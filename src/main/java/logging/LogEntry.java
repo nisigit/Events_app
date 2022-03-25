@@ -16,6 +16,7 @@ public class LogEntry extends Object {
 
     // TODO: What is this method for?
     public String getResult() {
+        return result.toString();
     };
 
     // TODO: How to stringify the additional info map?
