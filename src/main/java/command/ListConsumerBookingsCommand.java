@@ -1,6 +1,9 @@
 package command;
 
-public class ListConsumerBookingsCommand extends Object implements ICommand {
+import controller.Context;
+import model.Booking;
+
+public class ListConsumerBookingsCommand implements ICommand {
 
     public ListConsumerBookingsCommand() {
 

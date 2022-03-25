@@ -1,6 +1,8 @@
 package external;
 
-public class MockEntertainmentProviderSystem extends Object implements EntertainmentProviderSystem {
+import java.time.LocalDateTime;
+
+public class MockEntertainmentProviderSystem implements EntertainmentProviderSystem {
 
     public MockEntertainmentProviderSystem(String orgName, String orgAddress) {
 

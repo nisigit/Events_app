@@ -1,5 +1,7 @@
 package external;
 
+import java.time.LocalDateTime;
+
 public interface EntertainmentProviderSystem {
 
     void recordNewEvent(long eventNumber, String title, int numTickets);

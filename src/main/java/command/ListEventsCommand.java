@@ -1,10 +1,17 @@
 package command;
 
-public class ListEventsCommand extends Object implements ICommand {
+import controller.Context;
+import model.Event;
+
+public class ListEventsCommand implements ICommand {
 
     public ListEventsCommand(boolean userEventsOnly, boolean activeEventsOnly) {
 
     };
+
+    public ListEventsCommand() {
+
+    }
 
     @Override
     public void execute(Context context) {

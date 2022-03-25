@@ -1,5 +1,9 @@
 package model;
 
+import external.EntertainmentProviderSystem;
+
+import java.util.List;
+
 public class EntertainmentProvider extends User {
 
     public EntertainmentProvider(String orgName, String orgAddress, String paymentAccountEmail, String mainRepName, String mainRepEmail, String password, List<String> otherRepNames, List<String> otherRepEmails) {

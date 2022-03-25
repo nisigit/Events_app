@@ -1,6 +1,13 @@
 package command;
 
-public class GovernmentReport1Command extends Object implements ICommand {
+import controller.Context;
+import model.Booking;
+
+import java.time.LocalDateTime;
+
+public class GovernmentReport1Command implements ICommand {
+
+    private Booking result;
 
     public GovernmentReport1Command(LocalDateTime intervalStartInclusive, LocalDateTime intervalEndInclusive) {
 

@@ -1,6 +1,6 @@
 package model;
 
-public abstract class Event extends Object {
+public abstract class Event {
 
     protected Event(long eventNumber, EntertainmentProvider organiser, String title, EventType type) {
 
