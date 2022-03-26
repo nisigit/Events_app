@@ -4,11 +4,13 @@ import model.Booking;
 import model.Consumer;
 import model.EventPerformance;
 
+import java.util.List;
+
 public interface IBookingState {
 
     Booking findBookingByNumber(long bookingNumber);
 
-    Booking findBookingsByEventNumber(long eventNumber);
+    List<Booking> findBookingsByEventNumber(long eventNumber);
 
     Booking createBooking(Consumer booker, EventPerformance performance, int numTickets, double amountPaid);
 

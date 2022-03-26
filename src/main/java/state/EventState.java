@@ -5,7 +5,8 @@ import model.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class EventState extends Object implements IEventState {
+public class EventState implements IEventState {
+
 
     public EventState() {
 
