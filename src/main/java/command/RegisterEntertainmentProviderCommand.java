@@ -13,7 +13,6 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
         EntertainmentProvider entertainmentProvider = new EntertainmentProvider(orgName, orgAddress, paymentAccountEmail, mainRepName, mainRepEmail, password, otherRepNames, otherRepEmails);
     };
 
-    // TODO: Same as RegisterConsumerCommand.
     @Override
     public void execute(Context context) {
 
