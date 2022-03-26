@@ -2,6 +2,7 @@ package model;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 public abstract class Event {
 
@@ -10,9 +11,10 @@ public abstract class Event {
     private EntertainmentProvider organiser;
     private String title;
     private EventType type;
-    private HashMap<Long, EventPerformance> EventPerformances;
+    private Map<Long, EventPerformance> eventPerformances;
 
     protected Event(long eventNumber, EntertainmentProvider organiser, String title, EventType type) {
+        this.eventPerformances = new HashMap<>();
         this.eventStatus = EventStatus.ACTIVE;
         this.eventNumber = eventNumber;
         this.organiser = organiser;
@@ -45,15 +47,15 @@ public abstract class Event {
     };
 
     public void addPerformance(EventPerformance performance) {
-        EventPerformances.put(performance.getPerformanceNumber(), performance);
+        eventPerformances.put(performance.getPerformanceNumber(), performance);
     };
 
     public EventPerformance getPerformanceByNumber(long performanceNumber) {
-        return EventPerformances.get(performanceNumber);
+        return eventPerformances.get(performanceNumber);
     };
 
     public Collection<EventPerformance> getPerformances() {
-        return EventPerformances.values();
+        return eventPerformances.values();
     };
 
 }
