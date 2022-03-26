@@ -1,6 +1,7 @@
 package model;
 
 import external.EntertainmentProviderSystem;
+import external.MockEntertainmentProviderSystem;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -12,6 +13,8 @@ public class EntertainmentProvider extends User {
     private String orgName, orgAddress, mainRepName;
     private List<String> otherRepNames, otherRepEmails;
     private ArrayList<Event> events;
+    private EntertainmentProviderSystem system;
+
     public EntertainmentProvider(String orgName, String orgAddress, String paymentAccountEmail,
                                  String mainRepName, String mainRepEmail, String password, List<String> otherRepNames,
                                  List<String> otherRepEmails) throws InvalidKeySpecException, NoSuchAlgorithmException {
@@ -22,6 +25,7 @@ public class EntertainmentProvider extends User {
         this.otherRepNames = otherRepNames;
         this.otherRepEmails = otherRepEmails;
         this.events = new ArrayList<>();
+        this.system = new MockEntertainmentProviderSystem(orgName, orgAddress);
     };
 
     public void addEvent(Event event) {
@@ -49,28 +53,35 @@ public class EntertainmentProvider extends User {
     };
 
     public void setMainRepName(String mainRepName) {
-        
+        this.mainRepName = mainRepName;
     };
 
     public void setMainRepEmail(String mainRepEmail) {
-
+        super.setEmail(mainRepEmail);
     };
 
     public void setOtherRepNames(List<String> otherRepNames) {
-
+        this.otherRepNames = otherRepNames;
     };
 
     public void setOtherRepEmails(List<String> otherRepEmails) {
-
+        this.otherRepEmails = otherRepEmails;
     };
 
     public EntertainmentProviderSystem getProviderSystem() {
-
+        return this.system;
     };
 
     @Override
     public String toString() {
-
-    };
-
+        return super.toString() + "EntertainmentProvider{" +
+                "orgName='" + orgName + '\'' +
+                ", orgAddress='" + orgAddress + '\'' +
+                ", mainRepName='" + mainRepName + '\'' +
+                ", otherRepNames=" + otherRepNames +
+                ", otherRepEmails=" + otherRepEmails +
+                ", events=" + events +
+                ", system=" + system +
+                '}';
+    }
 }
