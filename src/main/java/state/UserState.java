@@ -9,7 +9,7 @@ public class UserState implements IUserState {
     };
 
     public UserState(IUserState other) {
-
+        new UserState();
     };
 
     @Override
