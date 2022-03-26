@@ -1,6 +1,8 @@
 package state;
 
-public class UserState extends Object implements IUserState {
+import model.User;
+
+public class UserState implements IUserState {
 
     public UserState() {
 

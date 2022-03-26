@@ -1,30 +1,25 @@
 package command;
 
-public abstract class CreateEventCommand extends Object implements ICommand {
+import controller.Context;
+import model.EventType;
 
-    protected final String title() {
+public abstract class CreateEventCommand implements ICommand {
 
-    };
-
-    protected final EventType type() {
-
-    };
-
-    protected Long eventNumberResult() {
-
-    };
+    protected Long eventNumberResult;
+    protected String title;
+    protected EventType type;
 
     public CreateEventCommand(String title, EventType type) {
+        this.title = title;
+        this.type = type;
+    }
 
+    @Override
+    public Long getResult() {
+        return eventNumberResult;
     };
 
     protected boolean isUserAllowedToCreateEvent(Context context) {
 
     };
-
-    @Override
-    public Long getResult() {
-
-    };
-
 }

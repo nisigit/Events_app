@@ -11,13 +11,12 @@ public class RegisterConsumerCommand implements ICommand {
         Consumer consumer = new Consumer(name, email, phoneNumber, password, paymentAccountEmail);
     };
 
-    // TODO: No idea what this is pt1.
+    // TODO: No idea what this is.
     @Override
     public void execute(Context context) {
 
     };
 
-    // TODO: No idea what this is pt2.
     @Override
     public Consumer getResult() {
 

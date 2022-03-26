@@ -1,6 +1,6 @@
 package external;
 
-public class MockPaymentSystem extends Object implements PaymentSystem {
+public class MockPaymentSystem implements PaymentSystem {
 
     public MockPaymentSystem() {
 

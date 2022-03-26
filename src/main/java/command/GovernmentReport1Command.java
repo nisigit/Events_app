@@ -20,7 +20,7 @@ public class GovernmentReport1Command implements ICommand {
 
     @Override
     public Booking getResult() {
-
+        return result;
     };
 
 }

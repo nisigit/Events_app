@@ -2,7 +2,7 @@ package command;
 
 import controller.Context;
 
-public class CancelEventCommand extends Object implements ICommand {
+public class CancelEventCommand implements ICommand {
 
     public CancelEventCommand(long eventNumber, String organiserMessage) {
 
