@@ -15,9 +15,13 @@ public class BookingState implements IBookingState {
 
     public BookingState() {
         this.nextBookingNumber++;
+        this.bookings = new ArrayList<>();
     }
 
     public BookingState(IBookingState other) {
+        BookingState x = (BookingState) other;
+        this.nextBookingNumber = x.getNextBookingNumber();
+        this.bookings = x.getBookings();
     }
 
     @Override
@@ -48,4 +52,11 @@ public class BookingState implements IBookingState {
         return newBooking;
     }
 
+    public int getNextBookingNumber() {
+        return nextBookingNumber;
+    }
+
+    public ArrayList<Booking> getBookings() {
+        return bookings;
+    }
 }
