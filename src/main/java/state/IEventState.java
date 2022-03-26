@@ -2,9 +2,12 @@ package state;
 
 import model.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public interface IEventState {
 
-    Event getAllEvents();
+    List<Event> getAllEvents();
 
     Event findEventByNumber(long eventNumber);
 
