@@ -11,10 +11,7 @@ public class GovernmentRepresentative extends User {
 
 
     public GovernmentRepresentative(String email, String password, String paymentAccountEmail) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        super();
-        this.email = email;
-        this.password = password;
-        this.paymentAccountEmail = paymentAccountEmail;
+        super(email, password, paymentAccountEmail);
     };
 
     @Override
