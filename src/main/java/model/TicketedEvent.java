@@ -8,6 +8,7 @@ public class TicketedEvent extends Event {
     private EventType type;
     private double ticketPrice;
     private int numTickets;
+    private SponsorshipRequest sponsorship;
 
     public TicketedEvent(long eventNumber, EntertainmentProvider organiser, String title, EventType type, double ticketPrice, int numTickets) {
         super(eventNumber, organiser, title, type);
@@ -22,7 +23,7 @@ public class TicketedEvent extends Event {
     public double getDiscountedTicketPrice() {
         boolean sponsored = isSponsored();
         if (sponsored) {
-
+            return ticketPrice * getSponsorship().getSponsoredPricePercent();
         }
         else {
             return ticketPrice;
@@ -34,16 +35,20 @@ public class TicketedEvent extends Event {
     };
 
     public String getSponsorAccountEmail() {
-        return ;
+        return getSponsorship().getSponsorAccountEmail();
     };
 
     public boolean isSponsored() {
-        return SponsorshipStatus
+        return getSponsorship().getStatus().equals(SponsorshipStatus.ACCEPTED);
     };
 
     public void setSponsorshipRequest(SponsorshipRequest sponsorshipRequest) {
-
+        this.sponsorship = sponsorshipRequest;
     };
+
+    public SponsorshipRequest getSponsorship(){
+        return sponsorship;
+    }
 
     @Override
     public String toString() {
