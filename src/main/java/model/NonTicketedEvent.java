@@ -2,14 +2,18 @@ package model;
 
 public class NonTicketedEvent extends Event {
 
-    private long eventNumber;
-    private EntertainmentProvider organiser;
-    private String title;
-    private EventType type;
+    private final long eventNumber;
+    private final EntertainmentProvider organiser;
+    private final String title;
+    private final EventType type;
 
 
     public NonTicketedEvent(long eventNumber, EntertainmentProvider organiser, String title, EventType type) {
-        super(eventNumber, organiser, title, type);
+        super();
+        this.eventNumber = eventNumber;
+        this.organiser = organiser;
+        this.title = title;
+        this.type = type;
     };
 
     @Override
