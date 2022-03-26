@@ -1,5 +1,7 @@
 package command;
 
+import model.Consumer;
+
 public class GovernmentReport2Command extends Object implements ICommand {
 
     public GovernmentReport2Command(String orgName) {
