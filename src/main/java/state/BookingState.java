@@ -10,7 +10,7 @@ import java.util.List;
 
 public class BookingState implements IBookingState {
 
-    private int nextBookingNumber = 0;
+    private long nextBookingNumber = 0;
     private ArrayList<Booking> bookings;
 
     public BookingState() {
@@ -52,7 +52,7 @@ public class BookingState implements IBookingState {
         return newBooking;
     }
 
-    public int getNextBookingNumber() {
+    public long getNextBookingNumber() {
         return nextBookingNumber;
     }
 

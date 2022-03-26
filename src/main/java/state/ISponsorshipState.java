@@ -3,13 +3,15 @@ package state;
 import model.SponsorshipRequest;
 import model.TicketedEvent;
 
+import java.util.List;
+
 public interface ISponsorshipState {
 
     SponsorshipRequest addSponsorshipRequest(TicketedEvent event);
 
-    SponsorshipRequest getAllSponsorshipRequests();
+    List<SponsorshipRequest> getAllSponsorshipRequests();
 
-    SponsorshipRequest getPendingSponsorshipRequests();
+    List<SponsorshipRequest> getPendingSponsorshipRequests();
 
     SponsorshipRequest findRequestByNumber(long requestNumber);
 
