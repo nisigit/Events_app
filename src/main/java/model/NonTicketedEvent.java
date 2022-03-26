@@ -15,10 +15,10 @@ public class NonTicketedEvent extends Event {
     @Override
     public String toString() {
         return "NonTicketedEvent{" +
-                "eventNumber=" + eventNumber +
-                ", organiser=" + organiser +
-                ", title='" + title + '\'' +
-                ", type=" + type +
+                "eventNumber=" + this.getEventNumber() +
+                ", organiser=" + this.getOrganiser() +
+                ", title='" + this.getTitle() + '\'' +
+                ", type=" + this.getType() +
                 '}';
     }
 }
