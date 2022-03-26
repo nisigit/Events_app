@@ -2,11 +2,13 @@ package state;
 
 import model.User;
 
+import java.util.Map;
+
 public interface IUserState {
 
     void addUser(User user);
 
-    User getAllUsers();
+    Map<String, User> getAllUsers();
 
     User getCurrentUser();
 
