@@ -2,10 +2,6 @@ package model;
 
 public class TicketedEvent extends Event {
 
-    private long eventNumber;
-    private EntertainmentProvider organiser;
-    private String title;
-    private EventType type;
     private double ticketPrice;
     private int numTickets;
 
@@ -13,7 +9,6 @@ public class TicketedEvent extends Event {
         super(eventNumber, organiser, title, type);
         this.ticketPrice = ticketPrice;
         this.numTickets = numTickets;
-
     };
 
     public double getOriginalTicketPrice() {
@@ -25,23 +20,26 @@ public class TicketedEvent extends Event {
     };
 
     public int getNumTickets() {
-
+        return numTickets;
     };
 
     public String getSponsorAccountEmail() {
-
+        return User.getEmail();
     };
 
     public boolean isSponsored() {
-
+        return SponsorshipStatus
     };
 
     public void setSponsorshipRequest(SponsorshipRequest sponsorshipRequest) {
 
     };
 
+    @Override
     public String toString() {
-
-    };
-
+        return super.toString() +
+                "ticketPrice=" + ticketPrice +
+                ", numTickets=" + numTickets +
+                '}';
+    }
 }
