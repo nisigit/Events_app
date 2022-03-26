@@ -1,5 +1,8 @@
 package model;
 
+import java.util.Collection;
+import java.util.HashMap;
+
 public abstract class Event {
 
     private EventStatus eventStatus;
@@ -7,6 +10,7 @@ public abstract class Event {
     private EntertainmentProvider organiser;
     private String title;
     private EventType type;
+    private HashMap<Long, EventPerformance> EventPerformances;
 
     protected Event(long eventNumber, EntertainmentProvider organiser, String title, EventType type) {
         this.eventStatus = EventStatus.ACTIVE;
@@ -41,15 +45,15 @@ public abstract class Event {
     };
 
     public void addPerformance(EventPerformance performance) {
-
+        EventPerformances.put(performance.getPerformanceNumber(), performance);
     };
 
     public EventPerformance getPerformanceByNumber(long performanceNumber) {
-
+        return EventPerformances.get(performanceNumber);
     };
 
-    public EventPerformance getPerformances() {
-
+    public Collection<EventPerformance> getPerformances() {
+        return EventPerformances.values();
     };
 
 }
