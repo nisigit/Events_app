@@ -1,6 +1,6 @@
 package model;
 
-public class ConsumerPreferences extends Object {
+public class ConsumerPreferences {
 
     public boolean preferSocialDistancing() {
         return false;

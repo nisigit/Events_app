@@ -2,6 +2,10 @@ package model;
 
 public class TicketedEvent extends Event {
 
+    private long eventNumber;
+    private EntertainmentProvider organiser;
+    private String title;
+    private EventType type;
     private double ticketPrice;
     private int numTickets;
 
@@ -16,7 +20,13 @@ public class TicketedEvent extends Event {
     };
 
     public double getDiscountedTicketPrice() {
+        boolean sponsored = isSponsored();
+        if (sponsored) {
 
+        }
+        else {
+            return ticketPrice;
+        }
     };
 
     public int getNumTickets() {
@@ -24,7 +34,7 @@ public class TicketedEvent extends Event {
     };
 
     public String getSponsorAccountEmail() {
-        return User.getEmail();
+        return ;
     };
 
     public boolean isSponsored() {
