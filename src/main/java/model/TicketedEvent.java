@@ -2,12 +2,25 @@ package model;
 
 public class TicketedEvent extends Event {
 
+    private long eventNumber;
+    private EntertainmentProvider organiser;
+    private String title;
+    private EventType type;
+    private double ticketPrice;
+    private int numTickets;
+
     public TicketedEvent(long eventNumber, EntertainmentProvider organiser, String title, EventType type, double ticketPrice, int numTickets) {
+        this.eventNumber = eventNumber;
+        this.organiser = organiser;
+        this.title = title;
+        this.type = type;
+        this.ticketPrice = ticketPrice;
+        this.numTickets = numTickets;
 
     };
 
     public double getOriginalTicketPrice() {
-
+        return ticketPrice;
     };
 
     public double getDiscountedTicketPrice() {
