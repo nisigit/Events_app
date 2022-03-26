@@ -10,10 +10,7 @@ public class TicketedEvent extends Event {
     private int numTickets;
 
     public TicketedEvent(long eventNumber, EntertainmentProvider organiser, String title, EventType type, double ticketPrice, int numTickets) {
-        this.eventNumber = eventNumber;
-        this.organiser = organiser;
-        this.title = title;
-        this.type = type;
+        super(eventNumber, organiser, title, type);
         this.ticketPrice = ticketPrice;
         this.numTickets = numTickets;
 
