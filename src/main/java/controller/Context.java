@@ -18,7 +18,7 @@ public class Context {
         this.eventState = new EventState();
         this.sponsorshipState = new SponsorshipState();
         this.userState = new UserState();
-    };
+    }
 
     public Context(Context other) {
         new Context();
@@ -27,26 +27,26 @@ public class Context {
         this.eventState = other.eventState;
         this.sponsorshipState = other.sponsorshipState;
         this.userState = other.userState;
-    };
+    }
 
     public PaymentSystem getPaymentSystem() {
         return paymentSystem;
-    };
+    }
 
     public IUserState getUserState() {
         return userState;
-    };
+    }
 
     public IBookingState getBookingState() {
         return bookingState;
-    };
+    }
 
     public IEventState getEventState() {
         return eventState;
-    };
+    }
 
     public ISponsorshipState getSponsorshipState() {
         return sponsorshipState;
-    };
+    }
 
 }
