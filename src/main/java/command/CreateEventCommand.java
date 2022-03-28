@@ -19,10 +19,10 @@ public abstract class CreateEventCommand implements ICommand {
     @Override
     public Long getResult() {
         return eventNumberResult;
-    };
+    }
 
     protected boolean isUserAllowedToCreateEvent(Context context) {
         User currentUser = context.getUserState().getCurrentUser();
         return currentUser instanceof EntertainmentProvider;
-    };
+    }
 }

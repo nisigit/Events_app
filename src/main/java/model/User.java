@@ -13,8 +13,6 @@ public abstract class User {
     private byte[] passHash;
     private String paymentAccountEmail;
 
-    private final SecureRandom random = new SecureRandom();
-
     protected User(String email, String password, String paymentAccountEmail) throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.email = email;
         this.paymentAccountEmail = paymentAccountEmail;

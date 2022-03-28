@@ -20,42 +20,42 @@ public abstract class Event {
         this.organiser = organiser;
         this.title = title;
         this.type = type;
-    };
+    }
 
     public long getEventNumber() {
         return eventNumber;
-    };
+    }
 
     public EntertainmentProvider getOrganiser() {
         return organiser;
-    };
+    }
 
     public String getTitle() {
         return title;
-    };
+    }
 
     public EventType getType() {
         return type;
-    };
+    }
 
     public EventStatus getStatus() {
         return eventStatus;
-    };
+    }
 
     public void cancel() {
         this.eventStatus = EventStatus.CANCELLED;
-    };
+    }
 
     public void addPerformance(EventPerformance performance) {
         eventPerformances.put(performance.getPerformanceNumber(), performance);
-    };
+    }
 
     public EventPerformance getPerformanceByNumber(long performanceNumber) {
         return eventPerformances.get(performanceNumber);
-    };
+    }
 
     public Collection<EventPerformance> getPerformances() {
         return eventPerformances.values();
-    };
+    }
 
 }

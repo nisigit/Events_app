@@ -2,7 +2,7 @@ package model;
 
 import java.time.LocalDateTime;
 
-public class Booking extends Object {
+public class Booking {
     private long bookingNumber;
     private Consumer booker;
     private EventPerformance performance;
@@ -19,39 +19,39 @@ public class Booking extends Object {
         this.numTickets = numTickets;
         this.amountPaid = amountPaid;
         this.bookingDateTime = bookingDateTime;
-    };
+    }
 
     public long getBookingNumber() {
         return this.bookingNumber;
-    };
+    }
 
     public BookingStatus getStatus() {
         return this.status;
-    };
+    }
 
     public Consumer getBooker() {
         return this.booker;
-    };
+    }
 
     public EventPerformance getEventPerformance() {
         return this.performance;
-    };
+    }
 
     public double getAmountPaid() {
         return this.amountPaid;
-    };
+    }
 
     public void cancelByConsumer() {
         status = BookingStatus.CancelledByConsumer;
-    };
+    }
 
     public void cancelPaymentFailed() {
         status = BookingStatus.PaymentFailed;
-    };
+    }
 
     public void cancelByProvider() {
         status = BookingStatus.CancelledByProvider;
-    };
+    }
 
     @Override
     public String toString() {
@@ -65,7 +65,5 @@ public class Booking extends Object {
                 ", status=" + status +
                 '}';
     }
-
-    ;
 
 }
