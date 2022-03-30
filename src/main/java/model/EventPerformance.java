@@ -3,7 +3,7 @@ package model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class EventPerformance extends Object {
+public class EventPerformance {
 
     private long performanceNumber;
     private Event event;
@@ -29,45 +29,45 @@ public class EventPerformance extends Object {
         this.isOutdoors = isOutdoors;
         this.capacityLimit = capacityLimit;
         this.venueSize = venueSize;
-    };
+    }
 
 
     public long getPerformanceNumber() {
         return performanceNumber;
-    };
+    }
 
     public Event getEvent() {
         return event;
 
-    };
+    }
 
     public LocalDateTime getStartDateTime() {
         return startDateTime;
-    };
+    }
 
     public LocalDateTime getEndDateTime() {
         return endDateTime;
-    };
+    }
 
     public boolean hasSocialDistancing() {
         return hasSocialDistancing;
-    };
+    }
 
     public boolean hasAirFiltration() {
         return hasAirFiltration;
-    };
+    }
 
     public boolean isOutdoors() {
         return isOutdoors;
-    };
+    }
 
     public int getCapacityLimit() {
         return capacityLimit;
-    };
+    }
 
     public int getVenueSize() {
         return venueSize;
-    };
+    }
 
     @Override
     public String toString() {
