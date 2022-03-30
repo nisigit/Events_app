@@ -7,10 +7,10 @@ public class Controller {
 
     public Controller() {
 
-    };
+    }
 
     public void runCommand(ICommand command) {
         command.execute(this.context);
-    };
+    }
 
 }
