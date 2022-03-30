@@ -23,6 +23,8 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand {
     }
 
     public void execute(Context context) {
+        this.successResult = false;
+
         User user = context.getUserState().getCurrentUser();
         boolean isNull = oldPassword == null && newName == null && newEmail == null && newPhoneNumber == null &&
                 newPassword == null && newPaymentAccountEmail == null && newPreferences == null && user == null;
@@ -38,6 +40,8 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand {
             consumer.updatePassword(newPassword);
             consumer.setPaymentAccountEmail(newPaymentAccountEmail);
             consumer.setPreferences(newPreferences);
+
+            this.successResult = true;
         }
     }
 
