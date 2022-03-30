@@ -13,10 +13,9 @@ public abstract class UpdateProfileCommand implements ICommand {
     protected boolean isProfileUpdateInvalid(Context context, String oldPassword, String newEmail) {
         User user = context.getUserState().getCurrentUser();
         if (user.checkPasswordMatch(oldPassword)) {
-            user.setEmail(newEmail);
-            return true;
+            return !(context.getUserState().getAllUsers().containsKey(newEmail));
         }
-        else return false;
+        return false;
     }
 
     @Override
