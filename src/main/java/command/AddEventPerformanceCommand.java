@@ -57,10 +57,11 @@ public class AddEventPerformanceCommand implements ICommand {
             return;
         }
 
-        // TODO: Do we have to compare times for all events with the same title?
         for (EventPerformance ep : event.getPerformances()) {
-            if (ep.getStartDateTime().equals(startDateTime) && ep.getEndDateTime().equals(endDateTime)) {
-                return;
+            if (ep.getEvent().getTitle().equals(event.getTitle())) {
+                if (ep.getStartDateTime().equals(startDateTime) && ep.getEndDateTime().equals(endDateTime)) {
+                    return;
+                }
             }
         }
 
