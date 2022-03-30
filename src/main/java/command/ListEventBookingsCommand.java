@@ -19,6 +19,7 @@ public class ListEventBookingsCommand implements ICommand {
         result = null;
         User user = context.getUserState().getCurrentUser();
         Event event = context.getEventState().findEventByNumber(this.eventNumber);
+        if (user == null) return;
         if (event == null) return;
         if (!(event instanceof TicketedEvent)) return;
         if (user instanceof GovernmentRepresentative || user.equals(event.getOrganiser())) {
