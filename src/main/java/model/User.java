@@ -1,57 +1,45 @@
 package model;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 
 public abstract class User {
 
     private String email;
-    private byte[] passHash;
     private String paymentAccountEmail;
+    private String passHashString;
 
-    protected User(String email, String password, String paymentAccountEmail) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    protected User(String email, String password, String paymentAccountEmail) {
         this.email = email;
         this.paymentAccountEmail = paymentAccountEmail;
-        passHash = this.hashPassword(password);
-    };
-
-    // TODO: Have to hash password using Becrypt function given in the javadoc.
-    // Can also make it static.
-    private byte[] hashPassword(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] salt = new byte[16];
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        byte[] hash = factory.generateSecret(spec).getEncoded();
-        return hash;
+        passHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
     }
+
+    // TODO: Have to hash password using Bcrypt function given in the javadoc.
 
     public String getEmail() {
         return email;
-    };
+    }
 
     public void setEmail(String newEmail) {
         this.email = newEmail;
-    };
+    }
 
-    public boolean checkPasswordMatch(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return this.passHash == this.hashPassword(password);
-    };
+    public boolean checkPasswordMatch(String password) {
+        String inputPassHash = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+        return passHashString.equals(inputPassHash);
+    }
 
-    public void updatePassword(String newPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        this.passHash = this.hashPassword(newPassword);
-    };
+    public void updatePassword(String newPassword) {
+        passHashString = BCrypt.withDefaults().hashToString(12, newPassword.toCharArray());
+    }
 
     public String getPaymentAccountEmail() {
         return paymentAccountEmail;
-    };
+    }
 
     public void setPaymentAccountEmail(String newPaymentAccountEmail) {
         this.paymentAccountEmail = newPaymentAccountEmail;
-    };
+    }
 
     @Override
     public String toString() {
