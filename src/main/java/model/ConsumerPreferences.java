@@ -1,6 +1,9 @@
 package model;
 
+import java.util.List;
+
 public class ConsumerPreferences {
+
     /* the way the javadoc specifies it, there would be no possible way to change the preference attributes
     We've changed the implementation entirely; the attributes are assigned the default values if the constructor
     is called with no arguments, and are set to the desired values if the constructor DOES have arguments
