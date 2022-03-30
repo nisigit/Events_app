@@ -4,8 +4,13 @@ import controller.Context;
 
 public class RespondSponsorshipCommand implements ICommand {
 
-    public RespondSponsorshipCommand(long requestNumber, int percentToSponsor) {
+    private long requestNumber;
+    private int percentToSponsor;
+    private boolean result;
 
+    public RespondSponsorshipCommand(long requestNumber, int percentToSponsor) {
+        this.requestNumber = requestNumber;
+        this.percentToSponsor = percentToSponsor;
     }
 
     @Override
@@ -15,7 +20,7 @@ public class RespondSponsorshipCommand implements ICommand {
 
     @Override
     public Boolean getResult() {
-
+        return this.result;
     }
 
 }

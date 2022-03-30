@@ -22,12 +22,11 @@ public class Context {
 
     public Context(Context other) {
         new Context();
-        this.paymentSystem = other.paymentSystem;
-        //TODO not sure but shouldn't the following be deep copies instead of reference
-        this.bookingState = other.bookingState;
-        this.eventState = other.eventState;
-        this.sponsorshipState = other.sponsorshipState;
-        this.userState = other.userState;
+        this.paymentSystem = other.getPaymentSystem();
+        this.bookingState = other.getBookingState();
+        this.eventState = other.getEventState();
+        this.sponsorshipState = other.getSponsorshipState();
+        this.userState = other.getUserState();
     }
 
     public PaymentSystem getPaymentSystem() {
