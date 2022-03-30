@@ -1,15 +1,8 @@
 package model;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-
 public class GovernmentRepresentative extends User {
 
-    private String email;
-    private String password;
-    private String paymentAccountEmail;
-
-    public GovernmentRepresentative(String email, String password, String paymentAccountEmail) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public GovernmentRepresentative(String email, String password, String paymentAccountEmail) {
         super(email, password, paymentAccountEmail);
     };
 
@@ -17,4 +10,4 @@ public class GovernmentRepresentative extends User {
     public String toString() {
         return super.toString();
     }
-};
+}

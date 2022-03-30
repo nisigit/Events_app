@@ -6,6 +6,7 @@ public class SponsorshipRequest {
     private TicketedEvent event;
     private SponsorshipStatus status;
     private int percent;
+    private String sponsorAccountEmail;
 
     public SponsorshipRequest(long requestNumber, TicketedEvent event) {
         this.requestNumber = requestNumber;
@@ -28,21 +29,22 @@ public class SponsorshipRequest {
     public Integer getSponsoredPricePercent() {
         if (getStatus() == SponsorshipStatus.ACCEPTED) {
             return percent;
-        }
-        else {
+        } else {
             return null;
         }
     }
 
     public String getSponsorAccountEmail() {
-        return event.getSponsorAccountEmail();
+        if (status == SponsorshipStatus.ACCEPTED) {
+            return sponsorAccountEmail;
+        }
+        return null;
     }
 
-    // Todo Don't know what sponsorAccountEmail if used for
     public void accept(int percent, String sponsorAccountEmail) {
         status = SponsorshipStatus.ACCEPTED;
         this.percent = percent;
-
+        this.sponsorAccountEmail = sponsorAccountEmail;
     }
 
     public void reject() {

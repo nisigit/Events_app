@@ -1,12 +1,10 @@
 package command;
+
 import external.PaymentSystem;
 import model.*;
 import java.time.LocalDateTime;
 
-
 import controller.Context;
-
-import java.time.LocalDateTime;
 
 public class CancelEventCommand implements ICommand {
     private long eventNumber;
@@ -33,7 +31,7 @@ public class CancelEventCommand implements ICommand {
                 (currentUser == organiser)) {
             result = true;
         }
-        for (EventPerformance ep: event.getPerformances()) {
+        for (EventPerformance ep : event.getPerformances()) {
             if ((LocalDateTime.now().isAfter(ep.getStartDateTime())) ||
                     (LocalDateTime.now().isAfter(ep.getEndDateTime()))) {
                 result = false;
