@@ -23,6 +23,7 @@ public class Context {
     public Context(Context other) {
         new Context();
         this.paymentSystem = other.paymentSystem;
+        //TODO not sure but shouldn't the following be deep copies instead of reference
         this.bookingState = other.bookingState;
         this.eventState = other.eventState;
         this.sponsorshipState = other.sponsorshipState;
