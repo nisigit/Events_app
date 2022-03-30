@@ -17,10 +17,10 @@ public class ListConsumerBookingsCommand implements ICommand {
     public void execute(Context context) {
         this.result = null;
         User user = context.getUserState().getCurrentUser();
+        if (user == null) return;
         if (user instanceof Consumer) {
             this.result = ((Consumer) user).getBookings();
         }
-        else return;
     }
 
     @Override
