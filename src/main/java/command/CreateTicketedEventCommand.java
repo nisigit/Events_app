@@ -6,6 +6,7 @@ import model.EventType;
 import model.TicketedEvent;
 import model.User;
 import state.IEventState;
+import state.ISponsorshipState;
 
 public class CreateTicketedEventCommand extends CreateEventCommand {
 
@@ -29,6 +30,11 @@ public class CreateTicketedEventCommand extends CreateEventCommand {
         IEventState eventState = context.getEventState();
         User user = context.getUserState().getCurrentUser();
         TicketedEvent ticketedEvent = eventState.createTicketedEvent((EntertainmentProvider) user, title, type, ticketPrice, numTickets);
+
+        if (requestSponsorship) {
+            ISponsorshipState sponsorshipState = context.getSponsorshipState();
+            sponsorshipState.addSponsorshipRequest(ticketedEvent);
+        }
         eventNumberResult = ticketedEvent.getEventNumber();
     }
 
