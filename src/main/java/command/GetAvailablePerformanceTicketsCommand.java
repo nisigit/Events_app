@@ -5,7 +5,9 @@ import model.Event;
 import model.EventPerformance;
 import model.TicketedEvent;
 
-public class GetAvailablePerformanceTicketsCommand extends Object implements ICommand {
+import controller.Context;
+
+public class GetAvailablePerformanceTicketsCommand implements ICommand {
 
     private long eventNumber, performanceNumber;
     private int result;
