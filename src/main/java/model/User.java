@@ -19,7 +19,7 @@ public abstract class User {
         passHash = this.hashPassword(password);
     };
 
-    // TODO: Discuss about how we want to hash the password.
+    // TODO: Have to hash password using Becrypt function given in the javadoc.
     // Can also make it static.
     private byte[] hashPassword(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] salt = new byte[16];

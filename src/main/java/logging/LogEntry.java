@@ -6,12 +6,12 @@ import java.util.stream.Collectors;
 public class LogEntry {
 
     private String callerName;
-    private Object result;
+    private String result;
     private Map<String, String> additionalInfo;
 
     LogEntry(String callerName, Object result, Map<String,Object> additionalInfo) {
         this.callerName = callerName;
-        this.result = result;
+        this.result = result.toString();
         this.additionalInfo = additionalInfo
                 .entrySet()
                 .stream()
@@ -21,9 +21,8 @@ public class LogEntry {
                 );
     };
 
-    // TODO: What is this method for?
     public String getResult() {
-        return result.toString();
+        return result;
     };
 
     @Override
