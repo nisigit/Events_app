@@ -18,10 +18,15 @@ public class ListSponsorshipRequestsCommand implements ICommand {
     @Override
     public void execute(Context context) {
         User currentUser = context.getUserState().getCurrentUser();
+        List<SponsorshipRequest> allSponsorshipRequests = context.getSponsorshipState().getAllSponsorshipRequests();
         if (currentUser == null) return;
         if (!(currentUser instanceof GovernmentRepresentative)) return;
         else {
-            result = context.getSponsorshipState().getAllSponsorshipRequests();
+            for (SponsorshipRequest sr: allSponsorshipRequests) {
+                if (sr.getStatus() == SponsorshipStatus.PENDING) {
+                    result.add(sr);
+                }
+            }
         };
     }
 
