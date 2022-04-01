@@ -4,6 +4,7 @@ import controller.Context;
 import model.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ListEventsCommand implements ICommand {
@@ -34,14 +35,18 @@ public class ListEventsCommand implements ICommand {
             else if (user instanceof Consumer) {
                 ConsumerPreferences cp = ((Consumer) user).getPreferences();
                 for (Event event : allEvents) {
-                    EventPerformance ep = event.getPerformances().iterator().next();
-                    if ((ep.hasAirFiltration() == cp.preferAirFiltration()) &&
-                            (ep.isOutdoors() == cp.preferAirFiltration()) &&
-                            (ep.hasSocialDistancing() == cp.preferSocialDistancing()) &&
-                            (ep.getCapacityLimit() <= cp.preferredMaxCapacity()) &&
-                            (ep.getVenueSize() <= cp.preferredMaxVenueSize())) {
-                        result.add(event);
+                    Collection<EventPerformance> performances = event.getPerformances();
+                    for (EventPerformance ep: performances) {
+                        if ((ep.hasAirFiltration() == cp.preferAirFiltration()) &&
+                                (ep.isOutdoors() == cp.preferAirFiltration()) &&
+                                (ep.hasSocialDistancing() == cp.preferSocialDistancing()) &&
+                                (ep.getCapacityLimit() <= cp.preferredMaxCapacity()) &&
+                                (ep.getVenueSize() <= cp.preferredMaxVenueSize())) {
+                            result.add(event);
+                            break;
+                        }
                     }
+
                 }
             }
         }
