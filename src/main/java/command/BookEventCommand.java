@@ -9,9 +9,7 @@ import java.time.LocalDateTime;
 
 public class BookEventCommand implements ICommand {
 
-    private long eventNumber;
-    private long performanceNumber;
-    private long numTicketsRequested;
+    private long eventNumber, performanceNumber, numTicketsRequested;
     private boolean paymentSuccess;
     private Long newBookingNumber;
 

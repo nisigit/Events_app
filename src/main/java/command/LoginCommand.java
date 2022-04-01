@@ -5,8 +5,7 @@ import model.User;
 
 public class LoginCommand implements ICommand {
 
-    private String email;
-    private String password;
+    private String email, password;
     private User user;
 
     public LoginCommand(String email, String password) {

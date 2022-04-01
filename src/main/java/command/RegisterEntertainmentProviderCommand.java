@@ -11,12 +11,7 @@ import java.util.Map;
 
 public class RegisterEntertainmentProviderCommand implements ICommand {
 
-    private String orgName;
-    private String orgAddress;
-    private String paymentAccountEmail;
-    private String mainRepName;
-    private String mainRepEmail;
-    private String password;
+    private String orgName, orgAddress, paymentAccountEmail, mainRepName, mainRepEmail, password;
     private List<String> otherRepNames;
     private List<String> otherRepEmails;
     private EntertainmentProvider entertainmentProvider;

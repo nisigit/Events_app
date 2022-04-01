@@ -11,12 +11,12 @@ import java.util.List;
 public class GovernmentReport1Command implements ICommand {
 
     private List<Booking> result;
-    private LocalDateTime intervalStartInclusive;
-    private LocalDateTime intervalEndInclusive;
+    private LocalDateTime intervalStartInclusive, intervalEndInclusive;
 
     public GovernmentReport1Command(LocalDateTime intervalStartInclusive, LocalDateTime intervalEndInclusive) {
         this.intervalStartInclusive = intervalStartInclusive;
         this.intervalEndInclusive = intervalEndInclusive;
+        this.result = new ArrayList<>();
     };
 
     @Override

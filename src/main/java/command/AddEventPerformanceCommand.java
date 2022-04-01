@@ -14,14 +14,10 @@ public class AddEventPerformanceCommand implements ICommand {
 
     private long eventNumber;
     private String venueAddress;
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
+    private LocalDateTime startDateTime, endDateTime;
     private List<String> performerNames;
-    private boolean hasSocialDistancing;
-    private boolean hasAirFiltration;
-    private boolean isOutdoors;
-    private int capacityLimit;
-    private int venueSize;
+    private boolean hasSocialDistancing, hasAirFiltration, isOutdoors;
+    private int capacityLimit, venueSize;
     private EventPerformance newPerformance;
 
 

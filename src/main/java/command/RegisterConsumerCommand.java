@@ -10,11 +10,7 @@ import java.util.Map;
 
 public class RegisterConsumerCommand implements ICommand {
 
-    private String name;
-    private String email;
-    private String phoneNumber;
-    private String password;
-    private String paymentAccountEmail;
+    private String name, email, phoneNumber, password, paymentAccountEmail;
     private Consumer consumer;
 
     public RegisterConsumerCommand(String name, String email, String phoneNumber, String password, String paymentAccountEmail)

@@ -7,8 +7,7 @@ import java.util.List;
 
 public class ListEventsCommand implements ICommand {
 
-    private boolean userEventsOnly;
-    private boolean activeEventsOnly;
+    private boolean userEventsOnly, activeEventsOnly;
     private List<Event> result;
 
     public ListEventsCommand(boolean userEventsOnly, boolean activeEventsOnly) {
