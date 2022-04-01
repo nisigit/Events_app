@@ -3,16 +3,18 @@ package command;
 import controller.Context;
 import model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListEventsCommand implements ICommand {
 
     private boolean userEventsOnly, activeEventsOnly;
-    private List<Event> result;
+    private ArrayList<Event> result;
 
     public ListEventsCommand(boolean userEventsOnly, boolean activeEventsOnly) {
         this.userEventsOnly = userEventsOnly;
         this.activeEventsOnly = activeEventsOnly;
+        this.result = new ArrayList<>();
     }
 
     @Override
@@ -27,7 +29,7 @@ public class ListEventsCommand implements ICommand {
         if (user == null) return;
         if (this.userEventsOnly) {
             if (user instanceof EntertainmentProvider) {
-                result = ((EntertainmentProvider) user).getEvents();
+                result = (ArrayList<Event>) ((EntertainmentProvider) user).getEvents();
             }
             else if (user instanceof Consumer) {
                 ConsumerPreferences cp = ((Consumer) user).getPreferences();
@@ -43,7 +45,7 @@ public class ListEventsCommand implements ICommand {
                 }
             }
         }
-        else result = allEvents;
+        else result = (ArrayList<Event>) allEvents;
 
         if (this.activeEventsOnly) {
             result.removeIf(event -> event.getStatus() != EventStatus.ACTIVE);
