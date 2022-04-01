@@ -1,10 +1,7 @@
 package command;
 
 import controller.Context;
-import model.EntertainmentProvider;
-import model.EventType;
-import model.TicketedEvent;
-import model.User;
+import model.*;
 import state.IEventState;
 import state.ISponsorshipState;
 
@@ -33,7 +30,8 @@ public class CreateTicketedEventCommand extends CreateEventCommand {
 
         if (requestSponsorship) {
             ISponsorshipState sponsorshipState = context.getSponsorshipState();
-            sponsorshipState.addSponsorshipRequest(ticketedEvent);
+            SponsorshipRequest request = sponsorshipState.addSponsorshipRequest(ticketedEvent);
+            ticketedEvent.setSponsorshipRequest(request);
         }
         eventNumberResult = ticketedEvent.getEventNumber();
     }
