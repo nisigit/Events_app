@@ -50,6 +50,7 @@ public class EventState implements IEventState {
     public TicketedEvent createTicketedEvent(EntertainmentProvider organiser, String title, EventType type, double ticketPrice, int numTickets) {
         TicketedEvent ticketedEvent = new TicketedEvent(uniqueEventNumber++, organiser, title, type, ticketPrice, numTickets);
         events.add(ticketedEvent);
+        organiser.addEvent(ticketedEvent);
         return ticketedEvent;
     }
 

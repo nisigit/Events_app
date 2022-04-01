@@ -8,9 +8,12 @@ public abstract class User {
     private String paymentAccountEmail;
     private String passHashString;
 
+    private String password;
+
     protected User(String email, String password, String paymentAccountEmail) {
         this.email = email;
         this.paymentAccountEmail = paymentAccountEmail;
+        this.password = password;
         passHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
     }
 
@@ -23,12 +26,14 @@ public abstract class User {
     }
 
     public boolean checkPasswordMatch(String password) {
-        String inputPassHash = BCrypt.withDefaults().hashToString(12, password.toCharArray());
-        return passHashString.equals(inputPassHash);
+//        String inputPassHash = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+//        return passHashString.equals(inputPassHash);
+        return this.password.equals(password);
     }
 
     public void updatePassword(String newPassword) {
-        passHashString = BCrypt.withDefaults().hashToString(12, newPassword.toCharArray());
+//        passHashString = BCrypt.withDefaults().hashToString(12, newPassword.toCharArray());
+        password = newPassword;
     }
 
     public String getPaymentAccountEmail() {
