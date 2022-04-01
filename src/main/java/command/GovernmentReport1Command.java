@@ -1,28 +1,57 @@
 package command;
 
 import controller.Context;
-import model.Booking;
+import model.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class GovernmentReport1Command implements ICommand {
 
-    private Booking result;
+    private List<Booking> result;
     private LocalDateTime intervalStartInclusive;
     private LocalDateTime intervalEndInclusive;
 
     public GovernmentReport1Command(LocalDateTime intervalStartInclusive, LocalDateTime intervalEndInclusive) {
-        this.intervalEndInclusive = intervalEndInclusive;
+        this.intervalStartInclusive = intervalStartInclusive;
         this.intervalEndInclusive = intervalEndInclusive;
     };
 
     @Override
     public void execute(Context context) {
+        List<Event> sponsoredEvents = new ArrayList<>();
+        List<SponsorshipRequest> sponsorshipRequests = context.getSponsorshipState().getAllSponsorshipRequests();
+
+
+        for (SponsorshipRequest sponsorshipRequest: sponsorshipRequests){
+            sponsoredEvents.add(sponsorshipRequest.getEvent());
+        }
+
+
+        for (Event event: sponsoredEvents){
+            if (event.getStatus() == EventStatus.ACTIVE) {
+                Collection<EventPerformance> performances = event.getPerformances();
+                for (EventPerformance performance: performances) {
+                    if (performance.getStartDateTime().isAfter(intervalStartInclusive) &&
+                            performance.getEndDateTime().isBefore(intervalEndInclusive)) {
+                        long eventNumber = event.getEventNumber();
+                        List<Booking> bookings = context.getBookingState().findBookingsByEventNumber(eventNumber);
+                        for (Booking booking: bookings) {
+                            if (booking.getEventPerformance() == performance) {
+                                result.add(booking);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
     };
 
     @Override
-    public Booking getResult() {
+    public List<Booking> getResult() {
         return result;
     };
 
