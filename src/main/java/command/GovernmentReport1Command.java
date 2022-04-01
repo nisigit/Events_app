@@ -30,8 +30,8 @@ public class GovernmentReport1Command implements ICommand {
         }
 
 
-        //Todo Just finish main actions, see if there's more need to be checked?
-        //Todo Also, this looks a bit time-consuming, discuss if it can be improved
+        //TODO: Just finish main actions, see if there's more need to be checked?
+        //TODO: Also, this looks a bit time-consuming, discuss if it can be improved
         for (Event event: sponsoredEvents){
             if (event.getStatus() == EventStatus.ACTIVE) {
                 Collection<EventPerformance> performances = event.getPerformances();

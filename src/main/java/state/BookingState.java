@@ -49,6 +49,7 @@ public class BookingState implements IBookingState {
         Booking newBooking = new Booking(this.nextBookingNumber, booker, performance,
                                         numTickets, amountPaid, LocalDateTime.now());
         this.nextBookingNumber++;
+        this.bookings.add(newBooking);
         return newBooking;
     }
 
