@@ -25,6 +25,9 @@ public class LoginCommand implements ICommand {
         if (!user.checkPasswordMatch(password)) {
             user = null;
         }
+        if (user != null) {
+            context.getUserState().setCurrentUser(user);
+        }
     }
 
     @Override
