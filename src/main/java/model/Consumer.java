@@ -39,15 +39,15 @@ public class Consumer extends User {
     }
 
     public void notify(String message) {
-
+        System.out.println(message);
     }
 
     public void setName(String newName) {
-
+        this.name = newName;
     }
 
     public void setPhoneNumber(String newPhoneNumber) {
-
+        this.phoneNumber = newPhoneNumber;
     }
 
     @Override
