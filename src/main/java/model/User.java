@@ -14,8 +14,6 @@ public abstract class User {
         passHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
     }
 
-    // TODO: Have to hash password using Bcrypt function given in the javadoc.
-
     public String getEmail() {
         return email;
     }

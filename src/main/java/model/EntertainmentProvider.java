@@ -17,7 +17,7 @@ public class EntertainmentProvider extends User {
 
     public EntertainmentProvider(String orgName, String orgAddress, String paymentAccountEmail,
                                  String mainRepName, String mainRepEmail, String password, List<String> otherRepNames,
-                                 List<String> otherRepEmails) throws InvalidKeySpecException, NoSuchAlgorithmException {
+                                 List<String> otherRepEmails) {
         super(mainRepEmail, password, paymentAccountEmail);
         this.orgName = orgName;
         this.orgAddress = orgAddress;

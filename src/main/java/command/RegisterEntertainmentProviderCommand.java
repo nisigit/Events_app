@@ -16,7 +16,7 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
     private List<String> otherRepEmails;
     private EntertainmentProvider entertainmentProvider;
 
-    public RegisterEntertainmentProviderCommand(String orgName, String orgAddress, String paymentAccountEmail, String mainRepName, String mainRepEmail, String password, List<String> otherRepNames, List<String> otherRepEmails) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public RegisterEntertainmentProviderCommand(String orgName, String orgAddress, String paymentAccountEmail, String mainRepName, String mainRepEmail, String password, List<String> otherRepNames, List<String> otherRepEmails) {
         EntertainmentProvider entertainmentProvider = new EntertainmentProvider(orgName, orgAddress, paymentAccountEmail, mainRepName, mainRepEmail, password, otherRepNames, otherRepEmails);
         this.orgName = orgName;
         this.orgAddress = orgAddress;

@@ -4,8 +4,6 @@ import controller.Context;
 import model.Consumer;
 import model.*;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Map;
 
 public class RegisterConsumerCommand implements ICommand {
@@ -13,8 +11,7 @@ public class RegisterConsumerCommand implements ICommand {
     private String name, email, phoneNumber, password, paymentAccountEmail;
     private Consumer consumer;
 
-    public RegisterConsumerCommand(String name, String email, String phoneNumber, String password, String paymentAccountEmail)
-            throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public RegisterConsumerCommand(String name, String email, String phoneNumber, String password, String paymentAccountEmail) {
         Consumer consumer = new Consumer(name, email, phoneNumber, password, paymentAccountEmail);
         this.email = email;
         this.name = name;
