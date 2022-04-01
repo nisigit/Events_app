@@ -34,6 +34,8 @@ public class CancelBookingCommand implements ICommand {
                 performanceStart.minusHours(24).isBefore(LocalDateTime.now())) {
             return;
         }
+        if(user instanceof Consumer) booking.cancelByConsumer();
+
         result = paymentSystem.processPayment(user.getPaymentAccountEmail(), event.getOrganiser().getPaymentAccountEmail(), booking.getAmountPaid());
     }
 

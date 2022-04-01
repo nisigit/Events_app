@@ -46,12 +46,15 @@ public class BookEventCommand implements ICommand {
         }
         double transactionAmount = ticketedEvent.getDiscountedTicketPrice() * numTicketsRequested;
         paymentSuccess = paymentSystem.processPayment(user.getPaymentAccountEmail(), event.getOrganiser().getPaymentAccountEmail(), transactionAmount);
-        if (!paymentSuccess) {
-            return;
-        }
+
         IBookingState bookingState = context.getBookingState();
         Booking newBooking = bookingState.createBooking((Consumer) user, eventPerformance, (int) numTicketsRequested, transactionAmount);
         newBookingNumber = newBooking.getBookingNumber();
+
+        if (!paymentSuccess) {
+            newBooking.cancelPaymentFailed();
+            return;
+        }
     }
 
     @Override

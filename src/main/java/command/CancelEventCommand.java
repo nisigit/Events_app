@@ -3,6 +3,7 @@ package command;
 import external.PaymentSystem;
 import model.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import controller.Context;
 
@@ -37,6 +38,11 @@ public class CancelEventCommand implements ICommand {
                 result = false;
             }
         }
+        List<Booking> bookings = context.getBookingState().findBookingsByEventNumber(eventNumber);
+        for (Booking booking : bookings) {
+            booking.cancelByProvider();
+        }
+
         if (event instanceof TicketedEvent) {
             TicketedEvent ticketedEvent = (TicketedEvent) event;
             double discountedTicketPrice = ticketedEvent.getDiscountedTicketPrice();
