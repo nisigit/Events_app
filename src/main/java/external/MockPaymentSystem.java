@@ -15,6 +15,7 @@ public class MockPaymentSystem implements PaymentSystem {
     @Override
     public boolean processPayment(String buyerAccountEmail, String sellerAccountEmail, double transactionAmount) {
         Transaction newTransaction = new Transaction(buyerAccountEmail, sellerAccountEmail, transactionAmount, TransactionType.PAYMENT);
+        transactions.add(newTransaction);
         return true;
     }
 
@@ -23,6 +24,7 @@ public class MockPaymentSystem implements PaymentSystem {
         Transaction newTransaction = new Transaction(buyerAccountEmail, sellerAccountEmail, transactionAmount, TransactionType.REFUND);
         for (Transaction transaction : transactions) {
             if (transaction.equals(newTransaction)) {
+                transactions.add(newTransaction);
                 return true;
             }
         }
