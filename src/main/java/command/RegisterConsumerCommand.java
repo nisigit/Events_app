@@ -35,6 +35,9 @@ public class RegisterConsumerCommand implements ICommand {
             consumer = null;
         }
         context.getUserState().setCurrentUser(consumer);
+        if (consumer != null) {
+            context.getUserState().addUser(consumer);
+        }
     }
 
     @Override

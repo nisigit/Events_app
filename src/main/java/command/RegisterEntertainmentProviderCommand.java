@@ -51,6 +51,9 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
             }
         }
         context.getUserState().setCurrentUser(entertainmentProvider);
+        if (entertainmentProvider != null) {
+            context.getUserState().addUser(entertainmentProvider);
+        }
     }
 
     @Override
