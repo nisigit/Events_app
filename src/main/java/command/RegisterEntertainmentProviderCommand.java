@@ -4,8 +4,6 @@ import controller.Context;
 import model.EntertainmentProvider;
 import model.*;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +50,7 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
                 }
             }
         }
+        context.getUserState().setCurrentUser(entertainmentProvider);
     }
 
     @Override

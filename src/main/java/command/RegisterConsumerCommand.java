@@ -34,6 +34,7 @@ public class RegisterConsumerCommand implements ICommand {
         if (allUsers.containsKey(email)) {
             consumer = null;
         }
+        context.getUserState().setCurrentUser(consumer);
     }
 
     @Override
