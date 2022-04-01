@@ -16,7 +16,7 @@ public class GovernmentReport2Command implements ICommand {
 
     @Override
     public Consumer getResult() {
-
+        return null;
     }
 
 }
