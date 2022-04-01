@@ -19,11 +19,11 @@ public class LogEntry {
                         Map.Entry::getKey,
                         entry -> String.valueOf(entry.getValue()))
                 );
-    };
+    }
 
     public String getResult() {
         return result;
-    };
+    }
 
     @Override
     public String toString() {

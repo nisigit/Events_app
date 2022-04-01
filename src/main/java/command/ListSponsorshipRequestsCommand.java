@@ -28,7 +28,7 @@ public class ListSponsorshipRequestsCommand implements ICommand {
                     result.add(sr);
                 }
             }
-        };
+        }
     }
 
     @Override

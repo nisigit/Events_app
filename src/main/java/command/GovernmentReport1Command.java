@@ -17,7 +17,7 @@ public class GovernmentReport1Command implements ICommand {
         this.intervalStartInclusive = intervalStartInclusive;
         this.intervalEndInclusive = intervalEndInclusive;
         this.result = new ArrayList<>();
-    };
+    }
 
     @Override
     public void execute(Context context) {
@@ -50,7 +50,7 @@ public class GovernmentReport1Command implements ICommand {
             }
         }
 
-    };
+    }
 
     @Override
     public List<Booking> getResult() {

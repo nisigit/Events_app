@@ -27,7 +27,7 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
         this.otherRepNames = otherRepNames;
         this.otherRepEmails = otherRepEmails;
         this.entertainmentProvider = entertainmentProvider;
-    };
+    }
 
     @Override
     public void execute(Context context) {
@@ -52,11 +52,11 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
                 }
             }
         }
-    };
+    }
 
     @Override
     public EntertainmentProvider getResult() {
         return entertainmentProvider;
-    };
+    }
 
 }

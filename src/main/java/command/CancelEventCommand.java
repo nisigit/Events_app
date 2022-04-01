@@ -14,7 +14,7 @@ public class CancelEventCommand implements ICommand {
     public CancelEventCommand(long eventNumber, String organiserMessage) {
         this.eventNumber = eventNumber;
         this.organiserMessage = organiserMessage;
-    };
+    }
 
     @Override
     public void execute(Context context) {
@@ -50,7 +50,7 @@ public class CancelEventCommand implements ICommand {
             }
         }
 
-    };
+    }
 
     @Override
     public Boolean getResult() {

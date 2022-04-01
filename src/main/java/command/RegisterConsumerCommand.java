@@ -19,7 +19,7 @@ public class RegisterConsumerCommand implements ICommand {
         this.password = password;
         this.paymentAccountEmail = paymentAccountEmail;
         this.consumer = consumer;
-    };
+    }
 
     @Override
     public void execute(Context context) {
@@ -34,11 +34,11 @@ public class RegisterConsumerCommand implements ICommand {
         if (allUsers.containsKey(email)) {
             consumer = null;
         }
-    };
+    }
 
     @Override
     public Consumer getResult() {
         return consumer;
-    };
+    }
 
 }
