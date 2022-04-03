@@ -62,7 +62,7 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
     public void recordNewBooking(long eventNumber, long performanceNumber, long bookingNumber, String consumerName, String consumerEmail, int bookedTickets) {
         int x = getNumTicketsLeft(eventNumber, performanceNumber);
         eventPerformanceTickets.get(eventNumber).replace(performanceNumber, x, x - bookedTickets);
-        System.out.println("New performance was made for a performance with the following details: ");
+        System.out.println("New booking was made with the following details: ");
         System.out.println("Event number: " + eventNumber);
         System.out.println("Performance number: " + performanceNumber);
         System.out.println("Booking number: " + bookingNumber);
