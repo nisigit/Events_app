@@ -1,8 +1,8 @@
 package tests;
 
 import command.*;
-import controller.Controller;
-import logging.Logger;
+import controller.*;
+import logging.*;
 import model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

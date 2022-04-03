@@ -41,10 +41,5 @@ public class UserState implements IUserState {
         this.currentUser = user;
     }
 
-    private void registerGovernmentRepresentatives() {
-        GovernmentRepresentative rep = new GovernmentRepresentative("margaret.thatcher@gov.uk",
-                "The Good times  ", "margaret.thatcher@gov.uk");
-        addUser(rep);
 
-    }
 }
