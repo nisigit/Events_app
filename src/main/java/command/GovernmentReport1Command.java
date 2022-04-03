@@ -29,7 +29,11 @@ public class GovernmentReport1Command implements ICommand {
      * This method should not be called directly outside of testing.
      * @param context object that provides access to global application state
      * Verifies that:
-     *
+     *                Current user is logged in
+     *                Current user is a government representative
+     *                intervalStartInclusive provided is before intervalEndInclusive
+     *                The event is active
+     *                The event is sponsored
      */
 
     @Override
@@ -42,9 +46,7 @@ public class GovernmentReport1Command implements ICommand {
             sponsoredEvents.add(sponsorshipRequest.getEvent());
         }
 
-
-        //TODO: Just finish main actions, see if there's more need to be checked?
-        //TODO: Also, this looks a bit time-consuming, discuss if it can be improved
+        //TODO set the list to null if any of the conditions failed
         for (Event event: sponsoredEvents){
             if (event.getStatus() == EventStatus.ACTIVE) {
                 Collection<EventPerformance> performances = event.getPerformances();
@@ -67,7 +69,7 @@ public class GovernmentReport1Command implements ICommand {
 
     /**
      * Get the result from the latest run of the command.
-     * @return
+     * @return list of Bookings if successful, and null for failed conditions
      */
 
     @Override
