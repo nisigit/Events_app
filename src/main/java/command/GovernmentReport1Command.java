@@ -40,6 +40,19 @@ public class GovernmentReport1Command implements ICommand {
     public void execute(Context context) {
         List<Event> sponsoredEvents = new ArrayList<>();
         List<SponsorshipRequest> sponsorshipRequests = context.getSponsorshipState().getAllSponsorshipRequests();
+        User user = context.getUserState().getCurrentUser();
+        if (user == null) {
+            result = null;
+            return;
+        }
+        if (!(user instanceof  GovernmentRepresentative)) {
+            result = null;
+            return;
+        }
+        if (intervalStartInclusive.isAfter(intervalEndInclusive)) {
+            result = null;
+            return;
+        }
 
 
         for (SponsorshipRequest sponsorshipRequest: sponsorshipRequests){
