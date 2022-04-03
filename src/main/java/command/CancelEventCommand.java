@@ -66,6 +66,6 @@ public class CancelEventCommand implements ICommand {
     @Override
     public Boolean getResult() {
         return result;
-    };
+    }
 
 }
