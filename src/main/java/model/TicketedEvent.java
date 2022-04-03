@@ -26,6 +26,13 @@ public class TicketedEvent extends Event {
         }
     }
 
+    @Override
+    public void addPerformance(EventPerformance performance) {
+        super.addPerformance(performance);
+        getOrganiser().getProviderSystem().recordNewPerformance(this.eventNumber, performance.getPerformanceNumber(),
+                performance.getStartDateTime(), performance.getEndDateTime());
+    }
+
     public int getNumTickets() {
         return numTickets;
     }

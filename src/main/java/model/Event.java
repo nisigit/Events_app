@@ -7,7 +7,7 @@ import java.util.Map;
 public abstract class Event {
 
     private EventStatus eventStatus;
-    private long eventNumber;
+    protected long eventNumber;
     private EntertainmentProvider organiser;
     private String title;
     private EventType type;
