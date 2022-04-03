@@ -1,12 +1,12 @@
 package tests;
 
 import command.*;
-import controller.*;
-import logging.*;
+import controller.Controller;
+import logging.Logger;
 import model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
 import java.time.LocalDateTime;

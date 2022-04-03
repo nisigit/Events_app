@@ -78,7 +78,9 @@ public class GovernmentReport1Command implements ICommand {
                 }
             }
         }
-
+        System.out.println(intervalStartInclusive);
+        System.out.println(intervalEndInclusive);
+        System.out.println(result);
     }
 
     /**
