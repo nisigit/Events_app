@@ -38,7 +38,6 @@ public class EventPerformance {
 
     public Event getEvent() {
         return event;
-
     }
 
     public LocalDateTime getStartDateTime() {

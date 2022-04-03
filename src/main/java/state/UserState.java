@@ -21,6 +21,7 @@ public class UserState implements IUserState {
     public UserState(IUserState other) {
         new UserState();
         this.allUsers = (HashMap<String, User>) other.getAllUsers();
+        this.currentUser = other.getCurrentUser();
     }
 
     @Override

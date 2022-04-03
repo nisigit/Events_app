@@ -41,6 +41,11 @@ public class AddEventPerformanceCommand implements ICommand {
         Event event = context.getEventState().findEventByNumber(eventNumber);
         newPerformance = null;
 
+        assert (user != null) : "No user logged in";
+        assert (startDateTime.isAfter(endDateTime)): "Provided start date is after end date";
+        assert (capacityLimit < 1): "Capacity limit cannot be less than 1";
+        assert (venueSize < 1): "Venue size cannot be less than 1";
+
         if (startDateTime.isAfter(endDateTime) ||
                 capacityLimit < 1 ||
                 venueSize < 1 ||

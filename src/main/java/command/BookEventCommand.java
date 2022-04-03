@@ -53,7 +53,6 @@ public class BookEventCommand implements ICommand {
 
         if (!paymentSuccess) {
             newBooking.cancelPaymentFailed();
-            return;
         }
     }
 
