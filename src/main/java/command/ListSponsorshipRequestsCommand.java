@@ -22,11 +22,10 @@ public class ListSponsorshipRequestsCommand implements ICommand {
         List<SponsorshipRequest> allSponsorshipRequests = context.getSponsorshipState().getAllSponsorshipRequests();
         if (currentUser == null) return;
         if (!(currentUser instanceof GovernmentRepresentative)) return;
-        else {
-            for (SponsorshipRequest sr: allSponsorshipRequests) {
-                if (sr.getStatus() == SponsorshipStatus.PENDING) {
-                    result.add(sr);
-                }
+
+        for (SponsorshipRequest sr: allSponsorshipRequests) {
+            if (sr.getStatus() == SponsorshipStatus.PENDING) {
+                result.add(sr);
             }
         }
     }
