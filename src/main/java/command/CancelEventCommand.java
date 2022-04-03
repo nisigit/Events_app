@@ -19,30 +19,28 @@ public class CancelEventCommand implements ICommand {
 
     @Override
     public void execute(Context context) {
+        // Condition checks
         User currentUser = context.getUserState().getCurrentUser();
         Event event = context.getEventState().findEventByNumber(eventNumber);
         EventStatus status = context.getEventState().findEventByNumber(eventNumber).getStatus();
         EntertainmentProvider organiser = event.getOrganiser();
         PaymentSystem paymentSystem = context.getPaymentSystem();
 
-        if (!(currentUser instanceof EntertainmentProvider) &&
-                (event != null) &&
-                (status == EventStatus.ACTIVE) &&
-                (organiserMessage != null) &&
-                (currentUser == organiser)) {
-            result = true;
+        if (!(currentUser instanceof EntertainmentProvider) ||
+                (event == null) ||
+                (status != EventStatus.ACTIVE) ||
+                (organiserMessage == null) ||
+                (currentUser != organiser)) {
+            return;
         }
         for (EventPerformance ep : event.getPerformances()) {
             if ((LocalDateTime.now().isAfter(ep.getStartDateTime())) ||
                     (LocalDateTime.now().isAfter(ep.getEndDateTime()))) {
-                result = false;
+                return;
             }
         }
-        List<Booking> bookings = context.getBookingState().findBookingsByEventNumber(eventNumber);
-        for (Booking booking : bookings) {
-            booking.cancelByProvider();
-        }
 
+        // Getting information to see if the refund happens properly
         if (event instanceof TicketedEvent) {
             TicketedEvent ticketedEvent = (TicketedEvent) event;
             double discountedTicketPrice = ticketedEvent.getDiscountedTicketPrice();
@@ -56,6 +54,13 @@ public class CancelEventCommand implements ICommand {
             }
         }
 
+        // If the conditions are passed, then cancel all the bookings of this event
+        if (result) {
+            List<Booking> bookings = context.getBookingState().findBookingsByEventNumber(eventNumber);
+            for (Booking booking : bookings) {
+                booking.cancelByProvider();
+            }
+        }
     }
 
     @Override

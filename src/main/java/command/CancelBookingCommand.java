@@ -34,10 +34,12 @@ public class CancelBookingCommand implements ICommand {
                 performanceStart.minusHours(24).isBefore(LocalDateTime.now())) {
             return;
         }
-        if(user instanceof Consumer) booking.cancelByConsumer();
-
-        // Check if it's successfully refunded to see if it's successfully cancelled
+        // Check if it's successfully refunded.
         result = paymentSystem.processRefund(user.getPaymentAccountEmail(), event.getOrganiser().getPaymentAccountEmail(), booking.getAmountPaid());
+
+        // After all the conditions are met, do the action of cancelling.
+        if(user instanceof Consumer && result) booking.cancelByConsumer();
+
     }
 
     @Override
