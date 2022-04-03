@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 
 public class BookEventCommand implements ICommand {
 
-    private long eventNumber, performanceNumber, numTicketsRequested;
+    private long eventNumber, performanceNumber;
+    private int numTicketsRequested;
     private boolean paymentSuccess;
     private Long newBookingNumber;
 
@@ -55,6 +56,8 @@ public class BookEventCommand implements ICommand {
         if (!paymentSuccess) {
             newBooking.cancelPaymentFailed();
         }
+
+        system.recordNewBooking(eventNumber, performanceNumber, newBookingNumber, ((Consumer) user).getName(), user.getEmail(), numTicketsRequested);
     }
 
     @Override

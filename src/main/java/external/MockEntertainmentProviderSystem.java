@@ -13,9 +13,11 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
     private String orgName;
     private String orgAddress;
     private Map<Long, Map<Long, Integer>> eventPerformanceTickets;
+    private Map<Long, Integer> globalNrTickets;
 
     public MockEntertainmentProviderSystem(String orgName, String orgAddress) {
         eventPerformanceTickets = new HashMap<>();
+        globalNrTickets = new HashMap<>();
         this.orgName = orgName;
         this.orgAddress = orgAddress;
     }
@@ -23,6 +25,7 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
     @Override
     public void recordNewEvent(long eventNumber, String title, int numTickets) {
         eventPerformanceTickets.put(eventNumber, new HashMap<>());
+        globalNrTickets.put(eventNumber, numTickets);
         System.out.println("A new event is created with the following details: ");
         System.out.println("Event Number: " + eventNumber);
         System.out.println("Event Title: " + title);
@@ -41,7 +44,8 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
 
     @Override
     public void recordNewPerformance(long eventNumber, long performanceNumber, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        eventPerformanceTickets.get(eventNumber).put(performanceNumber, 0);
+        int nrTickets = globalNrTickets.get(eventNumber);
+        eventPerformanceTickets.get(eventNumber).put(performanceNumber, nrTickets);
         System.out.println("A new event performance has been added to the event with the following details");
         System.out.println("Event number: " + eventNumber);
         System.out.println("Performance number in event: " + performanceNumber);
@@ -56,6 +60,8 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
 
     @Override
     public void recordNewBooking(long eventNumber, long performanceNumber, long bookingNumber, String consumerName, String consumerEmail, int bookedTickets) {
+        int x = getNumTicketsLeft(eventNumber, performanceNumber);
+        eventPerformanceTickets.get(eventNumber).replace(performanceNumber, x, x - bookedTickets);
         System.out.println("New performance was made for a performance with the following details: ");
         System.out.println("Event number: " + eventNumber);
         System.out.println("Performance number: " + performanceNumber);
