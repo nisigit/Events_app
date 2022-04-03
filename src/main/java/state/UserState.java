@@ -1,5 +1,6 @@
 package state;
 
+import command.LoginCommand;
 import model.GovernmentRepresentative;
 import model.User;
 
@@ -14,6 +15,7 @@ public class UserState implements IUserState {
     public UserState() {
         allUsers = new HashMap<>();
         currentUser = null;
+        registerGovtReps();
     }
 
     public UserState(IUserState other) {
@@ -41,5 +43,8 @@ public class UserState implements IUserState {
         this.currentUser = user;
     }
 
-
+    private void registerGovtReps() {
+        GovernmentRepresentative rep = new GovernmentRepresentative("margaret.thatcher@gov.uk", "The Good times  ", "margaret.thatcher@gov.uk");
+        addUser(rep);
+    }
 }
