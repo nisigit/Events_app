@@ -38,6 +38,7 @@ public class GovernmentReport1Command implements ICommand {
 
     @Override
     public void execute(Context context) {
+        // Condition checks
         List<Event> sponsoredEvents = new ArrayList<>();
         List<SponsorshipRequest> sponsorshipRequests = context.getSponsorshipState().getAllSponsorshipRequests();
         User user = context.getUserState().getCurrentUser();
@@ -54,12 +55,12 @@ public class GovernmentReport1Command implements ICommand {
             return;
         }
 
-
+        // Filter all the events not sponsored
         for (SponsorshipRequest sponsorshipRequest: sponsorshipRequests){
             sponsoredEvents.add(sponsorshipRequest.getEvent());
         }
 
-        //TODO set the list to null if any of the conditions failed
+        // Filter the bookings as specified
         for (Event event: sponsoredEvents){
             if (event.getStatus() == EventStatus.ACTIVE) {
                 Collection<EventPerformance> performances = event.getPerformances();
