@@ -17,6 +17,7 @@ public class CancelBookingCommand implements ICommand {
 
     @Override
     public void execute(Context context) {
+        // Condition check
         Booking booking = context.getBookingState().findBookingByNumber(bookingNumber);
         Event event = context.getEventState().findEventByNumber(bookingNumber);
         User user = context.getUserState().getCurrentUser();
@@ -24,7 +25,6 @@ public class CancelBookingCommand implements ICommand {
         LocalDateTime performanceStart = eventPerformance.getStartDateTime();
         PaymentSystem paymentSystem = context.getPaymentSystem();
 
-        result = false;
         if (booking == null) {
             return;
         }
@@ -36,7 +36,8 @@ public class CancelBookingCommand implements ICommand {
         }
         if(user instanceof Consumer) booking.cancelByConsumer();
 
-        result = paymentSystem.processPayment(user.getPaymentAccountEmail(), event.getOrganiser().getPaymentAccountEmail(), booking.getAmountPaid());
+        // Check if it's successfully refunded to see if it's successfully cancelled
+        result = paymentSystem.processRefund(user.getPaymentAccountEmail(), event.getOrganiser().getPaymentAccountEmail(), booking.getAmountPaid());
     }
 
     @Override

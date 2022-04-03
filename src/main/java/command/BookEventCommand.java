@@ -21,6 +21,7 @@ public class BookEventCommand implements ICommand {
 
     @Override
     public void execute(Context context) {
+        // Condition checks
         Event event = context.getEventState().findEventByNumber(eventNumber);
         User user = context.getUserState().getCurrentUser();
         PaymentSystem paymentSystem = context.getPaymentSystem();
@@ -44,6 +45,8 @@ public class BookEventCommand implements ICommand {
                 ticketedEvent.getNumTickets() >= numTicketsRequested)) {
             return;
         }
+
+        // After checking, we create new booking using the current user information
         double transactionAmount = ticketedEvent.getDiscountedTicketPrice() * numTicketsRequested;
         paymentSuccess = paymentSystem.processPayment(user.getPaymentAccountEmail(), event.getOrganiser().getPaymentAccountEmail(), transactionAmount);
 
