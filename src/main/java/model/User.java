@@ -2,19 +2,20 @@ package model;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+
 public abstract class User {
 
     private String email;
     private String paymentAccountEmail;
-    private String passHashString;
+    private String passHash;
 
-    private String password;
 
     protected User(String email, String password, String paymentAccountEmail) {
         this.email = email;
         this.paymentAccountEmail = paymentAccountEmail;
-        this.password = password;
-        passHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+        passHash = BCrypt.withDefaults().hashToString(12, password.toCharArray());
     }
 
     public String getEmail() {
@@ -26,14 +27,12 @@ public abstract class User {
     }
 
     public boolean checkPasswordMatch(String password) {
-//        String inputPassHash = BCrypt.withDefaults().hashToString(12, password.toCharArray());
-//        return passHashString.equals(inputPassHash);
-        return this.password.equals(password);
+        BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), passHash);
+        return result.verified;
     }
 
     public void updatePassword(String newPassword) {
-//        passHashString = BCrypt.withDefaults().hashToString(12, newPassword.toCharArray());
-        password = newPassword;
+        passHash = BCrypt.withDefaults().hashToString(12, newPassword.toCharArray());
     }
 
     public String getPaymentAccountEmail() {
