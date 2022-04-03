@@ -14,13 +14,14 @@ public class CreateNonTicketedEventCommand extends CreateEventCommand {
     }
 
     public void execute(Context context) {
-        eventNumberResult = null;
+        // Condition checks
         if (!isUserAllowedToCreateEvent(context)) {
             return;
         }
         User user = context.getUserState().getCurrentUser();
         IEventState eventState = context.getEventState();
 
+        // As we have checked if the user is an entertainment provider, we cast it here
         NonTicketedEvent nonTicketedEvent = eventState.createNonTicketedEvent((EntertainmentProvider) user, this.title, this.type);
         this.eventNumberResult = nonTicketedEvent.getEventNumber();
     }

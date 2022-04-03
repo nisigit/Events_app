@@ -19,13 +19,14 @@ public class CreateTicketedEventCommand extends CreateEventCommand {
     }
 
     public void execute(Context context) {
-        eventNumberResult = null;
+        // Condition checks
         if(!isUserAllowedToCreateEvent(context)) {
             return;
         }
 
         IEventState eventState = context.getEventState();
         User user = context.getUserState().getCurrentUser();
+        // Cast user to EntertainmentProvider since we have checked it
         TicketedEvent ticketedEvent = eventState.createTicketedEvent((EntertainmentProvider) user, title, type, ticketPrice, numTickets);
 
         if (requestSponsorship) {

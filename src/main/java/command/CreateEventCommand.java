@@ -22,6 +22,7 @@ public abstract class CreateEventCommand implements ICommand {
         return eventNumberResult;
     }
 
+    // Check if the current user is an entertainment provider
     protected boolean isUserAllowedToCreateEvent(Context context) {
         User currentUser = context.getUserState().getCurrentUser();
 
