@@ -14,11 +14,12 @@ public class GetAvailablePerformanceTicketsCommand implements ICommand {
     public GetAvailablePerformanceTicketsCommand(long eventNumber, long performanceNumber) {
         this.eventNumber = eventNumber;
         this.performanceNumber = performanceNumber;
+        this.result = -1;
     }
 
     @Override
     public void execute(Context context) {
-        this.result = -1;
+        // Condition checks
         Event event = context.getEventState().findEventByNumber(this.eventNumber);
 
         if (event == null) return;
@@ -28,6 +29,7 @@ public class GetAvailablePerformanceTicketsCommand implements ICommand {
 
             if (performance == null) return;
 
+            // get the tickets left after all the conditions are met
             result = event.getOrganiser().getProviderSystem().getNumTicketsLeft(this.eventNumber, this.performanceNumber);
         }
         else return;
