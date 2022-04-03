@@ -88,6 +88,6 @@ public class GovernmentReport1Command implements ICommand {
     @Override
     public List<Booking> getResult() {
         return result;
-    };
+    }
 
 }
