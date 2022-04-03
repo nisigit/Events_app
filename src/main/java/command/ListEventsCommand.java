@@ -27,8 +27,8 @@ public class ListEventsCommand implements ICommand {
         User user = context.getUserState().getCurrentUser();
         List<Event> allEvents = context.getEventState().getAllEvents();
 
-        if (user == null) return;
         if (this.userEventsOnly) {
+            if (user == null) return;
             if (user instanceof EntertainmentProvider) {
                 result = (ArrayList<Event>) ((EntertainmentProvider) user).getEvents();
             }
