@@ -32,24 +32,26 @@ public class GovernmentReport1Command implements ICommand {
      *                Current user is logged in
      *                Current user is a government representative
      *                intervalStartInclusive provided is before intervalEndInclusive
-     *                The event is active
-     *                The event is sponsored
+     *                The events returned are active and sponsored
      */
 
     @Override
     public void execute(Context context) {
-        // Condition checks
         List<Event> sponsoredEvents = new ArrayList<>();
         List<SponsorshipRequest> sponsorshipRequests = context.getSponsorshipState().getAllSponsorshipRequests();
         User user = context.getUserState().getCurrentUser();
+
+        // condition checks as described in docs - abort execution if condition is satisfied
         if (user == null) {
             result = null;
             return;
         }
+
         if (!(user instanceof  GovernmentRepresentative)) {
             result = null;
             return;
         }
+
         if (intervalStartInclusive.isAfter(intervalEndInclusive)) {
             result = null;
             return;
@@ -78,9 +80,10 @@ public class GovernmentReport1Command implements ICommand {
                 }
             }
         }
-        System.out.println(intervalStartInclusive);
-        System.out.println(intervalEndInclusive);
-        System.out.println(result);
+        // testing purposes
+//        System.out.println(intervalStartInclusive);
+//        System.out.println(intervalEndInclusive);
+//        System.out.println(result);
     }
 
     /**

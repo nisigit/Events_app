@@ -23,7 +23,7 @@ public class BookEventCommand implements ICommand {
 
     @Override
     public void execute(Context context) {
-        // Condition checks
+        // Condition checks - abort execution if a condition is satisfied
         Event event = context.getEventState().findEventByNumber(eventNumber);
         User user = context.getUserState().getCurrentUser();
         PaymentSystem paymentSystem = context.getPaymentSystem();

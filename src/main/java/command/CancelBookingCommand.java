@@ -17,7 +17,7 @@ public class CancelBookingCommand implements ICommand {
 
     @Override
     public void execute(Context context) {
-        // Condition check
+        // Condition checks - abort execution if condition is satisfied
         Booking booking = context.getBookingState().findBookingByNumber(bookingNumber);
         Event event = context.getEventState().findEventByNumber(bookingNumber);
         User user = context.getUserState().getCurrentUser();
@@ -37,8 +37,8 @@ public class CancelBookingCommand implements ICommand {
         // Check if it's successfully refunded.
         result = paymentSystem.processRefund(user.getPaymentAccountEmail(), event.getOrganiser().getPaymentAccountEmail(), booking.getAmountPaid());
 
-        // After all the conditions are met, do the action of cancelling.
-        if(user instanceof Consumer && result) booking.cancelByConsumer();
+        // After all the conditions are met, make sure the booking is logged as cancelled
+        if(result) booking.cancelByConsumer();
 
     }
 

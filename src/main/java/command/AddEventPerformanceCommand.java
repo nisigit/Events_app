@@ -47,6 +47,7 @@ public class AddEventPerformanceCommand implements ICommand {
 //        assert (capacityLimit < 1): "Capacity limit cannot be less than 1";
 //        assert (venueSize < 1): "Venue size cannot be less than 1";
 
+        // conditional checks as specified in docs - abort execution if a condition is satisfied
         if (startDateTime.isAfter(endDateTime) ||
                 capacityLimit < 1 ||
                 venueSize < 1 ||
@@ -55,10 +56,11 @@ public class AddEventPerformanceCommand implements ICommand {
             return;
         }
 
-        if (user != event.getOrganiser()) {
+        if (!user.equals(event.getOrganiser())) {
             return;
         }
 
+        // checks if an identical performance already exists for this event
         for (EventPerformance ep : event.getPerformances()) {
             if (ep.getEvent().getTitle().equals(event.getTitle())) {
                 if (ep.getStartDateTime().equals(startDateTime) && ep.getEndDateTime().equals(endDateTime)) {
