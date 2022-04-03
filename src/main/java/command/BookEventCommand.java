@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import external.EntertainmentProviderSystem;
 import external.PaymentSystem;
 import model.*;
 import state.IBookingState;
@@ -40,9 +41,9 @@ public class BookEventCommand implements ICommand {
         }
 
         TicketedEvent ticketedEvent = (TicketedEvent) event;
-
+        EntertainmentProviderSystem system = ticketedEvent.getOrganiser().getProviderSystem();
         if (!(eventPerformance.getEndDateTime().isAfter(LocalDateTime.now()) &&
-                ticketedEvent.getNumTickets() >= numTicketsRequested)) {
+                system.getNumTicketsLeft(eventNumber, performanceNumber) >= numTicketsRequested)) {
             return;
         }
 
