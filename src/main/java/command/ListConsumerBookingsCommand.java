@@ -11,11 +11,12 @@ public class ListConsumerBookingsCommand implements ICommand {
 
     private List<Booking> result;
     public ListConsumerBookingsCommand() {
+        this.result = null;
     }
 
     @Override
     public void execute(Context context) {
-        this.result = null;
+        // Condition checks
         User user = context.getUserState().getCurrentUser();
         if (user == null) return;
         if (user instanceof Consumer) {
