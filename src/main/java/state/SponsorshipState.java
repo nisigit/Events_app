@@ -27,6 +27,7 @@ public class SponsorshipState implements ISponsorshipState {
     public SponsorshipRequest addSponsorshipRequest(TicketedEvent event) {
         SponsorshipRequest request = new SponsorshipRequest(this.nextRequestNumber, event);
         this.nextRequestNumber++;
+        this.sponsorshipRequests.add(request);
         return request;
     }
 

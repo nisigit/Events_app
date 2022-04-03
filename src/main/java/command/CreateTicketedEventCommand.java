@@ -29,8 +29,7 @@ public class CreateTicketedEventCommand extends CreateEventCommand {
         TicketedEvent ticketedEvent = eventState.createTicketedEvent((EntertainmentProvider) user, title, type, ticketPrice, numTickets);
 
         if (requestSponsorship) {
-            ISponsorshipState sponsorshipState = context.getSponsorshipState();
-            SponsorshipRequest request = sponsorshipState.addSponsorshipRequest(ticketedEvent);
+            SponsorshipRequest request = context.getSponsorshipState().addSponsorshipRequest(ticketedEvent);
             ticketedEvent.setSponsorshipRequest(request);
         }
         eventNumberResult = ticketedEvent.getEventNumber();
