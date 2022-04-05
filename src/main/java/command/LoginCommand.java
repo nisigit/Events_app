@@ -18,10 +18,12 @@ public class LoginCommand implements ICommand {
     public void execute(Context context) {
         user = context.getUserState().getAllUsers().get(email);
 
+        // Condition checks
         if (user == null || !user.checkPasswordMatch(password)) {
             return;
         }
 
+        // If everything passes, log in the current user
         if (user != null) {
             context.getUserState().setCurrentUser(user);
         }
