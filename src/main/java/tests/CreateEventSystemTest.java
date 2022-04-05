@@ -1,7 +1,6 @@
 package tests;
 
 import command.CreateTicketedEventCommand;
-import command.LoginCommand;
 import command.RegisterEntertainmentProviderCommand;
 import controller.Controller;
 import model.EventType;
@@ -25,10 +24,6 @@ public class CreateEventSystemTest {
                 List.of("j.jamieson@dailybugle.com", "norman@oscorp.org")
         ));
 
-        controller.runCommand(new LoginCommand(
-                "p.bateman@pierce&pierce",
-                "Dorsia@9"
-                ));
     }
 
     @Test
@@ -37,7 +32,7 @@ public class CreateEventSystemTest {
         createAndLoginMovieProvider(controller);
 
         CreateTicketedEventCommand cmd = new CreateTicketedEventCommand(
-                "Spider-Man 4",
+                "Spider-Man 4: Ultimate Depression",
                 EventType.Movie,
                 200,
                 12,
