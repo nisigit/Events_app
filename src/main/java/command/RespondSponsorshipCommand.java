@@ -29,9 +29,17 @@ public class RespondSponsorshipCommand implements ICommand {
         if (percentToSponsor < 0 || percentToSponsor > 100) return;
         if (!(request.getStatus().equals(SponsorshipStatus.PENDING))) return;
 
-        // If all tests passed, then approve the
+        // TODO Still unsure if we should accept and reject based on amount
+        // If all tests passed, execute approve or reject the sponsorship
         if (user instanceof GovernmentRepresentative) {
-            request.accept(percentToSponsor, user.getPaymentAccountEmail());
+            // If percent is 0, then reject
+            if (percentToSponsor == 0) {
+                request.reject();
+            }
+            // if there's amount, then approve it
+            else {
+                request.accept(percentToSponsor, user.getPaymentAccountEmail());
+            }
             this.result = true;
         }
     }
