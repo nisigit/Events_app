@@ -30,6 +30,7 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
     @Override
     public void execute(Context context) {
         Map<String, User> allUsers = context.getUserState().getAllUsers();
+        // Checking Conditions
         if ((orgName == null) ||
                 (orgAddress == null) ||
                 (paymentAccountEmail == null) ||
@@ -38,18 +39,22 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
                 (otherRepNames == null) ||
                 (otherRepEmails == null)) {
             entertainmentProvider = null;
+            return;
         }
         if (allUsers.containsKey(mainRepEmail)) {
             entertainmentProvider = null;
+            return;
         }
         for (User user: allUsers.values()) {
             if (user instanceof EntertainmentProvider) {
                 if (((EntertainmentProvider) user).getOrgName().equals(orgName) ||
                         ((EntertainmentProvider) user).getOrgAddress().equals(orgAddress)) {
                             entertainmentProvider = null;
+                            return;
                 }
             }
         }
+        // After passing the checking, add the registered entertainment provider and log it in
         if (entertainmentProvider != null) {
             context.getUserState().setCurrentUser(entertainmentProvider);
             context.getUserState().addUser(entertainmentProvider);
