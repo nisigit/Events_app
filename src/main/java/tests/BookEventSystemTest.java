@@ -80,6 +80,10 @@ public class BookEventSystemTest {
         bookingNumber = bookEvent(controller, 32421341, 3412, 902);
         assertNull(bookingNumber);
 
+        // what if you try to book more tickets than the event has available?
+        bookingNumber = bookEvent(controller, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 500);
+        assertNull(bookingNumber);
+
         // completely invalid user login
         controller.runCommand(new LogoutCommand());
         controller.runCommand(new LoginCommand("fake@user.com", "IDontExistLol"));
