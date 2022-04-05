@@ -73,12 +73,26 @@ public class BookEventSystemTest {
         controller.runCommand(new LoginCommand("human@being.com", "IAmAGuy"));
 
         // valid booking attempt
-        Long bookingNumber1 = bookEvent(controller, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
-        assertNotNull(bookingNumber1);
+        Long bookingNumber = bookEvent(controller, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
+        assertNotNull(bookingNumber);
 
         // tries to book event that does not exist
-        Long bookingNumber2 = bookEvent(controller, 32421341, 3412, 902);
-        assertNull(bookingNumber2);
+        bookingNumber = bookEvent(controller, 32421341, 3412, 902);
+        assertNull(bookingNumber);
 
+        // completely invalid user login
+        controller.runCommand(new LogoutCommand());
+        controller.runCommand(new LoginCommand("fake@user.com", "IDontExistLol"));
+
+        // what happens if this invalid user tries to book an event?
+        bookingNumber = bookEvent(controller, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
+        assertNull(bookingNumber);
+
+        // what happens if someone who's not a consumer tries to book an event?
+        controller.runCommand(new LogoutCommand());
+        controller.runCommand(new LoginCommand("kebinfeeg@bing.com", "synder4eva"));
+
+        bookingNumber = bookEvent(controller, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
+        assertNull(bookingNumber);
     }
 }
