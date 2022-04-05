@@ -29,7 +29,7 @@ public class CancelEventCommand implements ICommand {
         if (!(currentUser instanceof EntertainmentProvider) ||
                 (event == null) ||
                 (status != EventStatus.ACTIVE) ||
-                (organiserMessage == null) ||
+                (organiserMessage == null) || (organiserMessage.equals("")) ||
                 (currentUser != organiser)) {
             return;
         }
