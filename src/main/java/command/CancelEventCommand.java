@@ -22,7 +22,7 @@ public class CancelEventCommand implements ICommand {
         // Condition checks
         User currentUser = context.getUserState().getCurrentUser();
         Event event = context.getEventState().findEventByNumber(eventNumber);
-        EventStatus status = context.getEventState().findEventByNumber(eventNumber).getStatus();
+        EventStatus status = event.getStatus();
         EntertainmentProvider organiser = event.getOrganiser();
         PaymentSystem paymentSystem = context.getPaymentSystem();
 
