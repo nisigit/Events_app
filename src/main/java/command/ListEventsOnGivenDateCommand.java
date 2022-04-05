@@ -19,10 +19,12 @@ public class ListEventsOnGivenDateCommand extends ListEventsCommand {
 
     @Override
     public void execute(Context context) {
+        // Getting the result of the super class listing events
         super.execute(context);
         List<Event> events = super.getResult();
 
         for (Event event : events) {
+            // Condition checks
             boolean isIncluded = false;
             Collection<EventPerformance> ePerformances = event.getPerformances();
             for (EventPerformance performance : ePerformances) {
@@ -33,6 +35,7 @@ public class ListEventsOnGivenDateCommand extends ListEventsCommand {
                     break;
                 }
             }
+            // if the condition passed, add the event to the output list
             if (isIncluded) result.add(event);
         }
     }
