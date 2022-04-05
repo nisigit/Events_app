@@ -279,7 +279,7 @@ public class GovernmentReport1SystemTest {
                 eventNumber1,
                 "Swimming arena",
                 LocalDateTime.now().plusMonths(1),
-                LocalDateTime.now().plusHours(8),
+                LocalDateTime.now().plusMonths(1).plusHours(8),
                 List.of("Everyone in swimming"),
                 true,
                 true,
