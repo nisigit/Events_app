@@ -23,11 +23,13 @@ public class RespondSponsorshipCommand implements ICommand {
         User user = context.getUserState().getCurrentUser();
         SponsorshipRequest request = context.getSponsorshipState().findRequestByNumber(this.requestNumber);
 
+        // Check Conditions
         if (user == null) return;
         if (request == null) return;
         if (percentToSponsor < 0 || percentToSponsor > 100) return;
         if (!(request.getStatus().equals(SponsorshipStatus.PENDING))) return;
 
+        // If all tests passed, then approve the
         if (user instanceof GovernmentRepresentative) {
             request.accept(percentToSponsor, user.getPaymentAccountEmail());
             this.result = true;

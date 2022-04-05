@@ -24,17 +24,21 @@ public class RegisterConsumerCommand implements ICommand {
     @Override
     public void execute(Context context) {
         Map<String, User> allUsers = context.getUserState().getAllUsers();
+        // Checking all conditions
         if ((email == null) ||
                 (name == null) ||
                 (phoneNumber == null) ||
                 (password == null) ||
                 (paymentAccountEmail == null)) {
             consumer = null;
+            return;
         }
         if (allUsers.containsKey(email)) {
             consumer = null;
+            return;
         }
         if (consumer != null) {
+            // If successfully registered, automatically log the current in
             context.getUserState().setCurrentUser(consumer);
             context.getUserState().addUser(consumer);
         }
