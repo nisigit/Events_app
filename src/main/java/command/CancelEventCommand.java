@@ -22,15 +22,13 @@ public class CancelEventCommand implements ICommand {
         // Condition checks
         User currentUser = context.getUserState().getCurrentUser();
         Event event = context.getEventState().findEventByNumber(eventNumber);
-        EventStatus status = event.getStatus();
-        EntertainmentProvider organiser = event.getOrganiser();
         PaymentSystem paymentSystem = context.getPaymentSystem();
 
         if (!(currentUser instanceof EntertainmentProvider) ||
                 (event == null) ||
-                (status != EventStatus.ACTIVE) ||
+                (event.getStatus() != EventStatus.ACTIVE) ||
                 (organiserMessage == null) || (organiserMessage.equals("")) ||
-                (currentUser != organiser)) {
+                (currentUser != event.getOrganiser())) {
             return;
         }
         for (EventPerformance ep : event.getPerformances()) {
@@ -50,7 +48,7 @@ public class CancelEventCommand implements ICommand {
             double sponsorshipAmount = (originalPrice - discountedTicketPrice) * numTickets;
             // Gather the emails of the event provider and government for refunding
             String governmentEmail = ticketedEvent.getSponsorAccountEmail();
-            String entertainmentProviderEmail = organiser.getEmail();
+            String entertainmentProviderEmail = event.getOrganiser().getEmail();
             paymentSystem.processRefund(governmentEmail, entertainmentProviderEmail, sponsorshipAmount);
         }
 
@@ -64,7 +62,7 @@ public class CancelEventCommand implements ICommand {
             // Refund the booking if ticketed
             if (event instanceof TicketedEvent) {
                 double discountedTicketPrice = ((TicketedEvent) event).getDiscountedTicketPrice();
-                paymentSystem.processRefund(buyerEmail, organiser.getEmail(), discountedTicketPrice);
+                paymentSystem.processRefund(buyerEmail, event.getOrganiser().getEmail(), discountedTicketPrice);
             }
         }
         // Remove all the bookings as the event is cancelled

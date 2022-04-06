@@ -75,7 +75,6 @@ public class CancelEventSystemTest {
         assertTrue(cancelEvent(controller, eventNumber, "I'm so sowwy uWu :3"));
 
         // cancelling non-existent event
-        //TODO This is causing a null pointer exception
         assertFalse(cancelEvent(controller, 69, "lol"));
 
         // cancelling existing event but with null / blank organiser message
@@ -90,7 +89,7 @@ public class CancelEventSystemTest {
         eventNumber = createEvent3(controller);
         assertFalse(cancelEvent(controller, eventNumber, "good news: activision doesn't own nintendo!"));
 
-        // non entertaiment provider tries to cancel event
+        // non-provider tries to cancel event
         controller.runCommand(new LogoutCommand());
         controller.runCommand(new LoginCommand("n.provider@noevents.com", "eventsn't"));
 
