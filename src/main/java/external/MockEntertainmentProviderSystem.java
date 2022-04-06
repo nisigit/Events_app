@@ -87,4 +87,26 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MockEntertainmentProviderSystem that = (MockEntertainmentProviderSystem) o;
+
+        if (orgName != null ? !orgName.equals(that.orgName) : that.orgName != null) return false;
+        if (orgAddress != null ? !orgAddress.equals(that.orgAddress) : that.orgAddress != null) return false;
+        if (eventPerformanceTickets != null ? !eventPerformanceTickets.equals(that.eventPerformanceTickets) : that.eventPerformanceTickets != null)
+            return false;
+        return globalNrTickets != null ? globalNrTickets.equals(that.globalNrTickets) : that.globalNrTickets == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = orgName != null ? orgName.hashCode() : 0;
+        result = 31 * result + (orgAddress != null ? orgAddress.hashCode() : 0);
+        result = 31 * result + (eventPerformanceTickets != null ? eventPerformanceTickets.hashCode() : 0);
+        result = 31 * result + (globalNrTickets != null ? globalNrTickets.hashCode() : 0);
+        return result;
+    }
 }

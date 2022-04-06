@@ -59,4 +59,27 @@ public class Consumer extends User {
                 ", prefs=" + prefs +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Consumer consumer = (Consumer) o;
+
+        if (name != null ? !name.equals(consumer.name) : consumer.name != null) return false;
+        if (phoneNumber != null ? !phoneNumber.equals(consumer.phoneNumber) : consumer.phoneNumber != null)
+            return false;
+        if (bookings != null ? !bookings.equals(consumer.bookings) : consumer.bookings != null) return false;
+        return prefs != null ? prefs.equals(consumer.prefs) : consumer.prefs == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
+        result = 31 * result + (bookings != null ? bookings.hashCode() : 0);
+        result = 31 * result + (prefs != null ? prefs.hashCode() : 0);
+        return result;
+    }
 }

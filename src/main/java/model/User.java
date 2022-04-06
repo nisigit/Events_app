@@ -50,4 +50,25 @@ public abstract class User {
                 ", paymentAccountEmail='" + paymentAccountEmail + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (paymentAccountEmail != null ? !paymentAccountEmail.equals(user.paymentAccountEmail) : user.paymentAccountEmail != null)
+            return false;
+        return passHash != null ? passHash.equals(user.passHash) : user.passHash == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = email != null ? email.hashCode() : 0;
+        result = 31 * result + (paymentAccountEmail != null ? paymentAccountEmail.hashCode() : 0);
+        result = 31 * result + (passHash != null ? passHash.hashCode() : 0);
+        return result;
+    }
 }

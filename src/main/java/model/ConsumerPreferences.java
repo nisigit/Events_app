@@ -70,4 +70,27 @@ public class ConsumerPreferences {
         this.maxVenueSize = maxVenueSize;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ConsumerPreferences that = (ConsumerPreferences) o;
+
+        if (socialDistancing != that.socialDistancing) return false;
+        if (airFiltration != that.airFiltration) return false;
+        if (outdoorsOnly != that.outdoorsOnly) return false;
+        if (maxCapacity != that.maxCapacity) return false;
+        return maxVenueSize == that.maxVenueSize;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (socialDistancing ? 1 : 0);
+        result = 31 * result + (airFiltration ? 1 : 0);
+        result = 31 * result + (outdoorsOnly ? 1 : 0);
+        result = 31 * result + maxCapacity;
+        result = 31 * result + maxVenueSize;
+        return result;
+    }
 }

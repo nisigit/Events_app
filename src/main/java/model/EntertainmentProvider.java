@@ -84,4 +84,34 @@ public class EntertainmentProvider extends User {
                 ", system=" + system +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EntertainmentProvider that = (EntertainmentProvider) o;
+
+        if (orgName != null ? !orgName.equals(that.orgName) : that.orgName != null) return false;
+        if (orgAddress != null ? !orgAddress.equals(that.orgAddress) : that.orgAddress != null) return false;
+        if (mainRepName != null ? !mainRepName.equals(that.mainRepName) : that.mainRepName != null) return false;
+        if (otherRepNames != null ? !otherRepNames.equals(that.otherRepNames) : that.otherRepNames != null)
+            return false;
+        if (otherRepEmails != null ? !otherRepEmails.equals(that.otherRepEmails) : that.otherRepEmails != null)
+            return false;
+        if (events != null ? !events.equals(that.events) : that.events != null) return false;
+        return system != null ? system.equals(that.system) : that.system == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = orgName != null ? orgName.hashCode() : 0;
+        result = 31 * result + (orgAddress != null ? orgAddress.hashCode() : 0);
+        result = 31 * result + (mainRepName != null ? mainRepName.hashCode() : 0);
+        result = 31 * result + (otherRepNames != null ? otherRepNames.hashCode() : 0);
+        result = 31 * result + (otherRepEmails != null ? otherRepEmails.hashCode() : 0);
+        result = 31 * result + (events != null ? events.hashCode() : 0);
+        result = 31 * result + (system != null ? system.hashCode() : 0);
+        return result;
+    }
 }
