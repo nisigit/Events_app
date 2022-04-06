@@ -79,7 +79,6 @@ public class LogInSystemTest {
         // valid government rep login attempt
         login = new LoginCommand("margaret.thatcher@gov.uk", "The Good times  ");
         controller.runCommand(login);
-        //TODO: flags this as false but can't figure out why
         assertEquals(login.getResult(), this.govtRep);
 
         // invalid login attempt
