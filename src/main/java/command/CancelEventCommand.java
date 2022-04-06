@@ -52,15 +52,19 @@ public class CancelEventCommand implements ICommand {
             if (paymentSystem.processRefund(governmentEmail, entertainmentProviderEmail, sponsorshipAmount)) {
                 result = true;
             }
-        }
 
-        // If the conditions are passed, then cancel all the bookings of this event
-        if (result) {
-            List<Booking> bookings = context.getBookingState().findBookingsByEventNumber(eventNumber);
-            for (Booking booking : bookings) {
-                booking.cancelByProvider();
+            // If the conditions are passed, then cancel all the bookings of this event, and refund the payment
+            if (result) {
+                List<Booking> bookings = context.getBookingState().findBookingsByEventNumber(eventNumber);
+                for (Booking booking : bookings) {
+                    booking.cancelByProvider();
+                    String buyerEmail = booking.getBooker().getEmail();
+                    paymentSystem.processRefund(buyerEmail, entertainmentProviderEmail, discountedTicketPrice);
+                }
+                bookings.clear();
             }
         }
+
     }
 
     @Override

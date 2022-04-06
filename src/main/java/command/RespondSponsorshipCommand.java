@@ -1,10 +1,8 @@
 package command;
 
 import controller.Context;
-import model.GovernmentRepresentative;
-import model.SponsorshipRequest;
-import model.SponsorshipStatus;
-import model.User;
+import external.PaymentSystem;
+import model.*;
 
 public class RespondSponsorshipCommand implements ICommand {
 
@@ -22,6 +20,7 @@ public class RespondSponsorshipCommand implements ICommand {
         this.result = false;
         User user = context.getUserState().getCurrentUser();
         SponsorshipRequest request = context.getSponsorshipState().findRequestByNumber(this.requestNumber);
+        PaymentSystem paymentSystem = context.getPaymentSystem();
 
         // Check Conditions
         if (user == null) return;
@@ -39,6 +38,13 @@ public class RespondSponsorshipCommand implements ICommand {
             // if there's amount, then approve it
             else {
                 request.accept(percentToSponsor, user.getPaymentAccountEmail());
+                TicketedEvent event = request.getEvent();
+                String sellerEmail = event.getOrganiser().getEmail();
+                String governmentEmail = event.getSponsorAccountEmail();
+                double originalPrice = event.getOriginalTicketPrice();
+                int numTickets = event.getNumTickets();
+                double sponsorshipAmount = originalPrice * (0.01 * percentToSponsor) * numTickets;
+                paymentSystem.processPayment(governmentEmail, sellerEmail, sponsorshipAmount);
             }
             this.result = true;
         }
