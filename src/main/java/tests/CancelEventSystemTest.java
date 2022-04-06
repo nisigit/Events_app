@@ -75,6 +75,7 @@ public class CancelEventSystemTest {
         assertTrue(cancelEvent(controller, eventNumber, "I'm so sowwy uWu :3"));
 
         // cancelling non-existent event
+        //TODO This is causing a null pointer exception
         assertFalse(cancelEvent(controller, 69, "lol"));
 
         // cancelling existing event but with null / blank organiser message
