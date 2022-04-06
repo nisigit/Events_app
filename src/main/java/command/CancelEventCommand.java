@@ -43,10 +43,12 @@ public class CancelEventCommand implements ICommand {
         // Getting information to see if the refund happens properly
         if (event instanceof TicketedEvent) {
             TicketedEvent ticketedEvent = (TicketedEvent) event;
+            // Calculate the amount of sponsorship to be refunded to the government
             double discountedTicketPrice = ticketedEvent.getDiscountedTicketPrice();
             double originalPrice = ticketedEvent.getOriginalTicketPrice();
             int numTickets = ticketedEvent.getNumTickets();
             double sponsorshipAmount = (originalPrice - discountedTicketPrice) * numTickets;
+            // Gather the emails of the event provider and government for refunding
             String governmentEmail = ticketedEvent.getSponsorAccountEmail();
             String entertainmentProviderEmail = organiser.getEmail();
             if (paymentSystem.processRefund(governmentEmail, entertainmentProviderEmail, sponsorshipAmount)) {
@@ -57,10 +59,13 @@ public class CancelEventCommand implements ICommand {
             if (result) {
                 List<Booking> bookings = context.getBookingState().findBookingsByEventNumber(eventNumber);
                 for (Booking booking : bookings) {
+                    // First set the booking state to be cancelled
                     booking.cancelByProvider();
                     String buyerEmail = booking.getBooker().getEmail();
+                    // Refund the booking
                     paymentSystem.processRefund(buyerEmail, entertainmentProviderEmail, discountedTicketPrice);
                 }
+                // Remove all the bookings as the event is cancelled
                 bookings.clear();
             }
         }

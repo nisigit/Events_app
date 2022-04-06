@@ -39,8 +39,10 @@ public class RespondSponsorshipCommand implements ICommand {
             else {
                 request.accept(percentToSponsor, user.getPaymentAccountEmail());
                 TicketedEvent event = request.getEvent();
+                // Gather emails for payment
                 String sellerEmail = event.getOrganiser().getEmail();
                 String governmentEmail = event.getSponsorAccountEmail();
+                // Calculate the amount of sponsorship
                 double originalPrice = event.getOriginalTicketPrice();
                 int numTickets = event.getNumTickets();
                 double sponsorshipAmount = originalPrice * (0.01 * percentToSponsor) * numTickets;
