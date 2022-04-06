@@ -51,24 +51,26 @@ public class CancelEventCommand implements ICommand {
             // Gather the emails of the event provider and government for refunding
             String governmentEmail = ticketedEvent.getSponsorAccountEmail();
             String entertainmentProviderEmail = organiser.getEmail();
-            if (paymentSystem.processRefund(governmentEmail, entertainmentProviderEmail, sponsorshipAmount)) {
-                result = true;
-            }
+            paymentSystem.processRefund(governmentEmail, entertainmentProviderEmail, sponsorshipAmount);
+        }
 
             // If the conditions are passed, then cancel all the bookings of this event, and refund the payment
-            if (result) {
-                List<Booking> bookings = context.getBookingState().findBookingsByEventNumber(eventNumber);
-                for (Booking booking : bookings) {
-                    // First set the booking state to be cancelled
-                    booking.cancelByProvider();
-                    String buyerEmail = booking.getBooker().getEmail();
-                    // Refund the booking
-                    paymentSystem.processRefund(buyerEmail, entertainmentProviderEmail, discountedTicketPrice);
-                }
-                // Remove all the bookings as the event is cancelled
-                bookings.clear();
+
+        List<Booking> bookings = context.getBookingState().findBookingsByEventNumber(eventNumber);
+        for (Booking booking : bookings) {
+            // First set the booking state to be cancelled
+            booking.cancelByProvider();
+            String buyerEmail = booking.getBooker().getEmail();
+            // Refund the booking if ticketed
+            if (event instanceof TicketedEvent) {
+                double discountedTicketPrice = ((TicketedEvent) event).getDiscountedTicketPrice();
+                paymentSystem.processRefund(buyerEmail, organiser.getEmail(), discountedTicketPrice);
             }
         }
+        // Remove all the bookings as the event is cancelled
+        bookings.clear();
+        result = true;
+
 
     }
 

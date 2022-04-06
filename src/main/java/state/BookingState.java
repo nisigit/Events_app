@@ -40,7 +40,11 @@ public class BookingState implements IBookingState {
 
     @Override
     public List<Booking> findBookingsByEventNumber(long eventNumber) {
-        return bookings.get(eventNumber);
+        List<Booking> result = bookings.get(eventNumber);
+        if (bookings.get(eventNumber) == null) {
+            result = new ArrayList<>();
+        }
+        return result;
     }
 
     public Booking createBooking(Consumer booker, EventPerformance performance, int numTickets, double amountPaid) {
