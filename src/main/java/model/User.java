@@ -59,16 +59,13 @@ public abstract class User {
         User user = (User) o;
 
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (paymentAccountEmail != null ? !paymentAccountEmail.equals(user.paymentAccountEmail) : user.paymentAccountEmail != null)
-            return false;
-        return passHash != null ? passHash.equals(user.passHash) : user.passHash == null;
+        return paymentAccountEmail != null ? paymentAccountEmail.equals(user.paymentAccountEmail) : user.paymentAccountEmail == null;
     }
 
     @Override
     public int hashCode() {
         int result = email != null ? email.hashCode() : 0;
         result = 31 * result + (paymentAccountEmail != null ? paymentAccountEmail.hashCode() : 0);
-        result = 31 * result + (passHash != null ? passHash.hashCode() : 0);
         return result;
     }
 }
