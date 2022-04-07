@@ -38,7 +38,6 @@ public class Consumer extends User {
         return bookings;
     }
 
-    //TODO Find usage of notify
     public void notify(String message) {
         System.out.println(message);
     }
