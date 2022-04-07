@@ -40,20 +40,12 @@ public class GovernmentReport1Command implements ICommand {
         List<Event> sponsoredEvents = new ArrayList<>();
         List<SponsorshipRequest> sponsorshipRequests = context.getSponsorshipState().getAllSponsorshipRequests();
         User user = context.getUserState().getCurrentUser();
+        result = null;
 
         // condition checks as described in docs - abort execution if condition is satisfied
-        if (user == null) {
-            result = null;
-            return;
-        }
-
-        if (!(user instanceof  GovernmentRepresentative)) {
-            result = null;
-            return;
-        }
-
-        if (intervalStartInclusive.isAfter(intervalEndInclusive)) {
-            result = null;
+        if ((user == null)
+                || (!(user instanceof  GovernmentRepresentative))
+                || (intervalStartInclusive.isAfter(intervalEndInclusive))) {
             return;
         }
 
@@ -67,8 +59,10 @@ public class GovernmentReport1Command implements ICommand {
             if (event.getStatus() == EventStatus.ACTIVE) {
                 Collection<EventPerformance> performances = event.getPerformances();
                 for (EventPerformance performance: performances) {
-                    if (performance.getStartDateTime().isAfter(intervalStartInclusive) &&
-                            performance.getEndDateTime().isBefore(intervalEndInclusive)) {
+                    LocalDateTime performanceStart = performance.getStartDateTime();
+                    LocalDateTime performanceEnd = performance.getEndDateTime();
+                    if ((performanceStart.isAfter(intervalStartInclusive) || performanceStart.equals(intervalStartInclusive)) &&
+                            (performanceEnd.isBefore(intervalEndInclusive) || performanceEnd.equals(intervalEndInclusive))) {
                         long eventNumber = event.getEventNumber();
                         List<Booking> bookings = context.getBookingState().findBookingsByEventNumber(eventNumber);
                         for (Booking booking: bookings) {
