@@ -40,12 +40,12 @@ public class GovernmentReport1Command implements ICommand {
         List<Event> sponsoredEvents = new ArrayList<>();
         List<SponsorshipRequest> sponsorshipRequests = context.getSponsorshipState().getAllSponsorshipRequests();
         User user = context.getUserState().getCurrentUser();
-        result = null;
 
         // condition checks as described in docs - abort execution if condition is satisfied
         if ((user == null)
                 || (!(user instanceof  GovernmentRepresentative))
                 || (intervalStartInclusive.isAfter(intervalEndInclusive))) {
+            result = null;
             return;
         }
 

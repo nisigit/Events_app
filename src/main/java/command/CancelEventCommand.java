@@ -75,7 +75,7 @@ public class CancelEventCommand implements ICommand {
         result = true;
         event.cancel();
 
-        Logger.getInstance().logAction("CancelEventCommand", result);
+        //Logger.getInstance().logAction("CancelEventCommand", result);
     }
 
     @Override

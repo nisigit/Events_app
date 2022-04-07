@@ -75,7 +75,7 @@ public class AddEventPerformanceCommand implements ICommand {
         newPerformance = eventState.createEventPerformance(event, venueAddress, startDateTime, endDateTime, performerNames, hasSocialDistancing, hasAirFiltration, isOutdoors, capacityLimit, venueSize);
         event.addPerformance(newPerformance);
 
-        Logger.getInstance().logAction("AddEventPerformanceCommand", newPerformance);
+        //Logger.getInstance().logAction("AddEventPerformanceCommand", newPerformance);
     }
 
     @Override
