@@ -2,9 +2,6 @@ package model;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-
 public abstract class User {
 
     private String email;

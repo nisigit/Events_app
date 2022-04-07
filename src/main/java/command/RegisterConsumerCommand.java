@@ -38,7 +38,7 @@ public class RegisterConsumerCommand implements ICommand {
             return;
         }
         if (consumer != null) {
-            // If successfully registered, automatically log the current in
+            // If successfully registered, automatically log the current user in
             context.getUserState().setCurrentUser(consumer);
             context.getUserState().addUser(consumer);
         }

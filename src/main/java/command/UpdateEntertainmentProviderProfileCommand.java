@@ -16,6 +16,7 @@ public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileComm
                                                      String newPaymentAccountEmail, String newMainRepName,
                                                      String newMainRepEmail, String newPassword,
                                                      List<String> newOtherRepNames, List<String> newOtherRepEmails) {
+        // Initialization of fields
         this.oldPassword = oldPassword;
         this.newOrgName = newOrgName;
         this.newOrgAddress = newOrgAddress;
@@ -31,6 +32,7 @@ public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileComm
         this.successResult = false;
 
         User user = context.getUserState().getCurrentUser();
+        // Condition checks
         boolean isNull = oldPassword == null && newOrgName == null && newOrgAddress == null
                 && newPaymentAccountEmail == null && newMainRepName == null && newMainRepEmail == null
                 && newPassword == null && newOtherRepNames == null && newOtherRepEmails == null && user == null;
@@ -38,6 +40,7 @@ public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileComm
 
         if (isProfileUpdateInvalid(context, oldPassword, newMainRepEmail)) return;
 
+        // If all conditions passed, then update the profile accordingly
         if (user instanceof EntertainmentProvider) {
             EntertainmentProvider provider = (EntertainmentProvider) user;
             provider.setOrgName(newOrgName);

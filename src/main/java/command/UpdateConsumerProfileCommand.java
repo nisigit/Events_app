@@ -13,6 +13,7 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand {
     public UpdateConsumerProfileCommand(String oldPassword, String newName, String newEmail,
                                         String newPhoneNumber, String newPassword, String newPaymentAccountEmail,
                                         ConsumerPreferences newPreferences) {
+        // Initializing the fields
         this.oldPassword = oldPassword;
         this.newName = newName;
         this.newEmail = newEmail;
@@ -26,12 +27,14 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand {
         this.successResult = false;
 
         User user = context.getUserState().getCurrentUser();
+        // Condition checks
         boolean isNull = oldPassword == null && newName == null && newEmail == null && newPhoneNumber == null &&
                 newPassword == null && newPaymentAccountEmail == null && newPreferences == null && user == null;
         if (isNull) return;
 
         if (isProfileUpdateInvalid(context, oldPassword, newEmail)) return;
 
+        //if all conditions passed, then update the consumer information
         if (user instanceof Consumer) {
             Consumer consumer = (Consumer) user;
             consumer.setName(newName);

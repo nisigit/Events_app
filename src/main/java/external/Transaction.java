@@ -10,6 +10,13 @@ public class Transaction {
     private LocalDateTime transactionTime;
     private TransactionType transactionType;
 
+    /**
+     * Class that stores the information of each transaction
+     * @param buyerAccountEmail buyer's email used for payments
+     * @param sellerAccountEmail seller's email used for payments
+     * @param transactionAmount the amount of current transaction
+     * @param transactionType if it's payment or refund
+     */
     Transaction(String buyerAccountEmail, String sellerAccountEmail, double transactionAmount, TransactionType transactionType) {
         this.buyerAccountEmail = buyerAccountEmail;
         this.sellerAccountEmail = sellerAccountEmail;
