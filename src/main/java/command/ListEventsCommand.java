@@ -36,7 +36,7 @@ public class ListEventsCommand implements ICommand {
                     Collection<EventPerformance> performances = event.getPerformances();
                     for (EventPerformance ep: performances) {
                         if ((ep.hasAirFiltration() == cp.preferAirFiltration()) &&
-                                (ep.isOutdoors() == cp.preferAirFiltration()) &&
+                                (ep.isOutdoors() == cp.preferOutdoorsOnly()) &&
                                 (ep.hasSocialDistancing() == cp.preferSocialDistancing()) &&
                                 (ep.getCapacityLimit() <= cp.preferredMaxCapacity()) &&
                                 (ep.getVenueSize() <= cp.preferredMaxVenueSize())) {

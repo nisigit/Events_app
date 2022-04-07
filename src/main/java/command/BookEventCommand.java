@@ -61,6 +61,7 @@ public class BookEventCommand implements ICommand {
         }
 
         system.recordNewBooking(eventNumber, performanceNumber, newBookingNumber, ((Consumer) user).getName(), user.getEmail(), numTicketsRequested);
+        ((Consumer) user).addBooking(newBooking);
     }
 
     @Override

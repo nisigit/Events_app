@@ -27,18 +27,11 @@ public class SponsorshipRequest {
     }
 
     public Integer getSponsoredPricePercent() {
-        if (getStatus() == SponsorshipStatus.ACCEPTED) {
-            return percent;
-        } else {
-            return null;
-        }
+        return percent;
     }
 
     public String getSponsorAccountEmail() {
-        if (status == SponsorshipStatus.ACCEPTED) {
-            return sponsorAccountEmail;
-        }
-        return null;
+        return sponsorAccountEmail;
     }
 
     public void accept(int percent, String sponsorAccountEmail) {
@@ -49,6 +42,8 @@ public class SponsorshipRequest {
 
     public void reject() {
         status = SponsorshipStatus.REJECTED;
+        this.percent = 0;
+        this.sponsorAccountEmail = null;
     }
 
 }

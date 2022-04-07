@@ -25,6 +25,7 @@ public class SponsorshipState implements ISponsorshipState {
 
     @Override
     public SponsorshipRequest addSponsorshipRequest(TicketedEvent event) {
+        // Create a new Request object and add it to the list
         SponsorshipRequest request = new SponsorshipRequest(this.nextRequestNumber, event);
         this.nextRequestNumber++;
         this.sponsorshipRequests.add(request);

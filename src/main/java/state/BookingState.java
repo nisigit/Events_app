@@ -51,6 +51,7 @@ public class BookingState implements IBookingState {
         Booking newBooking = new Booking(this.nextBookingNumber, booker, performance,
                                         numTickets, amountPaid, LocalDateTime.now());
         this.nextBookingNumber++;
+        // If there's no bookings for this event currently, then create a new object in the map
         if (!bookings.containsKey(performance.getEvent().getEventNumber())) {
             bookings.put(performance.getEvent().getEventNumber(), new ArrayList<>());
         }

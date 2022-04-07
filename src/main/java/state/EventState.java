@@ -1,5 +1,6 @@
 package state;
 
+import external.MockEntertainmentProviderSystem;
 import model.*;
 
 import java.time.LocalDateTime;
@@ -41,6 +42,7 @@ public class EventState implements IEventState {
 
     @Override
     public NonTicketedEvent createNonTicketedEvent(EntertainmentProvider organiser, String title, EventType type) {
+        // Create a new NonTicketedEvent and add it to the list
         NonTicketedEvent nonTicketedEvent = new NonTicketedEvent(uniqueEventNumber++, organiser, title, type);
         events.add(nonTicketedEvent);
         return nonTicketedEvent;
@@ -48,6 +50,7 @@ public class EventState implements IEventState {
 
     @Override
     public TicketedEvent createTicketedEvent(EntertainmentProvider organiser, String title, EventType type, double ticketPrice, int numTickets) {
+        // Create a new TicketedEvent and add it to the list
         TicketedEvent ticketedEvent = new TicketedEvent(uniqueEventNumber++, organiser, title, type, ticketPrice, numTickets);
         events.add(ticketedEvent);
         organiser.addEvent(ticketedEvent);
@@ -56,6 +59,7 @@ public class EventState implements IEventState {
 
     @Override
     public EventPerformance createEventPerformance(Event event, String venueAddress, LocalDateTime startDateTime, LocalDateTime endDateTime, List<String> performerNames, boolean hasSocialDistancing, boolean hasAirFiltration, boolean isOutdoors, int capacityLimit, int venueSize) {
+        // Create a new EventPerformance object and add it to the corresponding event
         EventPerformance newPerformance =  new EventPerformance(performanceNumber++, event, venueAddress, startDateTime, endDateTime, performerNames, hasSocialDistancing, hasAirFiltration, isOutdoors, capacityLimit, venueSize);
         event.addPerformance(newPerformance);
         return newPerformance;

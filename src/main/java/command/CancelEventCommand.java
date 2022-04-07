@@ -68,6 +68,7 @@ public class CancelEventCommand implements ICommand {
         // Remove all the bookings as the event is cancelled
         bookings.clear();
         result = true;
+        event.cancel();
 
 
     }
