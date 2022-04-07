@@ -1,6 +1,7 @@
 package command;
 
 import external.PaymentSystem;
+import logging.Logger;
 import model.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -74,7 +75,7 @@ public class CancelEventCommand implements ICommand {
         result = true;
         event.cancel();
 
-
+        Logger.getInstance().logAction("CancelEventCommand", result);
     }
 
     @Override

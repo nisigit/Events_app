@@ -2,6 +2,7 @@ package command;
 
 import controller.Context;
 import external.PaymentSystem;
+import logging.Logger;
 import model.*;
 
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ public class CancelBookingCommand implements ICommand {
         // After all the conditions are met, make sure the booking is logged as cancelled
         if(result) booking.cancelByConsumer();
 
+        Logger.getInstance().logAction("CancelBookingCommand", result);
     }
 
     @Override

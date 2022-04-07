@@ -3,6 +3,7 @@ package command;
 import controller.Context;
 import external.EntertainmentProviderSystem;
 import external.PaymentSystem;
+import logging.Logger;
 import model.*;
 import state.IBookingState;
 
@@ -62,6 +63,8 @@ public class BookEventCommand implements ICommand {
 
         system.recordNewBooking(eventNumber, performanceNumber, newBookingNumber, ((Consumer) user).getName(), user.getEmail(), numTicketsRequested);
         ((Consumer) user).addBooking(newBooking);
+
+        Logger.getInstance().logAction("BookEventCommand", newBooking);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.EntertainmentProvider;
 import model.Event;
 import model.EventPerformance;
@@ -73,6 +74,8 @@ public class AddEventPerformanceCommand implements ICommand {
         IEventState eventState = context.getEventState();
         newPerformance = eventState.createEventPerformance(event, venueAddress, startDateTime, endDateTime, performerNames, hasSocialDistancing, hasAirFiltration, isOutdoors, capacityLimit, venueSize);
         event.addPerformance(newPerformance);
+
+        Logger.getInstance().logAction("AddEventPerformanceCommand", newPerformance);
     }
 
     @Override
