@@ -58,11 +58,15 @@ public class CancelEventCommand implements ICommand {
         for (Booking booking : bookings) {
             // First set the booking state to be cancelled
             booking.cancelByProvider();
-            String buyerEmail = booking.getBooker().getEmail();
+
+            // notify consumer of cancellation
+            Consumer buyer = booking.getBooker();
+            buyer.notify(organiserMessage);
+
             // Refund the booking if ticketed
             if (event instanceof TicketedEvent) {
                 double discountedTicketPrice = ((TicketedEvent) event).getDiscountedTicketPrice();
-                paymentSystem.processRefund(buyerEmail, event.getOrganiser().getEmail(), discountedTicketPrice);
+                paymentSystem.processRefund(buyer.getEmail(), event.getOrganiser().getEmail(), discountedTicketPrice);
             }
         }
         // Remove all the bookings as the event is cancelled
