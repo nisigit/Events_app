@@ -3,7 +3,9 @@ package tests;
 import command.*;
 import controller.Context;
 import model.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -13,6 +15,11 @@ import java.util.List;
 public class RespondSponsorshipSystemTest {
     private Consumer consumer;
     private EntertainmentProvider provider;
+
+    @BeforeEach
+    void printTestName(TestInfo testInfo) {
+        System.out.println(testInfo.getDisplayName());
+    }
 
     private void createUsers(Context context) {
         consumer = new Consumer(
@@ -54,13 +61,31 @@ public class RespondSponsorshipSystemTest {
         return eventCommand.getResult();
     }
 
+    private Long createEvent2(Context context) {
+        LoginCommand login = new LoginCommand("indiansocediuni@gmail.com", "br0wn/t0wn");
+        login.execute(context);
+
+        CreateTicketedEventCommand eventCommand = new CreateTicketedEventCommand("IPL Screening",
+                EventType.Sports,
+                120,
+                5.00,
+                true);
+
+        eventCommand.execute(context);
+
+        LogoutCommand logout = new LogoutCommand();
+        logout.execute(context);
+
+        return eventCommand.getResult();
+    }
+
     @Test
-    void test() {
+    void respondSponsorshipTest() {
         Context context = new Context();
 
         createUsers(context);
 
-        // valid response attempt from govt rep
+        // valid acceptance attempt from govt rep
         long eventNumber = createEvent1(context);
 
         LoginCommand login = new LoginCommand("margaret.thatcher@gov.uk", "The Good times  ");
@@ -83,5 +108,32 @@ public class RespondSponsorshipSystemTest {
                 assertEquals(SponsorshipStatus.ACCEPTED, x.getStatus());
             }
         }
+
+        // valid rejection attempt from govt rep
+        eventNumber = createEvent2(context);
+
+        login.execute(context);
+
+        for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
+            if (x.getEvent().getEventNumber() == eventNumber) { requestNumber = x.getRequestNumber(); }
+        }
+
+        RespondSponsorshipCommand reject = new RespondSponsorshipCommand(requestNumber, 0);
+        reject.execute(context);
+
+        // check if result returned correctly
+        assertTrue(reject.getResult());
+
+        // check if request has actually been rejected within SponsorshipState
+        for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
+            if (x.getEvent().getEventNumber() == eventNumber) {
+                assertEquals(SponsorshipStatus.REJECTED, x.getStatus());
+            }
+        }
+
+        LogoutCommand logout = new LogoutCommand();
+        logout.execute(context);
+
+        
     }
 }
