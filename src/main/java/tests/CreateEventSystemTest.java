@@ -4,13 +4,19 @@ import command.CreateTicketedEventCommand;
 import command.RegisterEntertainmentProviderCommand;
 import controller.Controller;
 import model.EventType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CreateEventSystemTest {
+    @BeforeEach
+    void printTestName(TestInfo testInfo) {
+        System.out.println(testInfo.getDisplayName());
+    }
 
     private static void createAndLoginMovieProvider(Controller controller) {
         controller.runCommand(new RegisterEntertainmentProviderCommand(

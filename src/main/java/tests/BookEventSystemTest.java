@@ -4,7 +4,10 @@ import command.*;
 import controller.Controller;
 import model.EventPerformance;
 import model.EventType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
@@ -13,6 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookEventSystemTest {
+    @BeforeEach
+    void printTestName(TestInfo testInfo) {
+        System.out.println(testInfo.getDisplayName());
+    }
+
     private void registerUsers(Controller controller) {
         controller.runCommand(new RegisterConsumerCommand(
                 "Aper Son",

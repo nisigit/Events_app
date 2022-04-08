@@ -8,7 +8,10 @@ import controller.Controller;
 import model.Consumer;
 import model.EntertainmentProvider;
 import model.GovernmentRepresentative;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 
@@ -18,6 +21,11 @@ public class LogInSystemTest {
     private Consumer consumer;
     private EntertainmentProvider provider;
     private GovernmentRepresentative govtRep;
+
+    @BeforeEach
+    void printTestName(TestInfo testInfo) {
+        System.out.println(testInfo.getDisplayName());
+    }
 
     private void registerUsers(Controller controller) {
         LogoutCommand logout = new LogoutCommand();

@@ -3,7 +3,9 @@ package tests;
 import command.*;
 import controller.Controller;
 import model.EventType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -11,6 +13,11 @@ import static org.testng.Assert.assertTrue;
 import java.util.ArrayList;
 
 public class CancelEventSystemTest {
+    @BeforeEach
+    void printTestName(TestInfo testInfo) {
+        System.out.println(testInfo.getDisplayName());
+    }
+
     private void registerUsers(Controller controller) {
         controller.runCommand(new RegisterEntertainmentProviderCommand(
                 "Nitndeo",
