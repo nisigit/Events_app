@@ -25,26 +25,6 @@ public class BookEventSystemTest {
         System.out.println(testInfo.getDisplayName());
     }
 
-    private void registerUsers(Controller controller) {
-        controller.runCommand(new RegisterConsumerCommand(
-                "Aper Son",
-                "human@being.com",
-                "0000000",
-                "IAmAGuy",
-                "humanpayment@money.com"));
-        controller.runCommand(new LogoutCommand());
-
-        controller.runCommand(new RegisterEntertainmentProviderCommand(
-                "Marvel Studios",
-                "New York probably",
-                "kebinfeeg@bing.com",
-                "Kabro Fug",
-                "kebinfeeg@bing.com",
-                "synder4eva",
-                new ArrayList<>(), new ArrayList<>()));
-        controller.runCommand(new LogoutCommand());
-    }
-
     private void registerUsers(Context context) {
         Consumer consumer = new Consumer(
                 "Aper Son",
@@ -64,29 +44,6 @@ public class BookEventSystemTest {
 
         context.getUserState().addUser(consumer);
         context.getUserState().addUser(provider);
-    }
-
-    private EventPerformance createEventWithPerformance(Controller controller) {
-        controller.runCommand(new LoginCommand("kebinfeeg@bing.com", "synder4eva"));
-        CreateTicketedEventCommand movie = new CreateTicketedEventCommand(
-                "Spider-Man 4: God Pls Can Zendaya Be My GF Again #dard",
-                EventType.Movie,
-                400,
-                5.00,
-                true);
-        controller.runCommand(movie);
-        long eventNumber = movie.getResult();
-
-        AddEventPerformanceCommand moviePerformance = new AddEventPerformanceCommand(
-                eventNumber,
-                "Vue",
-                LocalDateTime.now().plusYears(1),
-                LocalDateTime.now().plusYears(1).plusHours(3),
-                List.of("Tom Holland, Zendaya, Jared Leto, Tom Hardy, Robert Pattinson"),
-                true, true, false, 400, 400);
-        controller.runCommand(moviePerformance);
-        controller.runCommand(new LogoutCommand());
-        return moviePerformance.getResult();
     }
 
     private EventPerformance createEventWithPerformance(Context context) {
@@ -114,13 +71,6 @@ public class BookEventSystemTest {
         logout.execute(context);
 
         return moviePerformance.getResult();
-    }
-
-    private Long bookEvent(Controller controller, long eventNumber,
-                           long performanceNumber, int nrTicketsRequested) {
-        BookEventCommand book = new BookEventCommand(eventNumber, performanceNumber, nrTicketsRequested);
-        controller.runCommand(book);
-        return book.getResult();
     }
 
     private Long bookEvent(Context context, long eventNumber,
