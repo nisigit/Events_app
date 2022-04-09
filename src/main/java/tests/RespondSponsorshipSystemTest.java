@@ -7,10 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-
 import java.util.List;
+
+import static org.testng.Assert.*;
 
 public class RespondSponsorshipSystemTest {
     private Consumer consumer;
@@ -79,6 +78,24 @@ public class RespondSponsorshipSystemTest {
         return eventCommand.getResult();
     }
 
+    private Long createEvent3(Context context) {
+        LoginCommand login = new LoginCommand("indiansocediuni@gmail.com", "br0wn/t0wn");
+        login.execute(context);
+
+        CreateTicketedEventCommand eventCommand = new CreateTicketedEventCommand("Holi celebration",
+                EventType.Dance,
+                120,
+                1,
+                true);
+
+        eventCommand.execute(context);
+
+        LogoutCommand logout = new LogoutCommand();
+        logout.execute(context);
+
+        return eventCommand.getResult();
+    }
+
     @Test
     void respondSponsorshipTest() {
         Context context = new Context();
@@ -134,6 +151,75 @@ public class RespondSponsorshipSystemTest {
         LogoutCommand logout = new LogoutCommand();
         logout.execute(context);
 
-        
+        // invalid response attempt from consumer
+        eventNumber = createEvent3(context);
+
+        login = new LoginCommand("unhealthy-sleep-schedule@ed.ac.uk", "Incorrect");
+        login.execute(context);
+
+        for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
+            if (x.getEvent().getEventNumber() == eventNumber) { requestNumber = x.getRequestNumber(); }
+        }
+
+        RespondSponsorshipCommand invalidConsumer = new RespondSponsorshipCommand(requestNumber, 11);
+        invalidConsumer.execute(context);
+
+        // check if result returned correctly
+        assertFalse(invalidConsumer.getResult());
+
+        // check if request is still 'Pending' within SponsorshipState
+        for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
+            if (x.getEvent().getEventNumber() == eventNumber) {
+                assertEquals(SponsorshipStatus.PENDING, x.getStatus());
+            }
+        }
+
+        // invalid response attempt from entertainment provider
+        login = new LoginCommand("indiansocediuni@gmail.com", "br0wn/t0wn");
+        login.execute(context);
+
+        RespondSponsorshipCommand invalidProvider = new RespondSponsorshipCommand(requestNumber, 69);
+        invalidProvider.execute(context);
+
+        // check if result returned correctly
+        assertFalse(invalidProvider.getResult());
+
+        // check if request is still 'Pending' within SponsorshipState
+        for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
+            if (x.getEvent().getEventNumber() == eventNumber) {
+                assertEquals(SponsorshipStatus.PENDING, x.getStatus());
+            }
+        }
+
+        // invalid response attempt from government provider (wrong percentage)
+        login = new LoginCommand("margaret.thatcher@gov.uk", "The Good times  ");
+        login.execute(context);
+
+        RespondSponsorshipCommand negativePercent = new RespondSponsorshipCommand(requestNumber, -1);
+        negativePercent.execute(context);
+
+        // check if result returned correctly
+        assertFalse(negativePercent.getResult());
+
+        // check if request is still 'Pending' within SponsorshipState
+        for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
+            if (x.getEvent().getEventNumber() == eventNumber) {
+                assertEquals(SponsorshipStatus.PENDING, x.getStatus());
+            }
+        }
+
+        RespondSponsorshipCommand percentMoreThan100 = new RespondSponsorshipCommand(requestNumber, 110);
+        percentMoreThan100.execute(context);
+
+        // check if result returned correctly
+        assertFalse(negativePercent.getResult());
+
+        // check if request is still 'Pending' within SponsorshipState
+        for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
+            if (x.getEvent().getEventNumber() == eventNumber) {
+                assertEquals(SponsorshipStatus.PENDING, x.getStatus());
+            }
+        }
+
     }
 }
