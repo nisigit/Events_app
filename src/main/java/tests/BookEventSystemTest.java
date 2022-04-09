@@ -124,5 +124,7 @@ public class BookEventSystemTest {
 
         bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
         assertNull(bookingNumber);
+
+        //TODO: Add case for govt rep trying to book an event
     }
 }
