@@ -12,8 +12,6 @@ import java.util.List;
 import static org.testng.Assert.*;
 
 public class RespondSponsorshipSystemTest {
-    private Consumer consumer;
-    private EntertainmentProvider provider;
 
     @BeforeEach
     void printTestName(TestInfo testInfo) {
@@ -21,14 +19,14 @@ public class RespondSponsorshipSystemTest {
     }
 
     private void createUsers(Context context) {
-        consumer = new Consumer(
+        Consumer consumer = new Consumer(
                 "Cristina Alexandru",
                 "unhealthy-sleep-schedule@ed.ac.uk",
                 "123456789",
                 "Incorrect",
                 "sepp@paypal.com");
 
-        provider = new EntertainmentProvider(
+        EntertainmentProvider provider = new EntertainmentProvider(
                 "Edinburgh University Indian Society",
                 "indiansocediuni@gmail.com",
                 "indiansoc.eusa@crypto.org",
