@@ -34,7 +34,7 @@ public class RespondSponsorshipSystemTest {
                 "indiansocediuni@gmail.com",
                 "br0wn/t0wn",
                 List.of("Isha Pawar", "Shivie Choudhry", "Diya Grace Jacob"),
-                List.of("i.pawar@ed.ac.uk", "m.s.choudhry@ed.ac.uk", "dont-fucking-contact-me@im-so-tired.com"));
+                List.of("i.pawar@ed.ac.uk", "m.s.choudhry@ed.ac.uk", "dont-contact-me@im-so-tired.com"));
 
         context.getUserState().addUser(consumer);
         context.getUserState().addUser(provider);

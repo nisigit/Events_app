@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.testng.Assert.*;
 
@@ -21,29 +22,8 @@ public class CancelEventSystemTest {
         System.out.println(testInfo.getDisplayName());
     }
 
-    private void registerUsers(Controller controller) {
-        controller.runCommand(new RegisterEntertainmentProviderCommand(
-                "Nitndeo",
-                "Nippon",
-                "doug.bowser@paypal.com",
-                "Reggie Jr.",
-                "regigigas@nitndeo.com",
-                "sonicBae",
-                new ArrayList<>(), new ArrayList<>()));
-        controller.runCommand(new LogoutCommand());
-
-        controller.runCommand(new RegisterConsumerCommand(
-                "Not Aprovider",
-                "n.provider@noevents.com",
-                "69696969696",
-                "eventsn't",
-                "n.provider@noevents.com"
-        ));
-        controller.runCommand(new LogoutCommand());
-    }
-
     private void registerUsers(Context context) {
-        EntertainmentProvider provider = new EntertainmentProvider(
+        EntertainmentProvider provider1 = new EntertainmentProvider(
                 "Nitndeo",
                 "Nippon",
                 "doug.bowser@paypal.com",
@@ -52,6 +32,16 @@ public class CancelEventSystemTest {
                 "sonicBae",
                 new ArrayList<>(), new ArrayList<>());
 
+        EntertainmentProvider provider2 = new EntertainmentProvider(
+                "Edinburgh University Indian Society",
+                "indiansocediuni@gmail.com",
+                "indiansoc.eusa@crypto.org",
+                "Simran Punjabi",
+                "indiansocediuni@gmail.com",
+                "br0wn/t0wn",
+                List.of("Isha Pawar", "Shivie Choudhry", "Diya Grace Jacob"),
+                List.of("i.pawar@ed.ac.uk", "m.s.choudhry@ed.ac.uk", "dont-contact-me@im-so-tired.com"));
+
         Consumer consumer = new Consumer(
                 "Not Aprovider",
                 "n.provider@noevents.com",
@@ -59,16 +49,9 @@ public class CancelEventSystemTest {
                 "eventsn't",
                 "n.provider@noevents.com");
 
-        context.getUserState().addUser(provider);
+        context.getUserState().addUser(provider1);
+        context.getUserState().addUser(provider2);
         context.getUserState().addUser(consumer);
-    }
-
-    private Long createEvent1(Controller controller) {
-        controller.runCommand(new LoginCommand("regigigas@nitndeo.com", "sonicBae"));
-        CreateNonTicketedEventCommand ntEvent = new CreateNonTicketedEventCommand("BOTW 2 release party", EventType.Dance);
-        controller.runCommand(ntEvent);
-        controller.runCommand(new LogoutCommand());
-        return ntEvent.getResult();
     }
 
     private Long createEvent1(Context context) {
@@ -86,14 +69,6 @@ public class CancelEventSystemTest {
         return event.getResult();
     }
 
-    private Long createEvent2(Controller controller) {
-        controller.runCommand(new LoginCommand("regigigas@nitndeo.com", "sonicBae"));
-        CreateNonTicketedEventCommand ntEvent = new CreateNonTicketedEventCommand("We Bought Sonic", EventType.Sports);
-        controller.runCommand(ntEvent);
-        controller.runCommand(new LogoutCommand());
-        return ntEvent.getResult();
-    }
-
     private Long createEvent2(Context context) {
         LoginCommand login = new LoginCommand("regigigas@nitndeo.com", "sonicBae");
         login.execute(context);
@@ -104,14 +79,6 @@ public class CancelEventSystemTest {
         LogoutCommand logout = new LogoutCommand();
         logout.execute(context);
 
-        return ntEvent.getResult();
-    }
-
-    private Long createEvent3(Controller controller) {
-        controller.runCommand(new LoginCommand("regigigas@nitndeo.com", "sonicBae"));
-        CreateNonTicketedEventCommand ntEvent = new CreateNonTicketedEventCommand("Announcement: Activision owns Nintendo now", EventType.Theatre);
-        controller.runCommand(ntEvent);
-        controller.runCommand(new LogoutCommand());
         return ntEvent.getResult();
     }
 
@@ -126,12 +93,6 @@ public class CancelEventSystemTest {
         logout.execute(context);
 
         return ntEvent.getResult();
-    }
-
-    private boolean cancelEvent(Controller controller, long eventNumber, String organiserMessage) {
-        CancelEventCommand cancelCommand = new CancelEventCommand(eventNumber, organiserMessage);
-        controller.runCommand(cancelCommand);
-        return cancelCommand.getResult();
     }
 
     private boolean cancelEvent(Context context, long eventNumber, String organiserMessage) {
@@ -179,18 +140,34 @@ public class CancelEventSystemTest {
         // check if event status is NOT cancelled if user does not exist
         assertNotEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED);
 
-        // non-provider tries to cancel event
-        logout = new LogoutCommand();
+        // consumer tries to cancel event
         logout.execute(context);
 
         login = new LoginCommand("n.provider@noevents.com", "eventsn't");
         login.execute(context);
 
         assertFalse(cancelEvent(context, eventNumber, "i'm committing fraud"));
-        // check if event status is NOT cancelled if user is not the provider
+        // check if event status is NOT cancelled if user is not the organiser
         assertNotEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED);
 
-        //TODO: Add case for if government rep tries to cancel event
-        //TODO: Add case for if non-organiser tries to cancel event (create second provider)
+        // government provider tries to cancel event
+        logout.execute(context);
+
+        login = new LoginCommand("margaret.thatcher@gov.uk", "The Good times  ");
+        login.execute(context);
+
+        assertFalse(cancelEvent(context, eventNumber, "i should not be able to do this"));
+        // check if event status is NOT cancelled if user is not the organiser
+        assertNotEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED);
+
+        // non-organiser tries to cancel event
+        logout.execute(context);
+
+        login = new LoginCommand("indiansocediuni@gmail.com", "br0wn/t0wn");
+        login.execute(context);
+
+        assertFalse(cancelEvent(context, eventNumber, "i should not be able to do this"));
+        // check if event status is NOT cancelled if user is not the organiser
+        assertNotEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED);
     }
 }
