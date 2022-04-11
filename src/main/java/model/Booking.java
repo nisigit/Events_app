@@ -58,7 +58,7 @@ public class Booking {
     public String toString() {
         return "Booking{" +
                 "bookingNumber=" + bookingNumber +
-                ", booker=" + booker +
+                ", booker=" + booker.getName() +
                 ", performance=" + performance +
                 ", numTickets=" + numTickets +
                 ", amountPaid=" + amountPaid +
