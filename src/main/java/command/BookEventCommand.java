@@ -44,8 +44,8 @@ public class BookEventCommand implements ICommand {
 
         TicketedEvent ticketedEvent = (TicketedEvent) event;
         EntertainmentProviderSystem system = ticketedEvent.getOrganiser().getProviderSystem();
-        if (!(eventPerformance.getEndDateTime().isAfter(LocalDateTime.now()) &&
-                system.getNumTicketsLeft(eventNumber, performanceNumber) >= numTicketsRequested)) {
+        if ((eventPerformance.getEndDateTime().isBefore(LocalDateTime.now()) ||
+                system.getNumTicketsLeft(eventNumber, performanceNumber) < numTicketsRequested)) {
             return;
         }
 

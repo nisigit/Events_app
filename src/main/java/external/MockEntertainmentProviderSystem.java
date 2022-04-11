@@ -55,13 +55,7 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
 
     @Override
     public int getNumTicketsLeft(long eventNumber, long performanceNumber) {
-        int ticketsLeft = globalNrTickets.get(eventNumber);
-        Map<Long, Integer> performanceTickets = eventPerformanceTickets.get(eventNumber);
-        for (Long currPerformanceNumber: performanceTickets.keySet()) {
-            if (currPerformanceNumber != performanceNumber) {
-                ticketsLeft -= performanceTickets.get(currPerformanceNumber);
-            }
-        }
+        int ticketsLeft = eventPerformanceTickets.get(eventNumber).get(performanceNumber);
         System.out.println("There are " + ticketsLeft + " tickets left for current performance provided");
         return ticketsLeft;
     }
@@ -69,6 +63,10 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
     @Override
     public void recordNewBooking(long eventNumber, long performanceNumber, long bookingNumber, String consumerName, String consumerEmail, int bookedTickets) {
         int x = getNumTicketsLeft(eventNumber, performanceNumber);
+        Map<Long, Integer> performanceTickets = eventPerformanceTickets.get(eventNumber);
+        for (Long currPerformanceNumber: performanceTickets.keySet()) {
+            performanceTickets.replace(currPerformanceNumber, x, x - bookedTickets);
+        }
         eventPerformanceTickets.get(eventNumber).replace(performanceNumber, x, x - bookedTickets);
         System.out.println("New booking was made with the following details: ");
         System.out.println("Event number: " + eventNumber);

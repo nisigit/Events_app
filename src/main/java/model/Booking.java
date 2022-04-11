@@ -19,6 +19,7 @@ public class Booking {
         this.numTickets = numTickets;
         this.amountPaid = amountPaid;
         this.bookingDateTime = bookingDateTime;
+        this.status = BookingStatus.Active;
     }
 
     public long getBookingNumber() {
