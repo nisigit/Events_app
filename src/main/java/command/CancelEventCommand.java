@@ -70,10 +70,12 @@ public class CancelEventCommand implements ICommand {
                 paymentSystem.processRefund(buyer.getEmail(), event.getOrganiser().getEmail(), discountedTicketPrice);
             }
         }
-        // Remove all the bookings as the event is cancelled
-        bookings.clear();
         result = true;
         event.cancel();
+        for (Booking booking: context.getBookingState().findBookingsByEventNumber(eventNumber)){
+            // Change the booking status correspondingly
+            booking.cancelByProvider();
+        }
 
         //Logger.getInstance().logAction("CancelEventCommand", result);
     }
