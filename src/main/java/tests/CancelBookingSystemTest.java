@@ -183,7 +183,7 @@ public class CancelBookingSystemTest {
     }
 
     @Test
-    void cancelEventTest() {
+    void cancelBookingTest() {
         Context context = new Context();
 
         EntertainmentProvider createdEntProvider = createEntProvider(context);
@@ -234,8 +234,8 @@ public class CancelBookingSystemTest {
         assertTrue(cancelBookingCommand1.getResult());
         assertFalse(cancelBookingCommand2.getResult());
         assertFalse(cancelBookingCommand3.getResult());
-        assertNull(bookingState.findBookingByNumber(bookEvent1Performance1Result));
-        assertTrue(bookingState.getBookings().containsKey(bookEvent1Performance2Result));
-        assertTrue(bookingState.getBookings().containsKey(bookEvent2Performance1Result));
+        assertEquals(bookingState.findBookingByNumber(bookEvent1Performance1Result).getStatus(), BookingStatus.CancelledByConsumer);
+        assertNotNull(bookingState.findBookingByNumber(bookEvent1Performance2Result));
+        assertNotNull(bookingState.findBookingByNumber(bookEvent2Performance1Result));
     }
 }
