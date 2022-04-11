@@ -235,7 +235,7 @@ public class CancelBookingSystemTest {
         assertFalse(cancelBookingCommand2.getResult());
         assertFalse(cancelBookingCommand3.getResult());
         assertNull(context.getBookingState().findBookingByNumber(bookEvent1Performance1Result));
-        assertTrue(bookingState.getBookings().containsKey(bookEvent1Performance2Result));
-        assertTrue(bookingState.getBookings().containsKey(bookEvent2Performance1Result));
+        assertNotNull(bookingState.findBookingByNumber(bookEvent1Performance2Result));
+        assertNotNull(bookingState.findBookingByNumber(bookEvent2Performance1Result));
     }
 }
