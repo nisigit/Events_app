@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Returns a list of bookings for event performances within a specified time interval, if the current user
+ * is a government representative
+ */
 public class GovernmentReport1Command implements ICommand {
 
     private List<Booking> result;
@@ -82,9 +86,8 @@ public class GovernmentReport1Command implements ICommand {
 
     /**
      * Get the result from the latest run of the command.
-     * @return list of Bookings if successful, and null for failed conditions
+     * @return list of Bookings if execution was successful, and null otherwise
      */
-
     @Override
     public List<Booking> getResult() {
         return result;
