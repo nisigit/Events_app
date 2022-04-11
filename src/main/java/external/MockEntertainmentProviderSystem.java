@@ -55,7 +55,15 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
 
     @Override
     public int getNumTicketsLeft(long eventNumber, long performanceNumber) {
-        return eventPerformanceTickets.get(eventNumber).get(performanceNumber);
+        int ticketsLeft = globalNrTickets.get(eventNumber);
+        Map<Long, Integer> performanceTickets = eventPerformanceTickets.get(eventNumber);
+        for (Long currPerformanceNumber: performanceTickets.keySet()) {
+            if (currPerformanceNumber != performanceNumber) {
+                ticketsLeft -= performanceTickets.get(currPerformanceNumber);
+            }
+        }
+        System.out.println("There are " + ticketsLeft + " tickets left for current performance provided");
+        return ticketsLeft;
     }
 
     @Override

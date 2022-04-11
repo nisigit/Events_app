@@ -14,7 +14,7 @@ public class GovernmentReport1Command implements ICommand {
     private LocalDateTime intervalStartInclusive, intervalEndInclusive;
 
     /**
-     *
+     * Create new instance of government report command, with given parameters
      * @param intervalStartInclusive indicates the start time of the interval provided
      * @param intervalEndInclusive indicates the end time of the interval provided
      */
