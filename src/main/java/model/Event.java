@@ -58,4 +58,10 @@ public abstract class Event {
         return eventPerformances.values();
     }
 
+    @Override
+    public String toString() {
+        return "Event info: \n" + "ID number: " + eventNumber + "\nTitle: " + title
+                + "\nType: " + type + "\nStatus: " + eventStatus + "\nOrganiser: " + organiser.getOrgName()
+                + "\nPerformances: " + eventPerformances;
+    }
 }

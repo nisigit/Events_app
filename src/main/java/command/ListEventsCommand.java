@@ -29,7 +29,7 @@ public class ListEventsCommand implements ICommand {
         if (this.userEventsOnly) {
             if (user == null) return;
             if (user instanceof EntertainmentProvider) {
-                List<Event> entEvents = (ArrayList<Event>) ((EntertainmentProvider) user).getEvents();
+                List<Event> entEvents = ((EntertainmentProvider) user).getEvents();
                 result = new ArrayList<>(entEvents);
             }
             else if (user instanceof Consumer) {

@@ -53,7 +53,8 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
 
     @Override
     public int getNumTicketsLeft(long eventNumber, long performanceNumber) {
-        if (eventPerformances.get(eventNumber).contains(performanceNumber)) {
+        // -1 is the performanceNumber value used internally when event information needs to be displayed in the View Event use case
+        if (eventPerformances.get(eventNumber).contains(performanceNumber) || performanceNumber == -1) {
             int ticketsLeft = eventTickets.get(eventNumber);
             System.out.println("There are " + ticketsLeft + " tickets left for current performance provided");
             return ticketsLeft;

@@ -51,10 +51,14 @@ public class TicketedEvent extends Event {
 
     @Override
     public String toString() {
-        return "TicketedEvent{" +
-                "ticketPrice=" + ticketPrice +
-                ", numTickets=" + numTickets +
-                ", sponsorshipRequest=" + sponsorshipRequest +
-                '}';
+        return super.toString() + "\nTicket price: " + ticketPrice +
+                "\nNumber of tickets left: " + getOrganiser().getProviderSystem().getNumTicketsLeft(eventNumber, -1)
+                +"\nSponsorship request" + sponsorshipRequest;
+
+//        return "TicketedEvent{" +
+//                "ticketPrice=" + ticketPrice +
+//                ", numTickets=" + getOrganiser().getProviderSystem().getNumTicketsLeft(eventNumber, -1) +
+//                ", sponsorshipRequest=" + sponsorshipRequest +
+//                '}';
     }
 }

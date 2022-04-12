@@ -72,7 +72,7 @@ public class EventPerformance {
     public String toString() {
         return "EventPerformance{" +
                 "performanceNumber=" + performanceNumber +
-                ", event=" + event +
+                ", event=" + event.getTitle() +
                 ", venueAddress='" + venueAddress + '\'' +
                 ", startDateTime=" + startDateTime +
                 ", endDateTime=" + endDateTime +
