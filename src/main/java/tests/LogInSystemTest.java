@@ -1,14 +1,12 @@
 package tests;
 
 import command.LoginCommand;
-import command.LogoutCommand;
-import command.RegisterConsumerCommand;
-import command.RegisterEntertainmentProviderCommand;
 import controller.Context;
-import controller.Controller;
+import logging.Logger;
 import model.Consumer;
 import model.EntertainmentProvider;
 import model.GovernmentRepresentative;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -26,6 +24,12 @@ public class LogInSystemTest {
     @BeforeEach
     void printTestName(TestInfo testInfo) {
         System.out.println(testInfo.getDisplayName());
+    }
+
+    @AfterEach
+    void clearLogs() {
+        Logger.getInstance().clearLog();
+        System.out.println("---");
     }
 
     private void createUsers(Context context) {
@@ -49,11 +53,9 @@ public class LogInSystemTest {
     }
 
     @Test
-    void LoginTest() {
-        Controller controller = new Controller();
+    void loginConsumer() {
         Context context = new Context();
         createUsers(context);
-
 
         // valid consumer login attempt
         LoginCommand login = new LoginCommand("c.sumer@customer.com", "SpendingMoneyIsSwag");
@@ -61,27 +63,42 @@ public class LogInSystemTest {
 
         assertEquals(login.getResult(), this.consumer);
         assertEquals(context.getUserState().getCurrentUser(), this.consumer);
+    }
+
+    @Test
+    void loginEntertainmentProvider() {
+        Context context = new Context();
+        createUsers(context);
 
         // valid entertainment provider login attempt
-        login = new LoginCommand("e.vider@makeseventsllc.ac.uk", "saregamapadhanisa");
+        LoginCommand login = new LoginCommand("e.vider@makeseventsllc.ac.uk", "saregamapadhanisa");
         login.execute(context);
 
         assertEquals(login.getResult(), this.provider);
         assertEquals(context.getUserState().getCurrentUser(), this.provider);
+    }
+
+    @Test
+    void loginGovernmentRep() {
+        Context context = new Context();
+        createUsers(context);
 
         // valid government rep login attempt
-        login = new LoginCommand("margaret.thatcher@gov.uk", "The Good times  ");
+        LoginCommand login = new LoginCommand("margaret.thatcher@gov.uk", "The Good times  ");
         login.execute(context);
 
         assertEquals(login.getResult(), this.govtRep);
         assertEquals(context.getUserState().getCurrentUser(), this.govtRep);
+    }
 
-        // invalid login attempt
-        LogoutCommand logout = new LogoutCommand();
-        logout.execute(context);
+    @Test
+    void invalidLogin() {
+        Context context = new Context();
+        createUsers(context);
 
-        login = new LoginCommand("dontexist@lol.uk", "incorporeal");
-        controller.runCommand(login);
+        // invalid user login
+        LoginCommand login = new LoginCommand("dontexist@lol.uk", "incorporeal");
+        login.execute(context);
 
         assertNull(login.getResult());
         assertNull(context.getUserState().getCurrentUser());
