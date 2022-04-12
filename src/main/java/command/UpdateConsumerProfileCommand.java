@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.Consumer;
 import model.ConsumerPreferences;
 import model.User;
@@ -46,6 +47,8 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand {
 
             this.successResult = true;
         }
+
+        Logger.getInstance().logAction("UpdateConsumerProfileCommand", successResult);
     }
 
 }

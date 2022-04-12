@@ -2,6 +2,7 @@ package command;
 
 import controller.Context;
 import external.PaymentSystem;
+import logging.Logger;
 import model.*;
 
 public class RespondSponsorshipCommand implements ICommand {
@@ -51,6 +52,8 @@ public class RespondSponsorshipCommand implements ICommand {
             }
             this.result = true;
         }
+
+        Logger.getInstance().logAction("RespondSponsorshipCommand", result);
     }
 
     @Override

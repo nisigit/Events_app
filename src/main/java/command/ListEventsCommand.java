@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.*;
 
 import java.util.ArrayList;
@@ -53,6 +54,8 @@ public class ListEventsCommand implements ICommand {
         if (this.activeEventsOnly) {
             result.removeIf(event -> event.getStatus() != EventStatus.ACTIVE);
         }
+
+        Logger.getInstance().logAction("ListEventsCommand", result);
     }
 
     @Override

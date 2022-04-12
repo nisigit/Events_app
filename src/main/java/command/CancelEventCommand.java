@@ -77,7 +77,7 @@ public class CancelEventCommand implements ICommand {
             booking.cancelByProvider();
         }
 
-        //Logger.getInstance().logAction("CancelEventCommand", result);
+        Logger.getInstance().logAction("CancelEventCommand", result);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.*;
 
 import java.time.LocalDateTime;
@@ -78,10 +79,8 @@ public class GovernmentReport1Command implements ICommand {
                 }
             }
         }
-        // testing purposes
-//        System.out.println(intervalStartInclusive);
-//        System.out.println(intervalEndInclusive);
-//        System.out.println(result);
+
+        Logger.getInstance().logAction("GovernmentReport1Command", result);
     }
 
     /**

@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.Booking;
 import model.Consumer;
 import model.User;
@@ -22,6 +23,8 @@ public class ListConsumerBookingsCommand implements ICommand {
         if (user instanceof Consumer) {
             this.result = ((Consumer) user).getBookings();
         }
+
+        Logger.getInstance().logAction("ListConsumerBookingsCommand", result);
     }
 
     @Override

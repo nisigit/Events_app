@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.Event;
 import model.EventPerformance;
 import model.TicketedEvent;
@@ -32,7 +33,8 @@ public class GetAvailablePerformanceTicketsCommand implements ICommand {
             // get the tickets left after all the conditions are met
             result = event.getOrganiser().getProviderSystem().getNumTicketsLeft(this.eventNumber, this.performanceNumber);
         }
-        else return;
+
+        Logger.getInstance().logAction("GetAvailablePerformanceTicketsCommand", result);
     }
 
     @Override

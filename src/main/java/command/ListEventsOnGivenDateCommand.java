@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.*;
 
 import java.time.LocalDateTime;
@@ -38,6 +39,8 @@ public class ListEventsOnGivenDateCommand extends ListEventsCommand {
             // if the condition passed, add the event to the output list
             if (isIncluded) result.add(event);
         }
+
+        Logger.getInstance().logAction("ListEventsOnGivenDateCommand", result);
     }
 
     @Override

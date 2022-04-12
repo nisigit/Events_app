@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.User;
 
 public class LoginCommand implements ICommand {
@@ -27,6 +28,8 @@ public class LoginCommand implements ICommand {
         if (user != null) {
             context.getUserState().setCurrentUser(user);
         }
+
+        Logger.getInstance().logAction("LoginCommand", user);
     }
 
     @Override

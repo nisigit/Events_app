@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.*;
 
 import java.util.List;
@@ -27,7 +28,8 @@ public class ListEventBookingsCommand implements ICommand {
         if (user instanceof GovernmentRepresentative || user.equals(event.getOrganiser())) {
             result = context.getBookingState().findBookingsByEventNumber(this.eventNumber);
         }
-        else return;
+
+        Logger.getInstance().logAction("ListEventsBookingCommand", result);
     }
 
     @Override

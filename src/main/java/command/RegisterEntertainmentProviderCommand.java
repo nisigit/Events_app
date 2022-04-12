@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.EntertainmentProvider;
 import model.*;
 
@@ -59,6 +60,8 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
             context.getUserState().setCurrentUser(entertainmentProvider);
             context.getUserState().addUser(entertainmentProvider);
         }
+
+        Logger.getInstance().logAction("RegisterEntertainmentProviderCommand", entertainmentProvider);
     }
 
     @Override

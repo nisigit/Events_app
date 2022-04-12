@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.Consumer;
 import model.*;
 
@@ -42,6 +43,8 @@ public class RegisterConsumerCommand implements ICommand {
             context.getUserState().setCurrentUser(consumer);
             context.getUserState().addUser(consumer);
         }
+
+        Logger.getInstance().logAction("RegisterConsumerCommand", consumer);
     }
 
     @Override

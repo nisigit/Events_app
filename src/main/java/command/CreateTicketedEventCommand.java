@@ -2,6 +2,7 @@ package command;
 
 import controller.Context;
 import external.EntertainmentProviderSystem;
+import logging.Logger;
 import model.*;
 import state.IEventState;
 import state.ISponsorshipState;
@@ -37,6 +38,8 @@ public class CreateTicketedEventCommand extends CreateEventCommand {
         eventNumberResult = ticketedEvent.getEventNumber();
         EntertainmentProviderSystem system = ticketedEvent.getOrganiser().getProviderSystem();
         system.recordNewEvent(eventNumberResult, this.title, this.numTickets);
+
+        Logger.getInstance().logAction("CreateTicketedEventCommand", eventNumberResult);
     }
 
 }

@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.SponsorshipRequest;
 import model.*;
 
@@ -30,6 +31,8 @@ public class ListSponsorshipRequestsCommand implements ICommand {
                 result.add(sr);
             }
         }
+
+        Logger.getInstance().logAction("ListSponsorshipRequestsCommand", result);
     }
 
     @Override

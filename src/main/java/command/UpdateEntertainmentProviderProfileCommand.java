@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.EntertainmentProvider;
 import model.User;
 
@@ -55,6 +56,7 @@ public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileComm
             this.successResult = true;
         }
 
+        Logger.getInstance().logAction("UpdateEntertainmentProviderProfileCommand", successResult);
     }
 
 }
