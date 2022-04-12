@@ -29,7 +29,8 @@ public class ListEventsCommand implements ICommand {
         if (this.userEventsOnly) {
             if (user == null) return;
             if (user instanceof EntertainmentProvider) {
-                result = (ArrayList<Event>) ((EntertainmentProvider) user).getEvents();
+                List<Event> entEvents = (ArrayList<Event>) ((EntertainmentProvider) user).getEvents();
+                result = new ArrayList<>(entEvents);
             }
             else if (user instanceof Consumer) {
                 ConsumerPreferences cp = ((Consumer) user).getPreferences();
@@ -49,7 +50,7 @@ public class ListEventsCommand implements ICommand {
                 }
             }
         }
-        else result = (ArrayList<Event>) allEvents;
+        else result = new ArrayList<>(allEvents);
 
         if (this.activeEventsOnly) {
             result.removeIf(event -> event.getStatus() != EventStatus.ACTIVE);
