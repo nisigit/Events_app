@@ -2,11 +2,12 @@ package tests;
 
 import command.*;
 import controller.Context;
-import controller.Controller;
+import logging.Logger;
 import model.Consumer;
 import model.EntertainmentProvider;
 import model.EventPerformance;
 import model.EventType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -23,6 +24,12 @@ public class BookEventSystemTest {
     @BeforeEach
     void printTestName(TestInfo testInfo) {
         System.out.println(testInfo.getDisplayName());
+    }
+
+    @AfterEach
+    void clearLogs() {
+        Logger.getInstance().clearLog();
+        System.out.println("---");
     }
 
     private void registerUsers(Context context) {
@@ -81,7 +88,7 @@ public class BookEventSystemTest {
     }
 
     @Test
-    void bookEventTest() {
+    void consumerValidBooking() {
         Context context = new Context();
         registerUsers(context);
         EventPerformance performance = createEventWithPerformance(context);
@@ -98,37 +105,89 @@ public class BookEventSystemTest {
         assertNotNull(bookingNumber);
         assertNotNull(context.getBookingState().findBookingByNumber(bookingNumber));
 
+        logout.execute(context);
+    }
+
+    @Test
+    void consumerNonExistentEventBooking() {
+        Context context = new Context();
+        registerUsers(context);
+        EventPerformance performance = createEventWithPerformance(context);
+        LogoutCommand logout = new LogoutCommand();
+
+        // valid user login
+        LoginCommand login = new LoginCommand("human@being.com", "IAmAGuy");
+        login.execute(context);
+
         // tries to book event that does not exist
-        bookingNumber = bookEvent(context, 32421341, 3412, 902);
+        Long bookingNumber = bookEvent(context, 32421341, 3412, 902);
         assertNull(bookingNumber);
+    }
+
+    @Test
+    void consumerTooManyTicketsBooking() {
+        Context context = new Context();
+        registerUsers(context);
+        EventPerformance performance = createEventWithPerformance(context);
+        LogoutCommand logout = new LogoutCommand();
+
+        // valid user login
+        LoginCommand login = new LoginCommand("human@being.com", "IAmAGuy");
+        login.execute(context);
 
         // what if you try to book more tickets than the event has available?
-        bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 500);
+        Long bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 500);
         assertNull(bookingNumber);
 
         logout.execute(context);
+    }
+
+    @Test
+    void invalidUserBooking() {
+        Context context = new Context();
+        registerUsers(context);
+        EventPerformance performance = createEventWithPerformance(context);
+        LogoutCommand logout = new LogoutCommand();
 
         // completely invalid user login
-        login = new LoginCommand("fake@user.com", "IDontExistLol");
+        LoginCommand login = new LoginCommand("fake@user.com", "IDontExistLol");
         login.execute(context);
 
         // what happens if this invalid user tries to book an event?
-        bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
+        Long bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
         assertNull(bookingNumber);
 
         logout.execute(context);
+    }
+
+    @Test
+    void entProviderBooking() {
+        Context context = new Context();
+        registerUsers(context);
+        EventPerformance performance = createEventWithPerformance(context);
+        LogoutCommand logout = new LogoutCommand();
 
         // what happens if someone who's not a consumer tries to book an event?
-        login = new LoginCommand("kebinfeeg@bing.com", "synder4eva");
+        LoginCommand login = new LoginCommand("kebinfeeg@bing.com", "synder4eva");
         login.execute(context);
 
-        bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
+        Long bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
         assertNull(bookingNumber);
 
-        login = new LoginCommand("margaret.thatcher@gov.uk", "The Good times  ");
+        logout.execute(context);
+    }
+
+    @Test
+    void govtRepBooking() {
+        Context context = new Context();
+        registerUsers(context);
+        EventPerformance performance = createEventWithPerformance(context);
+        LogoutCommand logout = new LogoutCommand();
+
+        LoginCommand login = new LoginCommand("margaret.thatcher@gov.uk", "The Good times  ");
         login.execute(context);
 
-        bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
+        Long bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
         assertNull(bookingNumber);
     }
 }
