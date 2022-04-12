@@ -1,31 +1,30 @@
 package external;
 
-import model.EntertainmentProvider;
-import model.Event;
-import model.TicketedEvent;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MockEntertainmentProviderSystem implements EntertainmentProviderSystem {
 
     private String orgName;
     private String orgAddress;
-    private Map<Long, Map<Long, Integer>> eventPerformanceTickets;
-    private Map<Long, Integer> globalNrTickets;
+    private Map<Long, Integer> eventTickets;
+    private Map<Long, List<Long>> eventPerformances;
 
     public MockEntertainmentProviderSystem(String orgName, String orgAddress) {
-        eventPerformanceTickets = new HashMap<>();
-        globalNrTickets = new HashMap<>();
+        eventTickets = new HashMap<>();
+        eventPerformances = new HashMap<>();
         this.orgName = orgName;
         this.orgAddress = orgAddress;
     }
 
     @Override
     public void recordNewEvent(long eventNumber, String title, int numTickets) {
-        eventPerformanceTickets.put(eventNumber, new HashMap<>());
-        globalNrTickets.put(eventNumber, numTickets);
+        eventTickets.put(eventNumber, numTickets);
+        eventPerformances.put(eventNumber, new ArrayList<>());
+        // globalNrTickets.put(eventNumber, numTickets);
         System.out.println("A new event is created with the following details: ");
         System.out.println("Event Number: " + eventNumber);
         System.out.println("Event Title: " + title);
@@ -35,7 +34,7 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
 
     @Override
     public void cancelEvent(long eventNumber, String message) {
-        eventPerformanceTickets.remove(eventNumber);
+        eventTickets.remove(eventNumber);
         System.out.println("The event with the following details has been cancelled: ");
         System.out.println("Event number: " + eventNumber);
         System.out.println("Message: " + message);
@@ -44,8 +43,7 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
 
     @Override
     public void recordNewPerformance(long eventNumber, long performanceNumber, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        int nrTickets = globalNrTickets.get(eventNumber);
-        eventPerformanceTickets.get(eventNumber).put(performanceNumber, nrTickets);
+        eventPerformances.get(eventNumber).add(performanceNumber);
         System.out.println("A new event performance has been added to the event with the following details");
         System.out.println("Event number: " + eventNumber);
         System.out.println("Performance number in event: " + performanceNumber);
@@ -55,19 +53,21 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
 
     @Override
     public int getNumTicketsLeft(long eventNumber, long performanceNumber) {
-        int ticketsLeft = eventPerformanceTickets.get(eventNumber).get(performanceNumber);
-        System.out.println("There are " + ticketsLeft + " tickets left for current performance provided");
-        return ticketsLeft;
+        if (eventPerformances.get(eventNumber).contains(performanceNumber)) {
+            int ticketsLeft = eventTickets.get(eventNumber);
+            System.out.println("There are " + ticketsLeft + " tickets left for current performance provided");
+            return ticketsLeft;
+        }
+        else {
+            System.out.println("This event does not have a performance with this number");
+            return -1;
+        }
     }
 
     @Override
     public void recordNewBooking(long eventNumber, long performanceNumber, long bookingNumber, String consumerName, String consumerEmail, int bookedTickets) {
         int x = getNumTicketsLeft(eventNumber, performanceNumber);
-        Map<Long, Integer> performanceTickets = eventPerformanceTickets.get(eventNumber);
-        for (Long currPerformanceNumber: performanceTickets.keySet()) {
-            performanceTickets.replace(currPerformanceNumber, x, x - bookedTickets);
-        }
-        eventPerformanceTickets.get(eventNumber).replace(performanceNumber, x, x - bookedTickets);
+        eventTickets.replace(eventNumber, x - bookedTickets);
         System.out.println("New booking was made with the following details: ");
         System.out.println("Event number: " + eventNumber);
         System.out.println("Performance number: " + performanceNumber);
@@ -102,17 +102,16 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
 
         if (orgName != null ? !orgName.equals(that.orgName) : that.orgName != null) return false;
         if (orgAddress != null ? !orgAddress.equals(that.orgAddress) : that.orgAddress != null) return false;
-        if (eventPerformanceTickets != null ? !eventPerformanceTickets.equals(that.eventPerformanceTickets) : that.eventPerformanceTickets != null)
-            return false;
-        return globalNrTickets != null ? globalNrTickets.equals(that.globalNrTickets) : that.globalNrTickets == null;
+        if (eventTickets != null ? !eventTickets.equals(that.eventTickets) : that.eventTickets != null) return false;
+        return eventPerformances != null ? eventPerformances.equals(that.eventPerformances) : that.eventPerformances == null;
     }
 
     @Override
     public int hashCode() {
         int result = orgName != null ? orgName.hashCode() : 0;
         result = 31 * result + (orgAddress != null ? orgAddress.hashCode() : 0);
-        result = 31 * result + (eventPerformanceTickets != null ? eventPerformanceTickets.hashCode() : 0);
-        result = 31 * result + (globalNrTickets != null ? globalNrTickets.hashCode() : 0);
+        result = 31 * result + (eventTickets != null ? eventTickets.hashCode() : 0);
+        result = 31 * result + (eventPerformances != null ? eventPerformances.hashCode() : 0);
         return result;
     }
 }
