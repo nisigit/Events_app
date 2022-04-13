@@ -49,4 +49,23 @@ public class UserState implements IUserState {
         GovernmentRepresentative rep = new GovernmentRepresentative("margaret.thatcher@gov.uk", "The Good times  ", "margaret.thatcher@gov.uk");
         addUser(rep);
     }
+
+    // added for the sake of unit testing
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserState userState = (UserState) o;
+
+        if (allUsers != null ? !allUsers.equals(userState.allUsers) : userState.allUsers != null) return false;
+        return currentUser != null ? currentUser.equals(userState.currentUser) : userState.currentUser == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = allUsers != null ? allUsers.hashCode() : 0;
+        result = 31 * result + (currentUser != null ? currentUser.hashCode() : 0);
+        return result;
+    }
 }
