@@ -1,7 +1,5 @@
 package model;
 
-import java.util.List;
-
 public class ConsumerPreferences {
 
     /* the way the javadoc specifies it, there would be no possible way to change the preference attributes
