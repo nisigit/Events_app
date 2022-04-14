@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 import static org.testng.Assert.*;
 
-public class TestUserStateUnit {
+public class TestUserState {
     private Consumer consumer;
     private EntertainmentProvider provider;
 
