@@ -18,9 +18,36 @@ import java.util.List;
 import static org.testng.Assert.assertEquals;
 
 public class CancelBookingSystemTest {
+    private Context context;
+    private CancelBookingCommand cancelBookingCommand1, cancelBookingCommand2, cancelBookingCommand3, cancelBookingCommand4;
+
     @BeforeEach
     void printTestName(TestInfo testInfo) {
         System.out.println(testInfo.getDisplayName());
+    }
+
+    @BeforeEach
+    void setup() {
+        // Set up some required actions and objects
+        this.context = new Context();
+        createEntProvider(context);
+        createConsumer(context);
+        createConsumer(context);
+        loginEntProvider(context);
+        createEvent1(context);
+        createEvent2(context);
+        createPerformance1Event1(context);
+        createPerformance2Event1(context);
+        createPerformanceEvent2(context);
+        logOut(context);
+        loginConsumer(context);
+        long bookingNumber1 = bookEvent1Performance1(context);
+        long bookingNumber2 = bookEvent1Performance2(context);
+        long bookingNumber3 = bookEvent2Performance1(context);
+        this.cancelBookingCommand1 = new CancelBookingCommand(bookingNumber1);
+        this.cancelBookingCommand2 = new CancelBookingCommand(bookingNumber2);
+        this.cancelBookingCommand3 = new CancelBookingCommand(bookingNumber3);
+        this.cancelBookingCommand4 = new CancelBookingCommand(Integer.toUnsignedLong(10));
     }
 
     @AfterEach
@@ -29,7 +56,7 @@ public class CancelBookingSystemTest {
         System.out.println("---");
     }
 
-    private EntertainmentProvider createEntProvider(Context context) {
+    private void createEntProvider(Context context) {
         EntertainmentProvider entertainmentProvider =
                 new EntertainmentProvider("A provider",
                         "A place",
@@ -40,17 +67,14 @@ public class CancelBookingSystemTest {
                         List.of("Some other reps"),
                         List.of("OtherRepsEmails@somewhere.com"));
         context.getUserState().addUser(entertainmentProvider);
-        return entertainmentProvider;
     }
 
-    private User loginEntProvider(Context context) {
+    private void loginEntProvider(Context context) {
         LoginCommand login = new LoginCommand("Rep'sEmail@somewhere.com", "Imapassword");
         login.execute(context);
-
-        return login.getResult();
     }
 
-    private Consumer createConsumer(Context context) {
+    private void createConsumer(Context context) {
         Consumer consumer =
                 new Consumer(
                         "Consumer",
@@ -59,14 +83,11 @@ public class CancelBookingSystemTest {
                         "ConsumerPassword",
                         "ConsumerPaymentEmail@somewhere.com");
         context.getUserState().addUser(consumer);
-        return consumer;
     }
 
-    private User loginConsumer(Context context) {
+    private void loginConsumer(Context context) {
         LoginCommand login = new LoginCommand("ConsumersEmail@somewhere.com", "ConsumerPassword");
         login.execute(context);
-
-        return login.getResult();
     }
 
     private void logOut(Context context) {
@@ -74,7 +95,7 @@ public class CancelBookingSystemTest {
         logout.execute(context);
     }
 
-    private Long createEvent1(Context context) {
+    private void createEvent1(Context context) {
         CreateTicketedEventCommand createEventCommand = new CreateTicketedEventCommand("Lecturer Concert",
                 EventType.Theatre,
                 200,
@@ -82,11 +103,9 @@ public class CancelBookingSystemTest {
                 true);
 
         createEventCommand.execute(context);
-
-        return createEventCommand.getResult();
     }
 
-    private EventPerformance createPerformanceEvent1(Context context) {
+    private void createPerformance1Event1(Context context) {
         AddEventPerformanceCommand addEventPerformanceCommand = new AddEventPerformanceCommand(
                 1,
                 "Edinburgh Castle",
@@ -100,11 +119,9 @@ public class CancelBookingSystemTest {
                 2000);
 
         addEventPerformanceCommand.execute(context);
-
-        return addEventPerformanceCommand.getResult();
     }
 
-    private EventPerformance createPerformance2Event1(Context context) {
+    private void createPerformance2Event1(Context context) {
         AddEventPerformanceCommand addEventPerformanceCommand = new AddEventPerformanceCommand(
                 1,
                 "Edinburgh Castle",
@@ -118,11 +135,9 @@ public class CancelBookingSystemTest {
                 20000);
 
         addEventPerformanceCommand.execute(context);
-
-        return addEventPerformanceCommand.getResult();
     }
 
-    private Long createEvent2(Context context) {
+    private void createEvent2(Context context) {
         CreateTicketedEventCommand createEventCommand = new CreateTicketedEventCommand("MEADOWS PARTY",
                 EventType.Music,
                 20000,
@@ -130,11 +145,9 @@ public class CancelBookingSystemTest {
                 true);
 
         createEventCommand.execute(context);
-
-        return createEventCommand.getResult();
     }
 
-    private EventPerformance createPerformanceEvent2(Context context) {
+    private void createPerformanceEvent2(Context context) {
         AddEventPerformanceCommand addEventPerformanceCommand = new AddEventPerformanceCommand(
                 2,
                 "Meadows",
@@ -148,8 +161,6 @@ public class CancelBookingSystemTest {
                 200000);
 
         addEventPerformanceCommand.execute(context);
-
-        return addEventPerformanceCommand.getResult();
     }
 
     private long bookEvent1Performance1(Context context) {
@@ -183,59 +194,27 @@ public class CancelBookingSystemTest {
     }
 
     @Test
-    void cancelBookingTest() {
-        Context context = new Context();
-
-        EntertainmentProvider createdEntProvider = createEntProvider(context);
-        User entProvider = loginEntProvider(context);
-        assertEquals(entProvider, createdEntProvider);
-        assertEquals(context.getUserState().getCurrentUser(), createdEntProvider);
-
-        long createEvent1Result = createEvent1(context);
-        assertEquals(createEvent1Result, 1);
-        assertEquals(context.getEventState().getAllEvents().size(), 1);
-
-        long createEvent2Result = createEvent2(context);
-        assertEquals(createEvent2Result, 2);
-        assertEquals(context.getEventState().getAllEvents().size(), 2);
-
-        EventPerformance createEvent1Performance1 = createPerformanceEvent1(context);
-        EventPerformance createEvent1Performance2 = createPerformance2Event1(context);
-        EventPerformance createEvent2Performance1 = createPerformanceEvent2(context);
-        assertEquals(context.getEventState().findEventByNumber(1).getPerformanceByNumber(1), createEvent1Performance1);
-        assertEquals(context.getEventState().findEventByNumber(1).getPerformanceByNumber(2), createEvent1Performance2);
-        assertEquals(context.getEventState().findEventByNumber(2).getPerformanceByNumber(3), createEvent2Performance1);
-        assertEquals(context.getEventState().findEventByNumber(1).getPerformances().size(), 2);
-        assertEquals(context.getEventState().findEventByNumber(2).getPerformances().size(), 1);
-
-        logOut(context);
-
-        Consumer createdConsumer = createConsumer(context);
-        User consumer = loginConsumer(context);
-        assertEquals(consumer, createdConsumer);
-        assertEquals(context.getUserState().getCurrentUser(), createdConsumer);
-
-        long bookEvent1Performance1Result = bookEvent1Performance1(context);
-        long bookEvent1Performance2Result = bookEvent1Performance2(context);
-        long bookEvent2Performance1Result = bookEvent2Performance1(context);
-        BookingState bookingState = (BookingState) context.getBookingState();
-        assertNotNull(bookingState.findBookingByNumber(bookEvent1Performance1Result));
-        assertNotNull(bookingState.findBookingByNumber(bookEvent1Performance2Result));
-        assertNotNull(bookingState.findBookingByNumber(bookEvent2Performance1Result));
-
-        CancelBookingCommand cancelBookingCommand1 = new CancelBookingCommand(bookEvent1Performance1Result);
-        CancelBookingCommand cancelBookingCommand2 = new CancelBookingCommand(bookEvent1Performance2Result);
-        CancelBookingCommand cancelBookingCommand3 = new CancelBookingCommand(bookEvent2Performance1Result);
-
+    void successfullyCancelled(){
         cancelBookingCommand1.execute(context);
-        cancelBookingCommand2.execute(context);
-        cancelBookingCommand3.execute(context);
-
         assertTrue(cancelBookingCommand1.getResult());
-        assertFalse(cancelBookingCommand2.getResult());
-        assertFalse(cancelBookingCommand3.getResult());
-        assertEquals(bookingState.findBookingByNumber(bookEvent1Performance1Result).getStatus(), BookingStatus.CancelledByConsumer);
-        assertNotNull(bookingState.findBookingByNumber(bookEvent1Performance2Result));
-        assertNotNull(bookingState.findBookingByNumber(bookEvent2Performance1Result));
+        assertEquals(context.getBookingState().findBookingByNumber(Integer.toUnsignedLong(1)).getStatus(), BookingStatus.CancelledByConsumer);
     }
+
+    @Test
+    void wrongBookingNumber() {
+        cancelBookingCommand4.execute(context);
+        assertNull(context.getBookingState().findBookingByNumber(Integer.toUnsignedLong(10)));
+        assertFalse(cancelBookingCommand4.getResult());
+    }
+
+    @Test
+    void within24Hours() {
+        cancelBookingCommand3.execute(context);
+        cancelBookingCommand2.execute(context);
+        assertFalse(cancelBookingCommand3.getResult());
+        assertFalse(cancelBookingCommand2.getResult());
+        assertEquals(context.getBookingState().findBookingByNumber(Integer.toUnsignedLong(3)).getStatus(), BookingStatus.Active);
+        assertEquals(context.getBookingState().findBookingByNumber(Integer.toUnsignedLong(2)).getStatus(), BookingStatus.Active);
+    }
+
 }
