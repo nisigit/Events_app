@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Booking {
     private long bookingNumber;
@@ -54,6 +55,11 @@ public class Booking {
         status = BookingStatus.CancelledByProvider;
     }
 
+    // For the Test Sake
+    public LocalDateTime getBookingDateTime() {
+        return bookingDateTime;
+    }
+
     @Override
     public String toString() {
         return "Booking{" +
@@ -67,4 +73,17 @@ public class Booking {
                 '}';
     }
 
+    // For Test Sake
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Booking booking = (Booking) o;
+        return bookingNumber == booking.bookingNumber && numTickets == booking.numTickets && Double.compare(booking.amountPaid, amountPaid) == 0 && Objects.equals(booker, booking.booker) && Objects.equals(performance, booking.performance) && Objects.equals(bookingDateTime, booking.bookingDateTime) && status == booking.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bookingNumber, booker, performance, numTickets, amountPaid, bookingDateTime, status);
+    }
 }

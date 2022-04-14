@@ -5,10 +5,7 @@ import model.EventPerformance;
 import model.Consumer;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BookingState implements IBookingState {
 
@@ -65,5 +62,19 @@ public class BookingState implements IBookingState {
 
     public Map<Long, List<Booking>> getBookings() {
         return bookings;
+    }
+
+    // Entirely for test sake
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BookingState that = (BookingState) o;
+        return nextBookingNumber == that.nextBookingNumber && Objects.equals(bookings, that.bookings);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nextBookingNumber, bookings);
     }
 }
