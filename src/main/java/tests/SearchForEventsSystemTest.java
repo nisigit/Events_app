@@ -15,9 +15,27 @@ import java.util.*;
 import static org.testng.Assert.assertEquals;
 
 public class SearchForEventsSystemTest {
+
+    private Context context;
+
     @BeforeEach
     void printTestName(TestInfo testInfo) {
         System.out.println(testInfo.getDisplayName());
+    }
+
+    @BeforeEach
+    void setup() {
+        this.context = new Context();
+        createEntProvider(context);
+        createConsumers(context);
+        loginEntProvider(context);
+        createEvent1(context);
+        createEvent2(context);
+        createPerformance1Event1(context);
+        createPerformance2Event1(context);
+        createPerformance1Event2(context);
+        createPerformance2Event2(context);
+        logOut(context);
     }
 
     @AfterEach
@@ -84,7 +102,6 @@ public class SearchForEventsSystemTest {
     private ConsumerPreferences createConsumerPreferences3() {
         return new ConsumerPreferences(false, false, false, 100, 2000);
     }
-
 
     private void loginConsumer1(Context context) {
         LoginCommand login = new LoginCommand("Consumer1sEmail@somewhere.com", "ConsumerPassword");
@@ -254,22 +271,10 @@ public class SearchForEventsSystemTest {
         return listEventsOnGivenDate.getResult();
     }
 
+    // Entertainment Provider Search for events:
     @Test
-    void searchForEventsTest() {
-        Context context = new Context();
-
-        createEntProvider(context);
-
-        createConsumers(context);
-
+    void entProviderSearchBeforeCancelling() {
         loginEntProvider(context);
-        createEvent1(context);
-        createEvent2(context);
-        createPerformance1Event1(context);
-        createPerformance2Event1(context);
-        createPerformance1Event2(context);
-        createPerformance2Event2(context);
-
         List<Event> entEventList1 = searchEvents1(context);
         List<Event> entEventList2 = searchEvents2(context);
         List<Event> entEventList3 = searchEvents3(context);
@@ -278,16 +283,26 @@ public class SearchForEventsSystemTest {
         assertEquals(entEventList1, entEventList2);
         assertEquals(entEventList2, entEventList3);
         assertEquals(entEventList3, entEventList4);
+    }
 
-        logOut(context);
+    @Test
+    void entProviderSearchAfterCancelling() {
+        loginEntProvider(context);
+        cancelEvent2(context);
 
+        List<Event> entEventList12 = searchEvents1(context);
+        List<Event> entEventList22 = searchEvents2(context);
+        assertEquals(entEventList12, List.of());
+        assertEquals(entEventList22, List.of(context.getEventState().findEventByNumber(2)));
+    }
+
+    // Consumers Search for events:
+    @Test
+    void consumer1SearchBeforeCancelling() {
         loginConsumer1(context);
         ConsumerPreferences consumerPreference1 = createConsumerPreferences1();
         User consumer1 = context.getUserState().getCurrentUser();
-        assertTrue(consumer1 instanceof Consumer);
-        assertEquals(consumer1.getEmail(), "Consumer1sEmail@somewhere.com");
         ((Consumer) consumer1).setPreferences(consumerPreference1);
-
         List<Event> conEventList1 = searchEvents1(context);
         List<Event> conEventList2 = searchEvents2(context);
         List<Event> conEventList3 = searchEvents3(context);
@@ -296,9 +311,10 @@ public class SearchForEventsSystemTest {
         assertEquals(conEventList1, conEventList2);
         assertEquals(conEventList2, conEventList3);
         assertEquals(conEventList3, conEventList4);
+    }
 
-        logOut(context);
-
+    @Test
+    void consumer2SearchBeforeCancelling() {
         loginConsumer2(context);
         ConsumerPreferences consumerPreference2 = createConsumerPreferences2();
         User consumer2 = context.getUserState().getCurrentUser();
@@ -306,27 +322,19 @@ public class SearchForEventsSystemTest {
 
         List<Event> con2EventList5 = searchEvents5(context);
         assertEquals(con2EventList5, List.of(context.getEventState().findEventByNumber(1)));
+    }
 
-        logOut(context);
-
-        loginConsumer3(context);
-        ConsumerPreferences consumerPreference3 = createConsumerPreferences3();
-        User consumer3 = context.getUserState().getCurrentUser();
-        ((Consumer) consumer3).setPreferences(consumerPreference3);
-
-        logOut(context);
-
+    @Test
+    void consumer1SearchAfterCancelling() {
         loginEntProvider(context);
         cancelEvent2(context);
-
-        List<Event> entEventList12 = searchEvents1(context);
-        List<Event> entEventList22 = searchEvents2(context);
-        assertEquals(entEventList12, List.of());
-        assertEquals(entEventList22, List.of(context.getEventState().findEventByNumber(2)));
-
         logOut(context);
 
         loginConsumer1(context);
+        ConsumerPreferences consumerPreference1 = createConsumerPreferences1();
+        User consumer1 = context.getUserState().getCurrentUser();
+        ((Consumer) consumer1).setPreferences(consumerPreference1);
+
         List<Event> conEventList12 = searchEvents1(context);
         List<Event> conEventList22 = searchEvents2(context);
         List<Event> conEventList32 = searchEvents3(context);
@@ -337,10 +345,19 @@ public class SearchForEventsSystemTest {
         assertEquals(conEventList22, conEventList32);
         assertEquals(conEventList42, List.of());
         assertEquals(conEventList52, List.of(context.getEventState().findEventByNumber(1)));
+    }
 
+    @Test
+    void consumer2SearchAfterCancelling() {
+        loginEntProvider(context);
+        cancelEvent2(context);
         logOut(context);
 
         loginConsumer2(context);
+        ConsumerPreferences consumerPreference2 = createConsumerPreferences2();
+        User consumer2 = context.getUserState().getCurrentUser();
+        ((Consumer) consumer2).setPreferences(consumerPreference2);
+
         List<Event> con2EventList12 = searchEvents1(context);
         List<Event> con2EventList22 = searchEvents2(context);
         List<Event> con2EventList32 = searchEvents3(context);
@@ -351,10 +368,19 @@ public class SearchForEventsSystemTest {
         assertEquals(con2EventList32, List.of());
         assertEquals(con2EventList42, List.of());
         assertEquals(con2EventList52, List.of(context.getEventState().findEventByNumber(1)));
+    }
 
+    @Test
+    void consumer3SearchAfterCancelling() {
+        loginEntProvider(context);
+        cancelEvent2(context);
         logOut(context);
 
         loginConsumer3(context);
+        ConsumerPreferences consumerPreference3 = createConsumerPreferences3();
+        User consumer3 = context.getUserState().getCurrentUser();
+        ((Consumer) consumer3).setPreferences(consumerPreference3);
+
         List<Event> con3EventList12 = searchEvents1(context);
         List<Event> con3EventList22 = searchEvents2(context);
         List<Event> con3EventList32 = searchEvents3(context);
@@ -365,7 +391,5 @@ public class SearchForEventsSystemTest {
         assertEquals(con3EventList32, List.of());
         assertEquals(con3EventList42, List.of());
         assertEquals(con3EventList52, List.of());
-
-        logOut(context);
     }
 }

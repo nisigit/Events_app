@@ -32,7 +32,6 @@ public class CancelBookingSystemTest {
         this.context = new Context();
         createEntProvider(context);
         createConsumer(context);
-        createConsumer(context);
         loginEntProvider(context);
         createEvent1(context);
         createEvent2(context);
