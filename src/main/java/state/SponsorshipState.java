@@ -6,6 +6,7 @@ import model.TicketedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SponsorshipState implements ISponsorshipState {
 
@@ -57,6 +58,20 @@ public class SponsorshipState implements ISponsorshipState {
             }
         }
         return null;
+    }
+
+    // For test Sake
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SponsorshipState that = (SponsorshipState) o;
+        return nextRequestNumber == that.nextRequestNumber && Objects.equals(sponsorshipRequests, that.sponsorshipRequests);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nextRequestNumber, sponsorshipRequests);
     }
 
     public long getNextRequestNumber() {

@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class SponsorshipRequest {
 
     private long requestNumber;
@@ -46,4 +48,17 @@ public class SponsorshipRequest {
         this.sponsorAccountEmail = null;
     }
 
+    // For Test Sake
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SponsorshipRequest that = (SponsorshipRequest) o;
+        return requestNumber == that.requestNumber && percent == that.percent && Objects.equals(event, that.event) && status == that.status && Objects.equals(sponsorAccountEmail, that.sponsorAccountEmail);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(requestNumber, event, status, percent, sponsorAccountEmail);
+    }
 }
