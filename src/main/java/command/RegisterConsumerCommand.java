@@ -39,19 +39,23 @@ public class RegisterConsumerCommand implements ICommand {
                 (password == null) ||
                 (paymentAccountEmail == null)) {
             newConsumerResult = null;
+            Logger.getInstance().logAction("RegisterConsumerCommand", LogStatus.USER_REGISTER_FIELDS_CANNOT_BE_NULL);
             return;
         }
         if (allUsers.containsKey(email)) {
             newConsumerResult = null;
+            Logger.getInstance().logAction("RegisterConsumerCommand", LogStatus.USER_REGISTER_EMAIL_ALREADY_REGISTERED);
             return;
         }
+        Logger.getInstance().logAction("RegisterConsumerCommand", LogStatus.REGISTER_CONSUMER_SUCCESS);
+
         if (newConsumerResult != null) {
             // If successfully registered, automatically log the current user in
             context.getUserState().setCurrentUser(newConsumerResult);
             context.getUserState().addUser(newConsumerResult);
+            Logger.getInstance().logAction("RegisterConsumerCommand", LogStatus.USER_LOGIN_SUCCESS);
         }
 
-        Logger.getInstance().logAction("RegisterConsumerCommand", newConsumerResult);
     }
 
     @Override
