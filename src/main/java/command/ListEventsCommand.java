@@ -14,8 +14,6 @@ public class ListEventsCommand implements ICommand {
         LIST_USER_EVENTS_NOT_LOGGED_IN
     }
 
-    //TODO: IMPLEMENT filterEvents AND eventSatisfiesPreferences HELPER FUNCTIONS
-
     private boolean userEventsOnly, activeEventsOnly;
     private ArrayList<Event> eventListResult;
 
@@ -23,6 +21,26 @@ public class ListEventsCommand implements ICommand {
         this.userEventsOnly = userEventsOnly;
         this.activeEventsOnly = activeEventsOnly;
         this.eventListResult = new ArrayList<>();
+    }
+
+    private boolean eventSatisfiesPreferences(ConsumerPreferences preferences, Event event) {
+        Collection<EventPerformance> performances = event.getPerformances();
+        for (EventPerformance ep: performances) {
+            if ((ep.hasAirFiltration() == preferences.preferAirFiltration()) &&
+                    (ep.isOutdoors() == preferences.preferOutdoorsOnly()) &&
+                    (ep.hasSocialDistancing() == preferences.preferSocialDistancing()) &&
+                    (ep.getCapacityLimit() <= preferences.preferredMaxCapacity()) &&
+                    (ep.getVenueSize() <= preferences.preferredMaxVenueSize())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<Event> filterEvents(List<Event> events, boolean activeEventsOnly) {
+        ArrayList<Event> filteredEvents = new ArrayList<>(events);
+        if (activeEventsOnly) filteredEvents.removeIf(event -> event.getStatus() != EventStatus.ACTIVE);
+        return filteredEvents;
     }
 
     @Override
@@ -44,26 +62,15 @@ public class ListEventsCommand implements ICommand {
             else if (user instanceof Consumer) {
                 ConsumerPreferences cp = ((Consumer) user).getPreferences();
                 for (Event event : allEvents) {
-                    Collection<EventPerformance> performances = event.getPerformances();
-                    for (EventPerformance ep: performances) {
-                        if ((ep.hasAirFiltration() == cp.preferAirFiltration()) &&
-                                (ep.isOutdoors() == cp.preferOutdoorsOnly()) &&
-                                (ep.hasSocialDistancing() == cp.preferSocialDistancing()) &&
-                                (ep.getCapacityLimit() <= cp.preferredMaxCapacity()) &&
-                                (ep.getVenueSize() <= cp.preferredMaxVenueSize())) {
-                            eventListResult.add(event);
-                            break;
-                        }
+                    if (eventSatisfiesPreferences(cp, event)) {
+                        eventListResult.add(event);
                     }
-
                 }
             }
         }
         else eventListResult = new ArrayList<>(allEvents);
 
-        if (this.activeEventsOnly) {
-            eventListResult.removeIf(event -> event.getStatus() != EventStatus.ACTIVE);
-        }
+        eventListResult = (ArrayList<Event>) filterEvents(eventListResult, activeEventsOnly);
 
         Logger.getInstance().logAction("ListEventsCommand", LogStatus.LIST_USER_EVENTS_SUCCESS);
     }
