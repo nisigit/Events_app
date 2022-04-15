@@ -10,4 +10,9 @@ public class NonTicketedEvent extends Event {
     public String toString() {
         return super.toString();
     }
+
+    @Override
+    public void addPerformance(EventPerformance performance) {
+        super.addPerformance(performance);
+    }
 }

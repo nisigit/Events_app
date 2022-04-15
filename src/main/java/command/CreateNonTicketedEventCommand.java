@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import external.EntertainmentProviderSystem;
 import logging.Logger;
 import model.EntertainmentProvider;
 import model.EventType;
@@ -25,6 +26,9 @@ public class CreateNonTicketedEventCommand extends CreateEventCommand {
         // As we have checked if the user is an entertainment provider, we cast it here
         NonTicketedEvent nonTicketedEvent = eventState.createNonTicketedEvent((EntertainmentProvider) user, this.title, this.type);
         this.eventNumberResult = nonTicketedEvent.getEventNumber();
+
+        EntertainmentProviderSystem system = nonTicketedEvent.getOrganiser().getProviderSystem();
+        system.recordNewEvent(eventNumberResult, this.title, 0);
 
         Logger.getInstance().logAction("CreateNonTicketedEventCommand", eventNumberResult);
     }

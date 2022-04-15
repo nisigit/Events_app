@@ -29,13 +29,12 @@ public class RespondSponsorshipCommand implements ICommand {
         if (percentToSponsor < 0 || percentToSponsor > 100) return;
         if (!(request.getStatus().equals(SponsorshipStatus.PENDING))) return;
 
-        // TODO Still unsure if we should accept and reject based on amount
-        // says so directly in javadoc
         // If all tests passed, execute approve or reject the sponsorship
         if (user instanceof GovernmentRepresentative) {
             // If percent is 0, then reject
             if (percentToSponsor == 0) {
                 request.reject();
+                request.getEvent().getOrganiser().getProviderSystem().recordSponsorshipRejection(request.getEvent().getEventNumber());
             }
             // if there's amount, then approve it
             else {
@@ -49,6 +48,8 @@ public class RespondSponsorshipCommand implements ICommand {
                 int numTickets = event.getNumTickets();
                 double sponsorshipAmount = originalPrice * (0.01 * percentToSponsor) * numTickets;
                 paymentSystem.processPayment(governmentEmail, sellerEmail, sponsorshipAmount);
+                request.getEvent().getOrganiser().getProviderSystem().recordSponsorshipAcceptance(
+                        request.getEvent().getEventNumber(), percentToSponsor);
             }
             this.result = true;
         }

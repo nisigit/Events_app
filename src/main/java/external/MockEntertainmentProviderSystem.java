@@ -12,10 +12,16 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
     private String orgAddress;
     private Map<Long, Integer> eventTickets;
     private Map<Long, List<Long>> eventPerformances;
+    private Map<Long, List<Long>> performanceBookings;
+    private Map<Long, Integer> acceptedSponsorships;
+    private List<Long> rejectedSponsorships;
 
     public MockEntertainmentProviderSystem(String orgName, String orgAddress) {
         eventTickets = new HashMap<>();
         eventPerformances = new HashMap<>();
+        performanceBookings = new HashMap<>();
+        acceptedSponsorships = new HashMap<>();
+        rejectedSponsorships = new ArrayList<>();
         this.orgName = orgName;
         this.orgAddress = orgAddress;
     }
@@ -44,6 +50,7 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
     @Override
     public void recordNewPerformance(long eventNumber, long performanceNumber, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         eventPerformances.get(eventNumber).add(performanceNumber);
+        performanceBookings.put(performanceNumber, new ArrayList<>());
         System.out.println("A new event performance has been added to the event with the following details");
         System.out.println("Event number: " + eventNumber);
         System.out.println("Performance number in event: " + performanceNumber);
@@ -69,6 +76,7 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
     public void recordNewBooking(long eventNumber, long performanceNumber, long bookingNumber, String consumerName, String consumerEmail, int bookedTickets) {
         int x = getNumTicketsLeft(eventNumber, performanceNumber);
         eventTickets.replace(eventNumber, x - bookedTickets);
+        performanceBookings.get(performanceNumber).add(bookingNumber);
         System.out.println("New booking was made with the following details: ");
         System.out.println("Event number: " + eventNumber);
         System.out.println("Performance number: " + performanceNumber);
@@ -81,17 +89,36 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
 
     @Override
     public void cancelBooking(long bookingNumber) {
-
+        for (long i : performanceBookings.keySet()) {
+            if (performanceBookings.get(i).contains(bookingNumber)) {
+                performanceBookings.get(i).remove(bookingNumber);
+                System.out.println("The booking was cancelled successfully");
+                return;
+            }
+        }
+        System.out.println("Error: the booking does not exist");
     }
 
     @Override
     public void recordSponsorshipAcceptance(long eventNumber, int sponsoredPricePercent) {
-
+        if (eventTickets.containsKey(eventNumber)) {
+            acceptedSponsorships.put(eventNumber, sponsoredPricePercent);
+            System.out.println("The sponsorship acceptance was recorded successfully");
+        }
+        else {
+            System.out.println("Error: this event does not exist in our system");
+        }
     }
 
     @Override
     public void recordSponsorshipRejection(long eventNumber) {
-
+        if (eventTickets.containsKey(eventNumber)) {
+            rejectedSponsorships.add(eventNumber);
+            System.out.println("The sponsorship rejection was recorded successfully");
+        }
+        else {
+            System.out.println("Error: this event does not exist in our system");
+        }
     }
 
     @Override
