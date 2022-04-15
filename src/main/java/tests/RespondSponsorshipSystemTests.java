@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.testng.Assert.*;
 
-public class RespondSponsorshipSystemTest {
+public class RespondSponsorshipSystemTests {
 
     @BeforeEach
     void printTestName(TestInfo testInfo) {

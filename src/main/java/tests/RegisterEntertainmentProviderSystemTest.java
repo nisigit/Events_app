@@ -11,7 +11,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 public class RegisterEntertainmentProviderSystemTest {
-
+    // TODO: convert to use context, split into more methods
     private static EntertainmentProvider add5Providers(Controller controller) {
         RegisterEntertainmentProviderCommand cmd = new RegisterEntertainmentProviderCommand(
                 "Maguire Stans",

@@ -16,7 +16,7 @@ import static org.testng.Assert.assertNull;
 
 import java.util.ArrayList;
 
-public class LogInSystemTest {
+public class LogInSystemTests {
     private Consumer consumer;
     private EntertainmentProvider provider;
     private GovernmentRepresentative govtRep;
