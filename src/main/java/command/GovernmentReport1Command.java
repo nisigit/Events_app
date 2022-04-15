@@ -15,6 +15,13 @@ import java.util.List;
  */
 public class GovernmentReport1Command implements ICommand {
 
+    enum LogStatus {
+        GOVERNMENT_REPORT1_NOT_LOGGED_IN,
+        GOVERNMENT_REPORT1_USER_NOT_GOVERNMENT_REPRESENTATIVE,
+        GOVERNMENT_REPORT1_START_AFTER_END,
+        GOVERNMENT_REPORT1_SUCCESS
+    }
+
     private List<Booking> bookingListResult;
     private LocalDateTime intervalStartInclusive, intervalEndInclusive;
 
@@ -47,10 +54,21 @@ public class GovernmentReport1Command implements ICommand {
         User user = context.getUserState().getCurrentUser();
 
         // condition checks as described in docs - abort execution if condition is satisfied
-        if ((user == null)
-                || (!(user instanceof  GovernmentRepresentative))
-                || (intervalStartInclusive.isAfter(intervalEndInclusive))) {
+        if (user == null) {
             bookingListResult = null;
+            Logger.getInstance().logAction("GovernmentReport1Command", LogStatus.GOVERNMENT_REPORT1_NOT_LOGGED_IN);
+            return;
+        }
+
+        if ((!(user instanceof  GovernmentRepresentative))) {
+            bookingListResult = null;
+            Logger.getInstance().logAction("GovernmentReport1Command", LogStatus.GOVERNMENT_REPORT1_USER_NOT_GOVERNMENT_REPRESENTATIVE);
+            return;
+        }
+
+        if ((intervalStartInclusive.isAfter(intervalEndInclusive))) {
+            bookingListResult = null;
+            Logger.getInstance().logAction("GovernmentReport1Command", LogStatus.GOVERNMENT_REPORT1_START_AFTER_END);
             return;
         }
 
@@ -80,7 +98,7 @@ public class GovernmentReport1Command implements ICommand {
             }
         }
 
-        Logger.getInstance().logAction("GovernmentReport1Command", bookingListResult);
+        Logger.getInstance().logAction("GovernmentReport1Command", LogStatus.GOVERNMENT_REPORT1_SUCCESS);
     }
 
     /**
