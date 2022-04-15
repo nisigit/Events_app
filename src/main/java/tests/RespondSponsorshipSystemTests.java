@@ -95,7 +95,7 @@ public class RespondSponsorshipSystemTests {
     }
 
     @Test
-    void respondSponsorshipTest() {
+    void validSponsorshipAcceptance() {
         Context context = new Context();
 
         createUsers(context);
@@ -115,20 +115,64 @@ public class RespondSponsorshipSystemTests {
         accept.execute(context);
 
         // check if result is returned correctly
-        assertTrue(accept.getResult());
+        assertTrue(accept.getResult(), "response attempt failed despite all conditions being valid");
 
         // check if request has actually been approved within SponsorshipState
         for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
             if (x.getEvent().getEventNumber() == eventNumber) {
-                assertEquals(SponsorshipStatus.ACCEPTED, x.getStatus());
+                assertEquals(SponsorshipStatus.ACCEPTED, x.getStatus(),
+                        "sponsorship status not logged as accepted in SponsorshipState");
             }
         }
+    }
+
+    @Test
+    void validFullSponsorship() {
+        Context context = new Context();
+
+        createUsers(context);
+
+        // valid acceptance attempt from govt rep
+        long eventNumber = createEvent1(context);
+
+        LoginCommand login = new LoginCommand("margaret.thatcher@gov.uk", "The Good times  ");
+        login.execute(context);
+
+        long requestNumber = 0;
+        for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
+            if (x.getEvent().getEventNumber() == eventNumber) { requestNumber = x.getRequestNumber(); }
+        }
+
+        RespondSponsorshipCommand accept = new RespondSponsorshipCommand(requestNumber, 100);
+        accept.execute(context);
+
+        // check if result is returned correctly
+        assertTrue(accept.getResult(), "response attempt failed despite all conditions being valid");
+
+        // check if request has actually been approved within SponsorshipState
+        for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
+            if (x.getEvent().getEventNumber() == eventNumber) {
+                assertEquals(SponsorshipStatus.ACCEPTED, x.getStatus(),
+                        "sponsorship status not logged as accepted in SponsorshipState");
+            }
+        }
+    }
+
+    @Test
+    void validSponsorshipRejection() {
+        Context context = new Context();
+
+        createUsers(context);
+
+        LoginCommand login = new LoginCommand("margaret.thatcher@gov.uk", "The Good times  ");
+        login.execute(context);
 
         // valid rejection attempt from govt rep
-        eventNumber = createEvent2(context);
+        long eventNumber = createEvent2(context);
 
         login.execute(context);
 
+        long requestNumber = 0;
         for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
             if (x.getEvent().getEventNumber() == eventNumber) { requestNumber = x.getRequestNumber(); }
         }
@@ -137,24 +181,30 @@ public class RespondSponsorshipSystemTests {
         reject.execute(context);
 
         // check if result returned correctly
-        assertTrue(reject.getResult());
+        assertTrue(reject.getResult(), "response attempt failed despite all conditions being valid");
 
         // check if request has actually been rejected within SponsorshipState
         for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
             if (x.getEvent().getEventNumber() == eventNumber) {
-                assertEquals(SponsorshipStatus.REJECTED, x.getStatus());
+                assertEquals(SponsorshipStatus.REJECTED, x.getStatus(),
+                        "sponsorship status not logged as rejected in SponsorshipState");
             }
         }
+    }
 
-        LogoutCommand logout = new LogoutCommand();
-        logout.execute(context);
+    @Test
+    void invalidConsumerResponse() {
+        Context context = new Context();
+
+        createUsers(context);
 
         // invalid response attempt from consumer
-        eventNumber = createEvent3(context);
+        long eventNumber = createEvent3(context);
 
-        login = new LoginCommand("unhealthy-sleep-schedule@ed.ac.uk", "Incorrect");
+        LoginCommand login = new LoginCommand("unhealthy-sleep-schedule@ed.ac.uk", "Incorrect");
         login.execute(context);
 
+        long requestNumber = 0;
         for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
             if (x.getEvent().getEventNumber() == eventNumber) { requestNumber = x.getRequestNumber(); }
         }
@@ -163,7 +213,20 @@ public class RespondSponsorshipSystemTests {
         invalidConsumer.execute(context);
 
         // check if result returned correctly
-        assertFalse(invalidConsumer.getResult());
+        assertFalse(invalidConsumer.getResult(), "sponsorship response successful despite the user being a consumer");
+
+        // edge cases
+        invalidConsumer = new RespondSponsorshipCommand(requestNumber, 0);
+        invalidConsumer.execute(context);
+
+        assertFalse(invalidConsumer.getResult(),
+                "sponsorship response successful despite the user being a consumer, when attempting to reject");
+
+        invalidConsumer = new RespondSponsorshipCommand(requestNumber, 100);
+        invalidConsumer.execute(context);
+
+        assertFalse(invalidConsumer.getResult(),
+                "sponsorship response successful despite the user being a consumer, when attempting to fully sponsor");
 
         // check if request is still 'Pending' within SponsorshipState
         for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
@@ -171,33 +234,75 @@ public class RespondSponsorshipSystemTests {
                 assertEquals(SponsorshipStatus.PENDING, x.getStatus());
             }
         }
+    }
 
-        // invalid response attempt from entertainment provider
-        login = new LoginCommand("indiansocediuni@gmail.com", "br0wn/t0wn");
+    @Test
+    void invalidEntProviderResponse() {
+        Context context = new Context();
+
+        createUsers(context);
+
+        // invalid response attempt from consumer
+        long eventNumber = createEvent3(context);
+
+        LoginCommand login = new LoginCommand("indiansocediuni@gmail.com", "br0wn/t0wn");
         login.execute(context);
 
-        RespondSponsorshipCommand invalidProvider = new RespondSponsorshipCommand(requestNumber, 69);
-        invalidProvider.execute(context);
+        long requestNumber = 0;
+        for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
+            if (x.getEvent().getEventNumber() == eventNumber) { requestNumber = x.getRequestNumber(); }
+        }
+
+        RespondSponsorshipCommand invalidEntProvider = new RespondSponsorshipCommand(requestNumber, 11);
+        invalidEntProvider.execute(context);
 
         // check if result returned correctly
-        assertFalse(invalidProvider.getResult());
+        assertFalse(invalidEntProvider.getResult(), "sponsorship response successful despite the user being an entertainment provider");
+
+        // edge cases
+        invalidEntProvider = new RespondSponsorshipCommand(requestNumber, 0);
+        invalidEntProvider.execute(context);
+
+        assertFalse(invalidEntProvider.getResult(),
+                "sponsorship response successful despite the user being a provider, when attempting to reject");
+
+        invalidEntProvider = new RespondSponsorshipCommand(requestNumber, 100);
+        invalidEntProvider.execute(context);
+
+        assertFalse(invalidEntProvider.getResult(),
+                "sponsorship response successful despite the user being a provider, when attempting to fully sponsor");
 
         // check if request is still 'Pending' within SponsorshipState
         for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
             if (x.getEvent().getEventNumber() == eventNumber) {
                 assertEquals(SponsorshipStatus.PENDING, x.getStatus());
             }
+        }
+    }
+
+    @Test
+    void incorrectPercentageResponse() {
+        Context context = new Context();
+
+        createUsers(context);
+
+        // invalid response attempt from consumer
+        long eventNumber = createEvent3(context);
+
+        long requestNumber = 0;
+        for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
+            if (x.getEvent().getEventNumber() == eventNumber) { requestNumber = x.getRequestNumber(); }
         }
 
         // invalid response attempt from government provider (wrong percentage)
-        login = new LoginCommand("margaret.thatcher@gov.uk", "The Good times  ");
+        LoginCommand login = new LoginCommand("margaret.thatcher@gov.uk", "The Good times  ");
         login.execute(context);
 
         RespondSponsorshipCommand negativePercent = new RespondSponsorshipCommand(requestNumber, -1);
         negativePercent.execute(context);
 
         // check if result returned correctly
-        assertFalse(negativePercent.getResult());
+        assertFalse(negativePercent.getResult(), "sponsorship response successful despite percentage being negative");
 
         // check if request is still 'Pending' within SponsorshipState
         for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
@@ -210,7 +315,7 @@ public class RespondSponsorshipSystemTests {
         percentMoreThan100.execute(context);
 
         // check if result returned correctly
-        assertFalse(negativePercent.getResult());
+        assertFalse(percentMoreThan100.getResult(), "sponsorship response successful despite percentage being >100");
 
         // check if request is still 'Pending' within SponsorshipState
         for (SponsorshipRequest x : context.getSponsorshipState().getAllSponsorshipRequests()) {
@@ -218,6 +323,6 @@ public class RespondSponsorshipSystemTests {
                 assertEquals(SponsorshipStatus.PENDING, x.getStatus());
             }
         }
-
     }
+
 }
