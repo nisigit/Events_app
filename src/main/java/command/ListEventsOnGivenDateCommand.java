@@ -10,7 +10,7 @@ import java.util.*;
 
 public class ListEventsOnGivenDateCommand extends ListEventsCommand {
 
-    private List<Event> result = new ArrayList<>();
+    private List<Event> eventListResult = new ArrayList<>();
     private LocalDateTime searchDateTime;
 
     public ListEventsOnGivenDateCommand(boolean userEventsOnly, boolean activeEventsOnly, LocalDateTime searchDateTime) {
@@ -37,15 +37,15 @@ public class ListEventsOnGivenDateCommand extends ListEventsCommand {
                 }
             }
             // if the condition passed, add the event to the output list
-            if (isIncluded) result.add(event);
+            if (isIncluded) eventListResult.add(event);
         }
 
-        Logger.getInstance().logAction("ListEventsOnGivenDateCommand", result);
+        Logger.getInstance().logAction("ListEventsOnGivenDateCommand", eventListResult);
     }
 
     @Override
     public List<Event> getResult() {
-        return result;
+        return eventListResult;
     }
 
 }

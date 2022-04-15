@@ -6,3 +6,4 @@
 .DS_Store
 *.lock
 /test-javadoc/
+/src/main/java/codereview/

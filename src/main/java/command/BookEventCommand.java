@@ -14,7 +14,7 @@ public class BookEventCommand implements ICommand {
     private long eventNumber, performanceNumber;
     private int numTicketsRequested;
     private boolean paymentSuccess;
-    private Long newBookingNumber;
+    private Long bookingNumberResult;
 
     public BookEventCommand(long eventNumber, long performanceNumber, int numTicketsRequested) {
         this.eventNumber = eventNumber;
@@ -29,7 +29,7 @@ public class BookEventCommand implements ICommand {
         User user = context.getUserState().getCurrentUser();
         PaymentSystem paymentSystem = context.getPaymentSystem();
         paymentSuccess = false;
-        newBookingNumber = null;
+        bookingNumberResult = null;
 
         if (!(event != null && (user instanceof Consumer) && (event instanceof TicketedEvent))) {
             return;
@@ -55,13 +55,13 @@ public class BookEventCommand implements ICommand {
 
         IBookingState bookingState = context.getBookingState();
         Booking newBooking = bookingState.createBooking((Consumer) user, eventPerformance, numTicketsRequested, transactionAmount);
-        newBookingNumber = newBooking.getBookingNumber();
+        bookingNumberResult = newBooking.getBookingNumber();
 
         if (!paymentSuccess) {
             newBooking.cancelPaymentFailed();
         }
 
-        system.recordNewBooking(eventNumber, performanceNumber, newBookingNumber, ((Consumer) user).getName(), user.getEmail(), numTicketsRequested);
+        system.recordNewBooking(eventNumber, performanceNumber, bookingNumberResult, ((Consumer) user).getName(), user.getEmail(), numTicketsRequested);
         ((Consumer) user).addBooking(newBooking);
 
         Logger.getInstance().logAction("BookEventCommand", newBooking);
@@ -69,7 +69,7 @@ public class BookEventCommand implements ICommand {
 
     @Override
     public Long getResult() {
-        return newBookingNumber;
+        return bookingNumberResult;
     }
 
 }

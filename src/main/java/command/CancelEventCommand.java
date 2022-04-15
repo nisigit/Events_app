@@ -11,7 +11,7 @@ import controller.Context;
 public class CancelEventCommand implements ICommand {
     private long eventNumber;
     private String organiserMessage;
-    private boolean result;
+    private boolean successResult;
 
     public CancelEventCommand(long eventNumber, String organiserMessage) {
         this.eventNumber = eventNumber;
@@ -70,19 +70,19 @@ public class CancelEventCommand implements ICommand {
                 paymentSystem.processRefund(buyer.getEmail(), event.getOrganiser().getEmail(), discountedTicketPrice);
             }
         }
-        result = true;
+        successResult = true;
         event.cancel();
         for (Booking booking: context.getBookingState().findBookingsByEventNumber(eventNumber)){
             // Change the booking status correspondingly
             booking.cancelByProvider();
         }
 
-        Logger.getInstance().logAction("CancelEventCommand", result);
+        Logger.getInstance().logAction("CancelEventCommand", successResult);
     }
 
     @Override
     public Boolean getResult() {
-        return result;
+        return successResult;
     }
 
 }

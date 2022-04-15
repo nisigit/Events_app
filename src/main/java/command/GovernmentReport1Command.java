@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class GovernmentReport1Command implements ICommand {
 
-    private List<Booking> result;
+    private List<Booking> bookingListResult;
     private LocalDateTime intervalStartInclusive, intervalEndInclusive;
 
     /**
@@ -27,7 +27,7 @@ public class GovernmentReport1Command implements ICommand {
     public GovernmentReport1Command(LocalDateTime intervalStartInclusive, LocalDateTime intervalEndInclusive) {
         this.intervalStartInclusive = intervalStartInclusive;
         this.intervalEndInclusive = intervalEndInclusive;
-        this.result = new ArrayList<>();
+        this.bookingListResult = new ArrayList<>();
     }
 
     /**
@@ -50,7 +50,7 @@ public class GovernmentReport1Command implements ICommand {
         if ((user == null)
                 || (!(user instanceof  GovernmentRepresentative))
                 || (intervalStartInclusive.isAfter(intervalEndInclusive))) {
-            result = null;
+            bookingListResult = null;
             return;
         }
 
@@ -72,7 +72,7 @@ public class GovernmentReport1Command implements ICommand {
                         List<Booking> bookings = context.getBookingState().findBookingsByEventNumber(eventNumber);
                         for (Booking booking: bookings) {
                             if (booking.getEventPerformance() == performance) {
-                                result.add(booking);
+                                bookingListResult.add(booking);
                             }
                         }
                     }
@@ -80,7 +80,7 @@ public class GovernmentReport1Command implements ICommand {
             }
         }
 
-        Logger.getInstance().logAction("GovernmentReport1Command", result);
+        Logger.getInstance().logAction("GovernmentReport1Command", bookingListResult);
     }
 
     /**
@@ -89,7 +89,7 @@ public class GovernmentReport1Command implements ICommand {
      */
     @Override
     public List<Booking> getResult() {
-        return result;
+        return bookingListResult;
     }
 
 }

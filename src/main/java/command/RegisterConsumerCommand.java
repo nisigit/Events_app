@@ -10,7 +10,7 @@ import java.util.Map;
 public class RegisterConsumerCommand implements ICommand {
 
     private String name, email, phoneNumber, password, paymentAccountEmail;
-    private Consumer consumer;
+    private Consumer newConsumerResult;
 
     public RegisterConsumerCommand(String name, String email, String phoneNumber, String password, String paymentAccountEmail) {
         Consumer consumer = new Consumer(name, email, phoneNumber, password, paymentAccountEmail);
@@ -19,7 +19,7 @@ public class RegisterConsumerCommand implements ICommand {
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.paymentAccountEmail = paymentAccountEmail;
-        this.consumer = consumer;
+        this.newConsumerResult = consumer;
     }
 
     @Override
@@ -31,25 +31,25 @@ public class RegisterConsumerCommand implements ICommand {
                 (phoneNumber == null) ||
                 (password == null) ||
                 (paymentAccountEmail == null)) {
-            consumer = null;
+            newConsumerResult = null;
             return;
         }
         if (allUsers.containsKey(email)) {
-            consumer = null;
+            newConsumerResult = null;
             return;
         }
-        if (consumer != null) {
+        if (newConsumerResult != null) {
             // If successfully registered, automatically log the current user in
-            context.getUserState().setCurrentUser(consumer);
-            context.getUserState().addUser(consumer);
+            context.getUserState().setCurrentUser(newConsumerResult);
+            context.getUserState().addUser(newConsumerResult);
         }
 
-        Logger.getInstance().logAction("RegisterConsumerCommand", consumer);
+        Logger.getInstance().logAction("RegisterConsumerCommand", newConsumerResult);
     }
 
     @Override
     public Consumer getResult() {
-        return consumer;
+        return newConsumerResult;
     }
 
 }

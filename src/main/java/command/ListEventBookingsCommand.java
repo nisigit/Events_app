@@ -9,11 +9,11 @@ import java.util.List;
 public class ListEventBookingsCommand implements ICommand {
 
     private long eventNumber;
-    private List<Booking> result;
+    private List<Booking> bookingListResult;
 
     public ListEventBookingsCommand(long eventNumber) {
         this.eventNumber = eventNumber;
-        this.result = null;
+        this.bookingListResult = null;
     }
 
     @Override
@@ -26,15 +26,15 @@ public class ListEventBookingsCommand implements ICommand {
         if (!(event instanceof TicketedEvent)) return;
         // Set the result to the bookings if all the conditions are fulfilled
         if (user instanceof GovernmentRepresentative || user.equals(event.getOrganiser())) {
-            result = context.getBookingState().findBookingsByEventNumber(this.eventNumber);
+            bookingListResult = context.getBookingState().findBookingsByEventNumber(this.eventNumber);
         }
 
-        Logger.getInstance().logAction("ListEventsBookingCommand", result);
+        Logger.getInstance().logAction("ListEventsBookingCommand", bookingListResult);
     }
 
     @Override
     public List<Booking> getResult() {
-        return result;
+        return bookingListResult;
     }
 
 }

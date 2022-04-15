@@ -10,9 +10,9 @@ import java.util.List;
 
 public class ListConsumerBookingsCommand implements ICommand {
 
-    private List<Booking> result;
+    private List<Booking> bookingListResult;
     public ListConsumerBookingsCommand() {
-        this.result = null;
+        this.bookingListResult = null;
     }
 
     @Override
@@ -21,15 +21,15 @@ public class ListConsumerBookingsCommand implements ICommand {
         User user = context.getUserState().getCurrentUser();
         if (user == null) return;
         if (user instanceof Consumer) {
-            this.result = ((Consumer) user).getBookings();
+            this.bookingListResult = ((Consumer) user).getBookings();
         }
 
-        Logger.getInstance().logAction("ListConsumerBookingsCommand", result);
+        Logger.getInstance().logAction("ListConsumerBookingsCommand", bookingListResult);
     }
 
     @Override
     public List<Booking> getResult() {
-        return result;
+        return bookingListResult;
     };
 
 }

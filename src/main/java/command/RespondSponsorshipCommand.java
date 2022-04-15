@@ -9,7 +9,7 @@ public class RespondSponsorshipCommand implements ICommand {
 
     private long requestNumber;
     private int percentToSponsor;
-    private boolean result;
+    private boolean successResult;
 
     public RespondSponsorshipCommand(long requestNumber, int percentToSponsor) {
         this.requestNumber = requestNumber;
@@ -18,7 +18,7 @@ public class RespondSponsorshipCommand implements ICommand {
 
     @Override
     public void execute(Context context) {
-        this.result = false;
+        this.successResult = false;
         User user = context.getUserState().getCurrentUser();
         SponsorshipRequest request = context.getSponsorshipState().findRequestByNumber(this.requestNumber);
         PaymentSystem paymentSystem = context.getPaymentSystem();
@@ -51,15 +51,15 @@ public class RespondSponsorshipCommand implements ICommand {
                 request.getEvent().getOrganiser().getProviderSystem().recordSponsorshipAcceptance(
                         request.getEvent().getEventNumber(), percentToSponsor);
             }
-            this.result = true;
+            this.successResult = true;
         }
 
-        Logger.getInstance().logAction("RespondSponsorshipCommand", result);
+        Logger.getInstance().logAction("RespondSponsorshipCommand", successResult);
     }
 
     @Override
     public Boolean getResult() {
-        return this.result;
+        return this.successResult;
     }
 
 }

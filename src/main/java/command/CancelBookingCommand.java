@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class CancelBookingCommand implements ICommand {
 
     private long bookingNumber;
-    private boolean result;
+    private boolean successResult;
 
     public CancelBookingCommand(long bookingNumber) {
         this.bookingNumber = bookingNumber;
@@ -38,18 +38,18 @@ public class CancelBookingCommand implements ICommand {
             return;
         }
         // Check if it's successfully refunded.
-        result = paymentSystem.processRefund(user.getPaymentAccountEmail(), event.getOrganiser().getPaymentAccountEmail(), booking.getAmountPaid());
+        successResult = paymentSystem.processRefund(user.getPaymentAccountEmail(), event.getOrganiser().getPaymentAccountEmail(), booking.getAmountPaid());
 
         // After all the conditions are met, make sure the booking is logged as cancelled
-        if(result) booking.cancelByConsumer();
+        if(successResult) booking.cancelByConsumer();
 
         event.getOrganiser().getProviderSystem().cancelBooking(bookingNumber);
-        Logger.getInstance().logAction("CancelBookingCommand", result);
+        Logger.getInstance().logAction("CancelBookingCommand", successResult);
     }
 
     @Override
     public Boolean getResult() {
-        return result;
+        return successResult;
     }
 
 }

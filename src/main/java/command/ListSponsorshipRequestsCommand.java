@@ -10,11 +10,11 @@ import java.util.*;
 public class ListSponsorshipRequestsCommand implements ICommand {
 
     private boolean pendingRequestsOnly;
-    private List<SponsorshipRequest> result;
+    private List<SponsorshipRequest> requestListResult;
 
     public ListSponsorshipRequestsCommand(boolean pendingRequestsOnly) {
         this.pendingRequestsOnly = pendingRequestsOnly;
-        this.result = new ArrayList<>();
+        this.requestListResult = new ArrayList<>();
     }
 
     @Override
@@ -28,16 +28,16 @@ public class ListSponsorshipRequestsCommand implements ICommand {
         // Filter the sponsorship requests and add them to the output list
         for (SponsorshipRequest sr: allSponsorshipRequests) {
             if (sr.getStatus() == SponsorshipStatus.PENDING) {
-                result.add(sr);
+                requestListResult.add(sr);
             }
         }
 
-        Logger.getInstance().logAction("ListSponsorshipRequestsCommand", result);
+        Logger.getInstance().logAction("ListSponsorshipRequestsCommand", requestListResult);
     }
 
     @Override
     public List<SponsorshipRequest> getResult() {
-        return result;
+        return requestListResult;
     }
 
 }

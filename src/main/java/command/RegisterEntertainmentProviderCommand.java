@@ -13,7 +13,7 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
     private String orgName, orgAddress, paymentAccountEmail, mainRepName, mainRepEmail, password;
     private List<String> otherRepNames;
     private List<String> otherRepEmails;
-    private EntertainmentProvider entertainmentProvider;
+    private EntertainmentProvider newEntertainmentProviderResult;
 
     public RegisterEntertainmentProviderCommand(String orgName, String orgAddress, String paymentAccountEmail, String mainRepName, String mainRepEmail, String password, List<String> otherRepNames, List<String> otherRepEmails) {
         EntertainmentProvider entertainmentProvider = new EntertainmentProvider(orgName, orgAddress, paymentAccountEmail, mainRepName, mainRepEmail, password, otherRepNames, otherRepEmails);
@@ -25,7 +25,7 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
         this.password = password;
         this.otherRepNames = otherRepNames;
         this.otherRepEmails = otherRepEmails;
-        this.entertainmentProvider = entertainmentProvider;
+        this.newEntertainmentProviderResult = entertainmentProvider;
     }
 
     @Override
@@ -39,34 +39,34 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
                 (password == null) ||
                 (otherRepNames == null) ||
                 (otherRepEmails == null)) {
-            entertainmentProvider = null;
+            newEntertainmentProviderResult = null;
             return;
         }
         if (allUsers.containsKey(mainRepEmail)) {
-            entertainmentProvider = null;
+            newEntertainmentProviderResult = null;
             return;
         }
         for (User user: allUsers.values()) {
             if (user instanceof EntertainmentProvider) {
                 if (((EntertainmentProvider) user).getOrgName().equals(orgName) ||
                         ((EntertainmentProvider) user).getOrgAddress().equals(orgAddress)) {
-                            entertainmentProvider = null;
+                            newEntertainmentProviderResult = null;
                             return;
                 }
             }
         }
         // After passing the checking, add the registered entertainment provider and log it in
-        if (entertainmentProvider != null) {
-            context.getUserState().setCurrentUser(entertainmentProvider);
-            context.getUserState().addUser(entertainmentProvider);
+        if (newEntertainmentProviderResult != null) {
+            context.getUserState().setCurrentUser(newEntertainmentProviderResult);
+            context.getUserState().addUser(newEntertainmentProviderResult);
         }
 
-        Logger.getInstance().logAction("RegisterEntertainmentProviderCommand", entertainmentProvider);
+        Logger.getInstance().logAction("RegisterEntertainmentProviderCommand", newEntertainmentProviderResult);
     }
 
     @Override
     public EntertainmentProvider getResult() {
-        return entertainmentProvider;
+        return newEntertainmentProviderResult;
     }
 
 }

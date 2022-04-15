@@ -19,7 +19,7 @@ public class AddEventPerformanceCommand implements ICommand {
     private List<String> performerNames;
     private boolean hasSocialDistancing, hasAirFiltration, isOutdoors;
     private int capacityLimit, venueSize;
-    private EventPerformance newPerformance;
+    private EventPerformance eventPerformanceResult;
 
 
     public AddEventPerformanceCommand(long eventNumber, String venueAddress, LocalDateTime startDateTime, LocalDateTime endDateTime, List<String> performerNames, boolean hasSocialDistancing, boolean hasAirFiltration, boolean isOutdoors, int capacityLimit, int venueSize) {
@@ -40,7 +40,7 @@ public class AddEventPerformanceCommand implements ICommand {
     public void execute(Context context) {
         User user = context.getUserState().getCurrentUser();
         Event event = context.getEventState().findEventByNumber(eventNumber);
-        newPerformance = null;
+        eventPerformanceResult = null;
 
         // Using assertions to check conditions
 //        assert (user != null) : "No user logged in";
@@ -72,17 +72,17 @@ public class AddEventPerformanceCommand implements ICommand {
 
         // After checking, add the performance to the corresponding event
         IEventState eventState = context.getEventState();
-        newPerformance = eventState.createEventPerformance(event, venueAddress, startDateTime, endDateTime, performerNames, hasSocialDistancing, hasAirFiltration, isOutdoors, capacityLimit, venueSize);
-        event.addPerformance(newPerformance);
-        event.getOrganiser().getProviderSystem().recordNewPerformance(this.eventNumber, newPerformance.getPerformanceNumber(),
+        eventPerformanceResult = eventState.createEventPerformance(event, venueAddress, startDateTime, endDateTime, performerNames, hasSocialDistancing, hasAirFiltration, isOutdoors, capacityLimit, venueSize);
+        event.addPerformance(eventPerformanceResult);
+        event.getOrganiser().getProviderSystem().recordNewPerformance(this.eventNumber, eventPerformanceResult.getPerformanceNumber(),
                 startDateTime, endDateTime);
 
-        Logger.getInstance().logAction("AddEventPerformanceCommand", newPerformance);
+        Logger.getInstance().logAction("AddEventPerformanceCommand", eventPerformanceResult);
     }
 
     @Override
     public EventPerformance getResult() {
-        return newPerformance;
+        return eventPerformanceResult;
     }
 
 }

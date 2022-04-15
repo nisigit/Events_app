@@ -11,12 +11,12 @@ import java.util.List;
 public class ListEventsCommand implements ICommand {
 
     private boolean userEventsOnly, activeEventsOnly;
-    private ArrayList<Event> result;
+    private ArrayList<Event> eventListResult;
 
     public ListEventsCommand(boolean userEventsOnly, boolean activeEventsOnly) {
         this.userEventsOnly = userEventsOnly;
         this.activeEventsOnly = activeEventsOnly;
-        this.result = new ArrayList<>();
+        this.eventListResult = new ArrayList<>();
     }
 
     @Override
@@ -30,7 +30,7 @@ public class ListEventsCommand implements ICommand {
             if (user == null) return;
             if (user instanceof EntertainmentProvider) {
                 List<Event> entEvents = ((EntertainmentProvider) user).getEvents();
-                result = new ArrayList<>(entEvents);
+                eventListResult = new ArrayList<>(entEvents);
             }
             else if (user instanceof Consumer) {
                 ConsumerPreferences cp = ((Consumer) user).getPreferences();
@@ -42,7 +42,7 @@ public class ListEventsCommand implements ICommand {
                                 (ep.hasSocialDistancing() == cp.preferSocialDistancing()) &&
                                 (ep.getCapacityLimit() <= cp.preferredMaxCapacity()) &&
                                 (ep.getVenueSize() <= cp.preferredMaxVenueSize())) {
-                            result.add(event);
+                            eventListResult.add(event);
                             break;
                         }
                     }
@@ -50,17 +50,17 @@ public class ListEventsCommand implements ICommand {
                 }
             }
         }
-        else result = new ArrayList<>(allEvents);
+        else eventListResult = new ArrayList<>(allEvents);
 
         if (this.activeEventsOnly) {
-            result.removeIf(event -> event.getStatus() != EventStatus.ACTIVE);
+            eventListResult.removeIf(event -> event.getStatus() != EventStatus.ACTIVE);
         }
 
-        Logger.getInstance().logAction("ListEventsCommand", result);
+        Logger.getInstance().logAction("ListEventsCommand", eventListResult);
     }
 
     @Override
     public List<Event> getResult() {
-        return result;
+        return eventListResult;
     }
 }
