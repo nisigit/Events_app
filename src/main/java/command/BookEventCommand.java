@@ -11,6 +11,19 @@ import java.time.LocalDateTime;
 
 public class BookEventCommand implements ICommand {
 
+    enum LogStatus {
+        BOOK_EVENT_SUCCESS,
+        BOOK_EVENT_USER_NOT_CONSUMER,
+        BOOK_EVENT_NOT_A_TICKETED_EVENT,
+        BOOK_EVENT_EVENT_NOT_ACTIVE,
+        BOOK_EVENT_ALREADY_OVER,
+        BOOK_EVENT_INVALID_NUM_TICKETS,
+        BOOK_EVENT_NOT_ENOUGH_TICKETS_LEFT,
+        BOOK_EVENT_PAYMENT_FAILED,
+        BOOK_EVENT_EVENT_NOT_FOUND,
+        BOOK_EVENT_PERFORMANCE_NOT_FOUND,
+    }
+
     private long eventNumber, performanceNumber;
     private int numTicketsRequested;
     private boolean paymentSuccess;
@@ -31,21 +44,48 @@ public class BookEventCommand implements ICommand {
         paymentSuccess = false;
         bookingNumberResult = null;
 
-        if (!(event != null && (user instanceof Consumer) && (event instanceof TicketedEvent))) {
+        if (!(user instanceof Consumer)) {
+            Logger.getInstance().logAction("BookEventCommand", LogStatus.BOOK_EVENT_USER_NOT_CONSUMER);
+            return;
+        }
+
+        if (event == null) {
+            Logger.getInstance().logAction("BookEventCommand", LogStatus.BOOK_EVENT_EVENT_NOT_FOUND);
+            return;
+        }
+
+        if (!(event instanceof TicketedEvent)) {
+            Logger.getInstance().logAction("BookEventCommand", LogStatus.BOOK_EVENT_NOT_A_TICKETED_EVENT);
+            return;
+        }
+
+        if (!(numTicketsRequested >= 1)) {
+            Logger.getInstance().logAction("BookEventCommand", LogStatus.BOOK_EVENT_INVALID_NUM_TICKETS);
             return;
         }
 
         EventPerformance eventPerformance = event.getPerformanceByNumber(performanceNumber);
 
-        if (!(numTicketsRequested >= 1 &&
-                eventPerformance != null)) {
+        if (eventPerformance == null) {
+            Logger.getInstance().logAction("BookEventCommand", LogStatus.BOOK_EVENT_PERFORMANCE_NOT_FOUND);
             return;
         }
 
         TicketedEvent ticketedEvent = (TicketedEvent) event;
+
+        if (ticketedEvent.getStatus() != EventStatus.ACTIVE) {
+            Logger.getInstance().logAction("BookEventCommand", LogStatus.BOOK_EVENT_EVENT_NOT_ACTIVE);
+            return;
+        }
+
         EntertainmentProviderSystem system = ticketedEvent.getOrganiser().getProviderSystem();
-        if ((eventPerformance.getEndDateTime().isBefore(LocalDateTime.now()) ||
-                system.getNumTicketsLeft(eventNumber, performanceNumber) < numTicketsRequested)) {
+        if (eventPerformance.getEndDateTime().isBefore(LocalDateTime.now())) {
+            Logger.getInstance().logAction("BookEventCommand", LogStatus.BOOK_EVENT_ALREADY_OVER);
+            return;
+        }
+
+        if (system.getNumTicketsLeft(eventNumber, performanceNumber) < numTicketsRequested) {
+            Logger.getInstance().logAction("BookEventCommand", LogStatus.BOOK_EVENT_NOT_ENOUGH_TICKETS_LEFT);
             return;
         }
 
@@ -59,12 +99,13 @@ public class BookEventCommand implements ICommand {
 
         if (!paymentSuccess) {
             newBooking.cancelPaymentFailed();
+            Logger.getInstance().logAction("BookEventCommand", LogStatus.BOOK_EVENT_PAYMENT_FAILED);
         }
-
-        system.recordNewBooking(eventNumber, performanceNumber, bookingNumberResult, ((Consumer) user).getName(), user.getEmail(), numTicketsRequested);
-        ((Consumer) user).addBooking(newBooking);
-
-        Logger.getInstance().logAction("BookEventCommand", newBooking);
+        else {
+            system.recordNewBooking(eventNumber, performanceNumber, bookingNumberResult, ((Consumer) user).getName(), user.getEmail(), numTicketsRequested);
+            ((Consumer) user).addBooking(newBooking);
+            Logger.getInstance().logAction("BookEventCommand", LogStatus.BOOK_EVENT_SUCCESS);
+        }
     }
 
     @Override
