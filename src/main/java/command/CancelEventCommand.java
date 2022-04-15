@@ -9,6 +9,21 @@ import java.util.List;
 import controller.Context;
 
 public class CancelEventCommand implements ICommand {
+
+    enum LogStatus {
+        CANCEL_EVENT_SUCCESS,
+        CANCEL_EVENT_MESSAGE_MUST_NOT_BE_BLANK,
+        CANCEL_EVENT_USER_NOT_ENTERTAINMENT_PROVIDER,
+        CANCEL_EVENT_EVENT_NOT_FOUND,
+        CANCEL_EVENT_NOT_ACTIVE,
+        CANCEL_EVENT_USER_NOT_ORGANISER,
+        CANCEL_EVENT_PERFORMANCE_ALREADY_STARTED,
+        CANCEL_EVENT_REFUND_SPONSORSHIP_SUCCESS,
+        CANCEL_EVENT_REFUND_SPONSORSHIP_FAILED,
+        CANCEL_EVENT_REFUND_BOOKING_SUCCESS,
+        CANCEL_EVENT_REFUND_BOOKING_ERROR,
+    }
+
     private long eventNumber;
     private String organiserMessage;
     private boolean successResult;
@@ -18,23 +33,50 @@ public class CancelEventCommand implements ICommand {
         this.organiserMessage = organiserMessage;
     }
 
+    private boolean userIsAllowedToCancelEvent(Context context, Event event) {
+        User currentUser = context.getUserState().getCurrentUser();
+        if (!(currentUser instanceof EntertainmentProvider)) {
+            Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_USER_NOT_ENTERTAINMENT_PROVIDER);
+            return false;
+        }
+
+        if (currentUser != event.getOrganiser()) {
+            Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_USER_NOT_ORGANISER);
+            return false;
+        }
+
+        if ((event.getStatus() != EventStatus.ACTIVE)) {
+            Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_NOT_ACTIVE);
+            return false;
+        }
+
+        return true;
+    }
+
     @Override
     public void execute(Context context) {
         // Condition checks
-        User currentUser = context.getUserState().getCurrentUser();
         Event event = context.getEventState().findEventByNumber(eventNumber);
         PaymentSystem paymentSystem = context.getPaymentSystem();
 
-        if (!(currentUser instanceof EntertainmentProvider) ||
-                (event == null) ||
-                (event.getStatus() != EventStatus.ACTIVE) ||
-                (organiserMessage == null) || (organiserMessage.equals("")) ||
-                (currentUser != event.getOrganiser())) {
+        if (event == null) {
+            Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_EVENT_NOT_FOUND);
             return;
         }
+        if ((organiserMessage == null) || (organiserMessage.equals(""))) {
+            Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_MESSAGE_MUST_NOT_BE_BLANK);
+            return;
+        }
+
+        if (!(userIsAllowedToCancelEvent(context, event))) {
+            return;
+        }
+
         for (EventPerformance ep : event.getPerformances()) {
+
             if ((LocalDateTime.now().isAfter(ep.getStartDateTime())) ||
                     (LocalDateTime.now().isAfter(ep.getEndDateTime()))) {
+                Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_PERFORMANCE_ALREADY_STARTED);
                 return;
             }
         }
@@ -50,7 +92,13 @@ public class CancelEventCommand implements ICommand {
             // Gather the emails of the event provider and government for refunding
             String governmentEmail = ticketedEvent.getSponsorAccountEmail();
             String entertainmentProviderEmail = event.getOrganiser().getEmail();
-            paymentSystem.processRefund(governmentEmail, entertainmentProviderEmail, sponsorshipAmount);
+            boolean refundResult = paymentSystem.processRefund(governmentEmail, entertainmentProviderEmail, sponsorshipAmount);
+            if (refundResult) {
+                Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_REFUND_SPONSORSHIP_SUCCESS);
+            }
+            else {
+                Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_REFUND_SPONSORSHIP_FAILED);
+            }
         }
 
             // If the conditions are passed, then cancel all the bookings of this event, and refund the payment
@@ -67,7 +115,13 @@ public class CancelEventCommand implements ICommand {
             // Refund the booking if ticketed
             if (event instanceof TicketedEvent) {
                 double discountedTicketPrice = ((TicketedEvent) event).getDiscountedTicketPrice();
-                paymentSystem.processRefund(buyer.getEmail(), event.getOrganiser().getEmail(), discountedTicketPrice);
+                boolean refundResult = paymentSystem.processRefund(buyer.getEmail(), event.getOrganiser().getEmail(), discountedTicketPrice);
+                if (refundResult) {
+                    Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_REFUND_BOOKING_SUCCESS);
+                }
+                else {
+                    Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_REFUND_BOOKING_ERROR);
+                }
             }
         }
         successResult = true;
@@ -77,7 +131,7 @@ public class CancelEventCommand implements ICommand {
             booking.cancelByProvider();
         }
 
-        Logger.getInstance().logAction("CancelEventCommand", successResult);
+        Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_SUCCESS);
     }
 
     @Override
