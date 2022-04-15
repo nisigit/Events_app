@@ -18,6 +18,7 @@ public class GovernmentReport1Command implements ICommand {
     enum LogStatus {
         GOVERNMENT_REPORT1_NOT_LOGGED_IN,
         GOVERNMENT_REPORT1_USER_NOT_GOVERNMENT_REPRESENTATIVE,
+        //TODO Extra enum, mention in Report
         GOVERNMENT_REPORT1_START_AFTER_END,
         GOVERNMENT_REPORT1_SUCCESS
     }
