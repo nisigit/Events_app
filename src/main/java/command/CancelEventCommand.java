@@ -58,7 +58,7 @@ public class CancelEventCommand implements ICommand {
         // Condition checks
         Event event = context.getEventState().findEventByNumber(eventNumber);
         PaymentSystem paymentSystem = context.getPaymentSystem();
-        boolean refundSponsorshipResult = false;
+        boolean refundSponsorshipResult = true;
         boolean refundBookingResult = false;
 
         if (event == null) {
@@ -86,20 +86,22 @@ public class CancelEventCommand implements ICommand {
         // Getting information to see if the refund happens properly
         if (event instanceof TicketedEvent) {
             TicketedEvent ticketedEvent = (TicketedEvent) event;
-            // Calculate the amount of sponsorship to be refunded to the government
-            double discountedTicketPrice = ticketedEvent.getDiscountedTicketPrice();
-            double originalPrice = ticketedEvent.getOriginalTicketPrice();
-            int numTickets = ticketedEvent.getNumTickets();
-            double sponsorshipAmount = (originalPrice - discountedTicketPrice) * numTickets;
-            // Gather the emails of the event provider and government for refunding
-            String governmentEmail = ticketedEvent.getSponsorAccountEmail();
-            String entertainmentProviderEmail = event.getOrganiser().getEmail();
-            refundSponsorshipResult = paymentSystem.processRefund(governmentEmail, entertainmentProviderEmail, sponsorshipAmount);
-            if (refundSponsorshipResult) {
-                Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_REFUND_SPONSORSHIP_SUCCESS);
-            }
-            else {
-                Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_REFUND_SPONSORSHIP_FAILED);
+            if (ticketedEvent.isSponsored()) {
+                // Calculate the amount of sponsorship to be refunded to the government
+                double discountedTicketPrice = ticketedEvent.getDiscountedTicketPrice();
+                double originalPrice = ticketedEvent.getOriginalTicketPrice();
+                int numTickets = ticketedEvent.getNumTickets();
+                double sponsorshipAmount = (originalPrice - discountedTicketPrice) * numTickets;
+                // Gather the emails of the event provider and government for refunding
+                String governmentEmail = ticketedEvent.getSponsorAccountEmail();
+                String entertainmentProviderEmail = event.getOrganiser().getEmail();
+                refundSponsorshipResult = paymentSystem.processRefund(governmentEmail, entertainmentProviderEmail, sponsorshipAmount);
+                if (refundSponsorshipResult) {
+                    Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_REFUND_SPONSORSHIP_SUCCESS);
+                }
+                else {
+                    Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_REFUND_SPONSORSHIP_FAILED);
+                }
             }
         }
 
@@ -116,8 +118,7 @@ public class CancelEventCommand implements ICommand {
 
             // Refund the booking if ticketed
             if (event instanceof TicketedEvent) {
-                double discountedTicketPrice = ((TicketedEvent) event).getDiscountedTicketPrice();
-                refundBookingResult = paymentSystem.processRefund(buyer.getEmail(), event.getOrganiser().getEmail(), discountedTicketPrice);
+                refundBookingResult = paymentSystem.processRefund(buyer.getEmail(), event.getOrganiser().getPaymentAccountEmail(), booking.getAmountPaid());
                 if (refundBookingResult) {
                     Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_REFUND_BOOKING_SUCCESS);
                 }
@@ -126,6 +127,7 @@ public class CancelEventCommand implements ICommand {
                 }
             }
         }
+
         if (((event instanceof TicketedEvent) && refundSponsorshipResult && refundBookingResult) || (event instanceof NonTicketedEvent)) {
             result = true;
             event.cancel();
