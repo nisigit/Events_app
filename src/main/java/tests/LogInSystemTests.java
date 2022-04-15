@@ -61,8 +61,8 @@ public class LogInSystemTests {
         LoginCommand login = new LoginCommand("c.sumer@customer.com", "SpendingMoneyIsSwag");
         login.execute(context);
 
-        assertEquals(login.getResult(), this.consumer);
-        assertEquals(context.getUserState().getCurrentUser(), this.consumer);
+        assertEquals(login.getResult(), this.consumer, "wrong user has been logged in");
+        assertEquals(context.getUserState().getCurrentUser(), this.consumer, "current user not set correctly");
     }
 
     @Test
@@ -74,8 +74,8 @@ public class LogInSystemTests {
         LoginCommand login = new LoginCommand("e.vider@makeseventsllc.ac.uk", "saregamapadhanisa");
         login.execute(context);
 
-        assertEquals(login.getResult(), this.provider);
-        assertEquals(context.getUserState().getCurrentUser(), this.provider);
+        assertEquals(login.getResult(), this.provider, "wrong user has been logged in");
+        assertEquals(context.getUserState().getCurrentUser(), this.provider, "current user not set correctly");
     }
 
     @Test
@@ -87,8 +87,8 @@ public class LogInSystemTests {
         LoginCommand login = new LoginCommand("margaret.thatcher@gov.uk", "The Good times  ");
         login.execute(context);
 
-        assertEquals(login.getResult(), this.govtRep);
-        assertEquals(context.getUserState().getCurrentUser(), this.govtRep);
+        assertEquals(login.getResult(), this.govtRep, "wrong user has logged in");
+        assertEquals(context.getUserState().getCurrentUser(), this.govtRep, "current user not set correctly");
     }
 
     @Test
@@ -100,7 +100,7 @@ public class LogInSystemTests {
         LoginCommand login = new LoginCommand("dontexist@lol.uk", "incorporeal");
         login.execute(context);
 
-        assertNull(login.getResult());
-        assertNull(context.getUserState().getCurrentUser());
+        assertNull(login.getResult(), "user has been logged in despite not being in our system");
+        assertNull(context.getUserState().getCurrentUser(), "current user has been set despite the user not being in our system");
     }
 }

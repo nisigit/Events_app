@@ -101,8 +101,38 @@ public class BookEventSystemTests {
         Long bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
 
         // check if number was returned properly, and then if booking was logged in the booking state
-        assertNotNull(bookingNumber);
-        assertNotNull(context.getBookingState().findBookingByNumber(bookingNumber));
+        assertNotNull(bookingNumber, "Booking number is null when it shouldn't be");
+        assertNotNull(context.getBookingState().findBookingByNumber(bookingNumber),
+                "Created booking does not exist in BookingState");
+
+        logout.execute(context);
+    }
+
+    @Test
+    void consumerValidBookingNrTicketsBoundary() {
+        Context context = new Context();
+        registerUsers(context);
+        EventPerformance performance = createEventWithPerformance(context);
+        LogoutCommand logout = new LogoutCommand();
+
+        // valid user login
+        LoginCommand login = new LoginCommand("human@being.com", "IAmAGuy");
+        login.execute(context);
+
+        // valid booking attempts, but with extreme values for the number of tickets
+        Long bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 1);
+
+        // check if number was returned properly, and then if booking was logged in the booking state
+        assertNotNull(bookingNumber, "Booking number is null when it shouldn't be");
+        assertNotNull(context.getBookingState().findBookingByNumber(bookingNumber),
+                "Created booking does not exist in BookingState");
+
+        bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 399);
+
+        // check if number was returned properly, and then if booking was logged in the booking state
+        assertNotNull(bookingNumber, "Booking number is null when it shouldn't be");
+        assertNotNull(context.getBookingState().findBookingByNumber(bookingNumber),
+                "Created booking does not exist in BookingState");
 
         logout.execute(context);
     }
@@ -120,7 +150,9 @@ public class BookEventSystemTests {
 
         // tries to book event that does not exist
         Long bookingNumber = bookEvent(context, 32421341, 3412, 902);
-        assertNull(bookingNumber);
+        assertNull(bookingNumber, "Booking number has been created for event that doesn't exist");
+
+        logout.execute(context);
     }
 
     @Test
@@ -135,8 +167,8 @@ public class BookEventSystemTests {
         login.execute(context);
 
         // what if you try to book more tickets than the event has available?
-        Long bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 500);
-        assertNull(bookingNumber);
+        Long bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 401);
+        assertNull(bookingNumber, "Booking number has been created despite the number of tickets booked being greater than the number available");
 
         logout.execute(context);
     }
@@ -154,7 +186,7 @@ public class BookEventSystemTests {
 
         // what happens if this invalid user tries to book an event?
         Long bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
-        assertNull(bookingNumber);
+        assertNull(bookingNumber, "Booking has been created despite the user not being in our system");
 
         logout.execute(context);
     }
@@ -171,7 +203,7 @@ public class BookEventSystemTests {
         login.execute(context);
 
         Long bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
-        assertNull(bookingNumber);
+        assertNull(bookingNumber, "Booking has been created despite the user being an entertainment provider");
 
         logout.execute(context);
     }
@@ -187,6 +219,6 @@ public class BookEventSystemTests {
         login.execute(context);
 
         Long bookingNumber = bookEvent(context, performance.getEvent().getEventNumber(), performance.getPerformanceNumber(), 2);
-        assertNull(bookingNumber);
+        assertNull(bookingNumber, "Booking has been created despite the user being an entertainment provider");
     }
 }

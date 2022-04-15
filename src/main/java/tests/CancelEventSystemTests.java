@@ -131,13 +131,16 @@ public class CancelEventSystemTests {
         login.execute(context);
 
         // cancelling event that actually exists, with a valid cancellation message
-        assertTrue(cancelEvent(context, eventNumber, "I'm so sowwy uWu :3"));
+        assertTrue(cancelEvent(context, eventNumber, "I'm so sowwy uWu :3"),
+                "event cancellation has failed even though the event exists and the parameters are correct");
         // check whether event status is actually logged as cancelled
-        assertEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED);
+        assertEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED,
+                "event is not logged as cancelled in EventState");
 
         // check whether booking status is logged as cancelled by provider correctly
         for (Booking b : context.getBookingState().findBookingsByEventNumber(eventNumber)) {
-            assertEquals(b.getStatus(), BookingStatus.CancelledByProvider);
+            assertEquals(b.getStatus(), BookingStatus.CancelledByProvider,
+                    "booking for this event has not been logged as cancelled in BookingState");
         }
     }
 
@@ -152,7 +155,8 @@ public class CancelEventSystemTests {
         login.execute(context);
 
         // cancelling non-existent event
-        assertFalse(cancelEvent(context, 69, "lol"));
+        assertFalse(cancelEvent(context, 69, "lol"),
+                "event cancellation has succeeded despite the event not existing");
     }
 
     @Test
@@ -167,11 +171,14 @@ public class CancelEventSystemTests {
 
         // cancelling existing event but with null / blank organiser message
         Long eventNumber = createEvent2(context);
-        assertFalse(cancelEvent(context, eventNumber, null));
-        assertFalse(cancelEvent(context, eventNumber, ""));
+        assertFalse(cancelEvent(context, eventNumber, null),
+                "event has been successfully cancelled despite the provided message being null");
+        assertFalse(cancelEvent(context, eventNumber, ""),
+                "event has been successfully cancelled despite the provided message being empty");
 
         // check if event status is NOT cancelled if organiser message is blank
-        assertNotEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED);
+        assertNotEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED,
+                "event is logged as cancelled in EventState even though the cancellation execution failed");
     }
 
     @Test
@@ -184,9 +191,11 @@ public class CancelEventSystemTests {
         login.execute(context);
 
         Long eventNumber = createEvent3(context);
-        assertFalse(cancelEvent(context, eventNumber, "good news: activision doesn't own nintendo!"));
+        assertFalse(cancelEvent(context, eventNumber, "good news: activision doesn't own nintendo!"),
+                "event has been successfully cancelled despite the current user not being a part of our system");
         // check if event status is NOT cancelled if user does not exist
-        assertNotEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED);
+        assertNotEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED,
+                "event is logged as cancelled in EventState even though the cancellation execution failed");
     }
 
     @Test
@@ -200,9 +209,11 @@ public class CancelEventSystemTests {
         login.execute(context);
 
         Long eventNumber = createEvent3(context);
-        assertFalse(cancelEvent(context, eventNumber, "i'm committing fraud"));
+        assertFalse(cancelEvent(context, eventNumber, "i'm committing fraud"),
+                "event has been successfully cancelled despite the current user being a consumer");
         // check if event status is NOT cancelled if user is not the organiser
-        assertNotEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED);
+        assertNotEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED,
+                "event is logged as cancelled in EventState even though the cancellation execution failed");
     }
 
     @Test
@@ -215,9 +226,11 @@ public class CancelEventSystemTests {
         login.execute(context);
 
         Long eventNumber = createEvent3(context);
-        assertFalse(cancelEvent(context, eventNumber, "i should not be able to do this"));
+        assertFalse(cancelEvent(context, eventNumber, "i should not be able to do this"),
+                "event has been successfully cancelled despite the current user being a government representative");
         // check if event status is NOT cancelled if user is not the organiser
-        assertNotEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED);
+        assertNotEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED,
+                "event is logged as cancelled in EventState even though the cancellation execution failed");
     }
 
     @Test
@@ -230,8 +243,10 @@ public class CancelEventSystemTests {
         login.execute(context);
 
         Long eventNumber = createEvent3(context);
-        assertFalse(cancelEvent(context, eventNumber, "i should not be able to do this"));
+        assertFalse(cancelEvent(context, eventNumber, "i should not be able to do this"),
+                "event has been successfully cancelled despite the current user not being the provider who created the event");
         // check if event status is NOT cancelled if user is not the organiser
-        assertNotEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED);
+        assertNotEquals(context.getEventState().findEventByNumber(eventNumber).getStatus(), EventStatus.CANCELLED,
+                "event is logged as cancelled in EventState even though the cancellation execution failed");
     }
 }
