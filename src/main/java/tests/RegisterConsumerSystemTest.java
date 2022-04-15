@@ -8,7 +8,7 @@ import org.junit.jupiter.api.TestInfo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RegisterConsumerTest {
+public class RegisterConsumerSystemTest {
 
     private static void register5Consumers(Controller controller) {
         controller.runCommand(new RegisterConsumerCommand(

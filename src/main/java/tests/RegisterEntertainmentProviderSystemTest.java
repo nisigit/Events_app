@@ -10,7 +10,7 @@ import java.util.List;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-public class RegisterEntProviderRepTest {
+public class RegisterEntertainmentProviderSystemTest {
 
     private static EntertainmentProvider add5Providers(Controller controller) {
         RegisterEntertainmentProviderCommand cmd = new RegisterEntertainmentProviderCommand(

@@ -20,15 +20,17 @@ public class CancelBookingCommand implements ICommand {
     public void execute(Context context) {
         // Condition checks - abort execution if condition is satisfied
         Booking booking = context.getBookingState().findBookingByNumber(bookingNumber);
+
+        if (booking == null) {
+            return;
+        }
+
         Event event = context.getEventState().findEventByNumber(bookingNumber);
         User user = context.getUserState().getCurrentUser();
         EventPerformance eventPerformance = booking.getEventPerformance();
         LocalDateTime performanceStart = eventPerformance.getStartDateTime();
         PaymentSystem paymentSystem = context.getPaymentSystem();
 
-        if (booking == null) {
-            return;
-        }
         if (!(user instanceof Consumer) ||
                 booking.getStatus() != BookingStatus.Active ||
                 booking.getBooker() != user ||
