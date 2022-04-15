@@ -13,6 +13,18 @@ import java.util.List;
 
 public class AddEventPerformanceCommand implements ICommand {
 
+    enum LogStatus{
+        ADD_PERFORMANCE_SUCCESS,
+        ADD_PERFORMANCE_START_AFTER_END,
+        ADD_PERFORMANCE_CAPACITY_LESS_THAN_1,
+        ADD_PERFORMANCE_VENUE_SIZE_LESS_THAN_1,
+        ADD_PERFORMANCE_EVENTS_WITH_SAME_TITLE_CLASH,
+        ADD_PERFORMANCE_USER_NOT_LOGGED_IN,
+        ADD_PERFORMANCE_USER_NOT_ENTERTAINMENT_PROVIDER,
+        ADD_PERFORMANCE_EVENT_NOT_FOUND,
+        ADD_PERFORMANCE_USER_NOT_EVENT_ORGANISER,
+    }
+
     private long eventNumber;
     private String venueAddress;
     private LocalDateTime startDateTime, endDateTime;
@@ -49,15 +61,38 @@ public class AddEventPerformanceCommand implements ICommand {
 //        assert (venueSize < 1): "Venue size cannot be less than 1";
 
         // conditional checks as specified in docs - abort execution if a condition is satisfied
-        if (startDateTime.isAfter(endDateTime) ||
-                capacityLimit < 1 ||
-                venueSize < 1 ||
-                !(user instanceof EntertainmentProvider) ||
-                event == null) {
+        if (user == null) {
+            Logger.getInstance().logAction("AddEventPerformanceCommand", LogStatus.ADD_PERFORMANCE_USER_NOT_LOGGED_IN);
+            return;
+        }
+
+        if (startDateTime.isAfter(endDateTime)) {
+            Logger.getInstance().logAction("AddEventPerformanceCommand", LogStatus.ADD_PERFORMANCE_START_AFTER_END);
+            return;
+        }
+
+        if (capacityLimit < 1) {
+            Logger.getInstance().logAction("AddEventPerformanceCommand", LogStatus.ADD_PERFORMANCE_CAPACITY_LESS_THAN_1);
+            return;
+        }
+
+        if (venueSize < 1) {
+            Logger.getInstance().logAction("AddEventPerformanceCommand", LogStatus.ADD_PERFORMANCE_VENUE_SIZE_LESS_THAN_1);
+            return;
+        }
+
+        if (!(user instanceof EntertainmentProvider)) {
+            Logger.getInstance().logAction("AddEventPerformanceCommand", LogStatus.ADD_PERFORMANCE_USER_NOT_ENTERTAINMENT_PROVIDER);
+            return;
+        }
+
+        if (event == null) {
+            Logger.getInstance().logAction("AddEventPerformanceCommand", LogStatus.ADD_PERFORMANCE_EVENT_NOT_FOUND);
             return;
         }
 
         if (!user.equals(event.getOrganiser())) {
+            Logger.getInstance().logAction("AddEventPerformanceCommand", LogStatus.ADD_PERFORMANCE_USER_NOT_EVENT_ORGANISER);
             return;
         }
 
@@ -65,6 +100,7 @@ public class AddEventPerformanceCommand implements ICommand {
         for (EventPerformance ep : event.getPerformances()) {
             if (ep.getEvent().getTitle().equals(event.getTitle())) {
                 if (ep.getStartDateTime().equals(startDateTime) && ep.getEndDateTime().equals(endDateTime)) {
+                    Logger.getInstance().logAction("AddEventPerformanceCommand", LogStatus.ADD_PERFORMANCE_EVENTS_WITH_SAME_TITLE_CLASH);
                     return;
                 }
             }
@@ -77,7 +113,7 @@ public class AddEventPerformanceCommand implements ICommand {
         event.getOrganiser().getProviderSystem().recordNewPerformance(this.eventNumber, eventPerformanceResult.getPerformanceNumber(),
                 startDateTime, endDateTime);
 
-        Logger.getInstance().logAction("AddEventPerformanceCommand", eventPerformanceResult);
+        Logger.getInstance().logAction("AddEventPerformanceCommand", LogStatus.ADD_PERFORMANCE_SUCCESS);
     }
 
     @Override

@@ -11,6 +11,10 @@ import state.IEventState;
 
 public class CreateNonTicketedEventCommand extends CreateEventCommand {
 
+    enum LogStatus{
+        CREATE_NON_TICKETED_EVENT_SUCCESS
+    }
+
     public CreateNonTicketedEventCommand(String title, EventType type) {
         super(title, type);
     }
@@ -30,6 +34,6 @@ public class CreateNonTicketedEventCommand extends CreateEventCommand {
         EntertainmentProviderSystem system = nonTicketedEvent.getOrganiser().getProviderSystem();
         system.recordNewEvent(eventNumberResult, this.title, 0);
 
-        Logger.getInstance().logAction("CreateNonTicketedEventCommand", eventNumberResult);
+        Logger.getInstance().logAction("CreateNonTicketedEventCommand", LogStatus.CREATE_NON_TICKETED_EVENT_SUCCESS);
     }
 }

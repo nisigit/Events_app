@@ -9,6 +9,13 @@ import java.util.Map;
 
 public class RegisterConsumerCommand implements ICommand {
 
+    enum LogStatus{
+        REGISTER_CONSUMER_SUCCESS,
+        USER_REGISTER_FIELDS_CANNOT_BE_NULL,
+        USER_REGISTER_EMAIL_ALREADY_REGISTERED,
+        USER_LOGIN_SUCCESS
+    }
+
     private String name, email, phoneNumber, password, paymentAccountEmail;
     private Consumer newConsumerResult;
 

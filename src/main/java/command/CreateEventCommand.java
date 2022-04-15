@@ -1,11 +1,17 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.EntertainmentProvider;
 import model.EventType;
 import model.User;
 
 public abstract class CreateEventCommand implements ICommand {
+
+    enum LogStatus{
+        CREATE_EVENT_USER_NOT_ENTERTAINMENT_PROVIDER,
+        CREATE_EVENT_USER_NOT_LOGGED_IN
+    }
 
     protected Long eventNumberResult;
     protected String title;
@@ -27,8 +33,13 @@ public abstract class CreateEventCommand implements ICommand {
         User currentUser = context.getUserState().getCurrentUser();
 
         if (currentUser == null) {
+            Logger.getInstance().logAction("CreateEventCommand", LogStatus.CREATE_EVENT_USER_NOT_LOGGED_IN);
             return false;
         }
-        return currentUser instanceof EntertainmentProvider;
+        if (!(currentUser instanceof EntertainmentProvider)) {
+            Logger.getInstance().logAction("CreateEventCommand", LogStatus.CREATE_EVENT_USER_NOT_ENTERTAINMENT_PROVIDER);
+            return false;
+        }
+        else return true;
     }
 }

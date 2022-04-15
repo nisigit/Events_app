@@ -9,6 +9,11 @@ import state.ISponsorshipState;
 
 public class CreateTicketedEventCommand extends CreateEventCommand {
 
+    enum LogStatus {
+        CREATE_TICKETED_EVENT_SUCCESS,
+        CREATE_EVENT_REQUESTED_SPONSORSHIP
+    }
+
     private int numTickets;
     private double ticketPrice;
     private boolean requestSponsorship;
@@ -31,15 +36,17 @@ public class CreateTicketedEventCommand extends CreateEventCommand {
         // Cast user to EntertainmentProvider since we have checked it
         TicketedEvent ticketedEvent = eventState.createTicketedEvent((EntertainmentProvider) user, title, type, ticketPrice, numTickets);
 
-        if (requestSponsorship) {
-            SponsorshipRequest request = context.getSponsorshipState().addSponsorshipRequest(ticketedEvent);
-            ticketedEvent.setSponsorshipRequest(request);
-        }
         eventNumberResult = ticketedEvent.getEventNumber();
         EntertainmentProviderSystem system = ticketedEvent.getOrganiser().getProviderSystem();
         system.recordNewEvent(eventNumberResult, this.title, this.numTickets);
 
-        Logger.getInstance().logAction("CreateTicketedEventCommand", eventNumberResult);
+        Logger.getInstance().logAction("CreateTicketedEventCommand", LogStatus.CREATE_TICKETED_EVENT_SUCCESS);
+
+        if (requestSponsorship) {
+            SponsorshipRequest request = context.getSponsorshipState().addSponsorshipRequest(ticketedEvent);
+            ticketedEvent.setSponsorshipRequest(request);
+            Logger.getInstance().logAction("CreateTicketedEventCommand", LogStatus.CREATE_EVENT_REQUESTED_SPONSORSHIP);
+        }
     }
 
 }
