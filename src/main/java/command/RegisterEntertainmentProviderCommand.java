@@ -9,6 +9,13 @@ import java.util.List;
 import java.util.Map;
 
 public class RegisterEntertainmentProviderCommand implements ICommand {
+    enum LogStatus{
+        REGISTER_ENTERTAINMENT_PROVIDER_SUCCESS,
+        USER_REGISTER_FIELDS_CANNOT_BE_NULL,
+        USER_REGISTER_EMAIL_ALREADY_REGISTERED,
+        USER_REGISTER_ORG_ALREADY_REGISTERED,
+        USER_LOGIN_SUCCESS,
+    }
 
     private String orgName, orgAddress, paymentAccountEmail, mainRepName, mainRepEmail, password;
     private List<String> otherRepNames;
@@ -30,6 +37,7 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
 
     @Override
     public void execute(Context context) {
+        Logger logger = Logger.getInstance();
         Map<String, User> allUsers = context.getUserState().getAllUsers();
         // Checking Conditions
         if ((orgName == null) ||
@@ -40,9 +48,11 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
                 (otherRepNames == null) ||
                 (otherRepEmails == null)) {
             newEntertainmentProviderResult = null;
+            logger.logAction("RegisterEntertainmentProviderCommand", LogStatus.USER_REGISTER_FIELDS_CANNOT_BE_NULL);
             return;
         }
         if (allUsers.containsKey(mainRepEmail)) {
+            logger.logAction("RegisterEntertainmentProviderCommand", LogStatus.USER_REGISTER_EMAIL_ALREADY_REGISTERED);
             newEntertainmentProviderResult = null;
             return;
         }
@@ -50,18 +60,19 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
             if (user instanceof EntertainmentProvider) {
                 if (((EntertainmentProvider) user).getOrgName().equals(orgName) ||
                         ((EntertainmentProvider) user).getOrgAddress().equals(orgAddress)) {
-                            newEntertainmentProviderResult = null;
-                            return;
+                    logger.logAction("RegisterEntertainmentProviderCommand", LogStatus.USER_REGISTER_ORG_ALREADY_REGISTERED);
+                    newEntertainmentProviderResult = null;
+                    return;
                 }
             }
         }
         // After passing the checking, add the registered entertainment provider and log it in
         if (newEntertainmentProviderResult != null) {
-            context.getUserState().setCurrentUser(newEntertainmentProviderResult);
             context.getUserState().addUser(newEntertainmentProviderResult);
+            logger.logAction("RegisterEntertainmentProviderCommand", LogStatus.REGISTER_ENTERTAINMENT_PROVIDER_SUCCESS);
+            context.getUserState().setCurrentUser(newEntertainmentProviderResult);
+            logger.logAction("RegisterEntertainmentProviderCommand", LogStatus.USER_LOGIN_SUCCESS);
         }
-
-        Logger.getInstance().logAction("RegisterEntertainmentProviderCommand", newEntertainmentProviderResult);
     }
 
     @Override

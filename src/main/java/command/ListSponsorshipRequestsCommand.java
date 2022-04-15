@@ -8,7 +8,11 @@ import model.*;
 import java.util.*;
 
 public class ListSponsorshipRequestsCommand implements ICommand {
-
+    // TODO: possibly add success value in enum?????
+    enum LogStatus {
+        LIST_SPONSORSHIP_REQUESTS_NOT_LOGGED_IN,
+        LIST_SPONSORSHIP_REQUESTS_NOT_GOVERNMENT_REPRESENTATIVE
+    }
     private boolean pendingRequestsOnly;
     private List<SponsorshipRequest> requestListResult;
 
@@ -19,20 +23,27 @@ public class ListSponsorshipRequestsCommand implements ICommand {
 
     @Override
     public void execute(Context context) {
+        Logger logger = Logger.getInstance();
         User currentUser = context.getUserState().getCurrentUser();
         List<SponsorshipRequest> allSponsorshipRequests = context.getSponsorshipState().getAllSponsorshipRequests();
         // Condition checks
-        if (currentUser == null) return;
-        if (!(currentUser instanceof GovernmentRepresentative)) return;
-
-        // Filter the sponsorship requests and add them to the output list
-        for (SponsorshipRequest sr: allSponsorshipRequests) {
-            if (sr.getStatus() == SponsorshipStatus.PENDING) {
-                requestListResult.add(sr);
-            }
+        if (currentUser == null) {
+            logger.logAction("ListSponsorshipRequestsCommand", LogStatus.LIST_SPONSORSHIP_REQUESTS_NOT_LOGGED_IN);
+            return;
+        }
+        if (!(currentUser instanceof GovernmentRepresentative)) {
+            logger.logAction("ListSponsorshipRequestsCommand", LogStatus.LIST_SPONSORSHIP_REQUESTS_NOT_GOVERNMENT_REPRESENTATIVE);
+            return;
         }
 
-        Logger.getInstance().logAction("ListSponsorshipRequestsCommand", requestListResult);
+        // Filter the sponsorship requests and add them to the output list
+        if (pendingRequestsOnly) {
+            for (SponsorshipRequest sr: allSponsorshipRequests) {
+                if (sr.getStatus() == SponsorshipStatus.PENDING) {
+                    requestListResult.add(sr);
+                }
+            }
+        }
     }
 
     @Override

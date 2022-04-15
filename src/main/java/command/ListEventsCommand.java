@@ -9,6 +9,12 @@ import java.util.Collection;
 import java.util.List;
 
 public class ListEventsCommand implements ICommand {
+    enum LogStatus {
+        LIST_USER_EVENTS_SUCCESS,
+        LIST_USER_EVENTS_NOT_LOGGED_IN
+    }
+
+    //TODO: IMPLEMENT filterEvents AND eventSatisfiesPreferences HELPER FUNCTIONS
 
     private boolean userEventsOnly, activeEventsOnly;
     private ArrayList<Event> eventListResult;
@@ -21,13 +27,16 @@ public class ListEventsCommand implements ICommand {
 
     @Override
     public void execute(Context context) {
-
+        Logger logger = Logger.getInstance();
         User user = context.getUserState().getCurrentUser();
         List<Event> allEvents = context.getEventState().getAllEvents();
 
         // Condition Checks for userEventsOnly
         if (this.userEventsOnly) {
-            if (user == null) return;
+            if (user == null) {
+                logger.logAction("ListEventsCommand", LogStatus.LIST_USER_EVENTS_NOT_LOGGED_IN);
+                return;
+            }
             if (user instanceof EntertainmentProvider) {
                 List<Event> entEvents = ((EntertainmentProvider) user).getEvents();
                 eventListResult = new ArrayList<>(entEvents);
@@ -56,7 +65,7 @@ public class ListEventsCommand implements ICommand {
             eventListResult.removeIf(event -> event.getStatus() != EventStatus.ACTIVE);
         }
 
-        Logger.getInstance().logAction("ListEventsCommand", eventListResult);
+        Logger.getInstance().logAction("ListEventsCommand", LogStatus.LIST_USER_EVENTS_SUCCESS);
     }
 
     @Override
