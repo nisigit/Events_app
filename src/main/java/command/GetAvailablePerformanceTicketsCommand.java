@@ -9,6 +9,12 @@ import model.TicketedEvent;
 import controller.Context;
 
 public class GetAvailablePerformanceTicketsCommand implements ICommand {
+    enum LogStatus {
+        GET_AVAILABLE_TICKETS_SUCCESS,
+        GET_AVAILABLE_TICKETS_EVENT_NOT_FOUND,
+        GET_AVAILABLE_TICKETS_NOT_TICKETED_EVENT,
+        GET_AVAILABLE_TICKETS_PERFORMANCE_NOT_FOUND
+    }
 
     private long eventNumber, performanceNumber;
     private int result;
@@ -20,21 +26,30 @@ public class GetAvailablePerformanceTicketsCommand implements ICommand {
 
     @Override
     public void execute(Context context) {
+        Logger logger = Logger.getInstance();
         // Condition checks
         Event event = context.getEventState().findEventByNumber(this.eventNumber);
 
-        if (event == null) return;
+        if (event == null) {
+            logger.logAction("GetAvailablePerformanceTicketsCommand", LogStatus.GET_AVAILABLE_TICKETS_EVENT_NOT_FOUND);
+            return;
+        }
 
         if (event instanceof TicketedEvent) {
             EventPerformance performance = event.getPerformanceByNumber(this.performanceNumber);
 
-            if (performance == null) return;
+            if (performance == null) {
+                logger.logAction("GetAvailablePerformanceTicketsCommand", LogStatus.GET_AVAILABLE_TICKETS_PERFORMANCE_NOT_FOUND);
+                return;
+            }
 
             // get the tickets left after all the conditions are met
             result = event.getOrganiser().getProviderSystem().getNumTicketsLeft(this.eventNumber, this.performanceNumber);
+            logger.logAction("GetAvailablePerformanceTicketsCommand", LogStatus.GET_AVAILABLE_TICKETS_SUCCESS);
         }
+        else logger.logAction("GetAvailablePerformanceTicketsCommand", LogStatus.GET_AVAILABLE_TICKETS_NOT_TICKETED_EVENT);
 
-        Logger.getInstance().logAction("GetAvailablePerformanceTicketsCommand", result);
+        //Logger.getInstance().logAction("GetAvailablePerformanceTicketsCommand", result);
     }
 
     @Override
