@@ -8,7 +8,12 @@ import model.User;
 import java.util.List;
 
 public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileCommand {
-
+    enum LogStatus {
+        USER_UPDATE_PROFILE_SUCCESS,
+        USER_UPDATE_PROFILE_FIELDS_CANNOT_BE_NULL,
+        USER_UPDATE_PROFILE_NOT_ENTERTAINMENT_PROVIDER,
+        USER_UPDATE_PROFILE_ORG_ALREADY_REGISTERED
+    }
     private String oldPassword, newOrgName, newOrgAddress, newPaymentAccountEmail,
             newMainRepName, newMainRepEmail, newPassword;
     private List<String> newOtherRepNames, newOtherRepEmails;
@@ -31,15 +36,30 @@ public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileComm
 
     public void execute(Context context) {
         this.successResult = false;
+        Logger logger = Logger.getInstance();
 
         User user = context.getUserState().getCurrentUser();
         // Condition checks
         boolean isNull = oldPassword == null && newOrgName == null && newOrgAddress == null
                 && newPaymentAccountEmail == null && newMainRepName == null && newMainRepEmail == null
-                && newPassword == null && newOtherRepNames == null && newOtherRepEmails == null && user == null;
-        if (isNull) return;
+                && newPassword == null && newOtherRepNames == null && newOtherRepEmails == null;
+        if (isNull) {
+            logger.logAction("UpdateEntertainmentProviderProfileCommand", LogStatus.USER_UPDATE_PROFILE_FIELDS_CANNOT_BE_NULL);
+            return;
+        }
 
         if (isProfileUpdateInvalid(context, oldPassword, newMainRepEmail)) return;
+
+        // check if organisation details don't already exist in our database
+        for (User i: context.getUserState().getAllUsers().values()) {
+            if (i instanceof EntertainmentProvider) {
+                if (((EntertainmentProvider) i).getOrgName().equals(newOrgName) ||
+                        ((EntertainmentProvider) i).getOrgAddress().equals(newOrgAddress)) {
+                    logger.logAction("UpdateEntertainmentProviderProfileCommand", LogStatus.USER_UPDATE_PROFILE_ORG_ALREADY_REGISTERED);
+                    return;
+                }
+            }
+        }
 
         // If all conditions passed, then update the profile accordingly
         if (user instanceof EntertainmentProvider) {
@@ -52,11 +72,11 @@ public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileComm
             provider.updatePassword(newPassword);
             provider.setOtherRepNames(newOtherRepNames);
             provider.setOtherRepEmails(newOtherRepEmails);
+            logger.logAction("UpdateEntertainmentProviderProfileCommand", LogStatus.USER_UPDATE_PROFILE_SUCCESS);
 
             this.successResult = true;
         }
-
-        Logger.getInstance().logAction("UpdateEntertainmentProviderProfileCommand", successResult);
+        else logger.logAction("UpdateEntertainmentProviderProfileCommand", LogStatus.USER_UPDATE_PROFILE_NOT_ENTERTAINMENT_PROVIDER);
     }
 
 }

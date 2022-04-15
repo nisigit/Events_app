@@ -7,6 +7,11 @@ import model.ConsumerPreferences;
 import model.User;
 
 public class UpdateConsumerProfileCommand extends UpdateProfileCommand {
+    enum LogStatus {
+        USER_UPDATE_PROFILE_FIELDS_CANNOT_BE_NULL,
+        USER_UPDATE_PROFILE_NOT_CONSUMER,
+        USER_UPDATE_PROFILE_SUCCESS
+    }
 
     private String oldPassword, newName, newEmail, newPhoneNumber, newPassword, newPaymentAccountEmail;
     private ConsumerPreferences newPreferences;
@@ -25,13 +30,17 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand {
     }
 
     public void execute(Context context) {
+        Logger logger = Logger.getInstance();
         this.successResult = false;
 
         User user = context.getUserState().getCurrentUser();
         // Condition checks
         boolean isNull = oldPassword == null && newName == null && newEmail == null && newPhoneNumber == null &&
-                newPassword == null && newPaymentAccountEmail == null && newPreferences == null && user == null;
-        if (isNull) return;
+                newPassword == null && newPaymentAccountEmail == null && newPreferences == null;
+        if (isNull) {
+            logger.logAction("UpdateConsumerProfileCommand", LogStatus.USER_UPDATE_PROFILE_FIELDS_CANNOT_BE_NULL);
+            return;
+        }
 
         if (isProfileUpdateInvalid(context, oldPassword, newEmail)) return;
 
@@ -44,11 +53,11 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand {
             consumer.updatePassword(newPassword);
             consumer.setPaymentAccountEmail(newPaymentAccountEmail);
             consumer.setPreferences(newPreferences);
+            logger.logAction("UpdateConsumerProfileCommand", LogStatus.USER_UPDATE_PROFILE_SUCCESS);
 
             this.successResult = true;
         }
-
-        Logger.getInstance().logAction("UpdateConsumerProfileCommand", successResult);
+        else logger.logAction("UpdateConsumerProfileCommand", LogStatus.USER_UPDATE_PROFILE_NOT_CONSUMER);
     }
 
 }
