@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.testng.Assert.assertEquals;
 
-public class ViewEventSystemTest {
+public class ViewEventSystemTests {
     private Event event1, event2;
 
     @BeforeEach

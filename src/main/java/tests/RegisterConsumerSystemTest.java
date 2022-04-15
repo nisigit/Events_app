@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestInfo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RegisterConsumerSystemTest {
-
+    // TODO: convert to use context, split into smaller methods
     private static void register5Consumers(Controller controller) {
         controller.runCommand(new RegisterConsumerCommand(
                 "John Smith",

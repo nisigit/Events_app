@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import static org.testng.Assert.assertEquals;
 
-public class SearchForEventsSystemTest {
+public class SearchForEventsSystemTests {
 
     private Context context;
 

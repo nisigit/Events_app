@@ -18,9 +18,8 @@ import static org.testng.Assert.assertNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-public class BookEventSystemTest {
+public class BookEventSystemTests {
     @BeforeEach
     void printTestName(TestInfo testInfo) {
         System.out.println(testInfo.getDisplayName());

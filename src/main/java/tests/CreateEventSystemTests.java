@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CreateEventSystemTest {
+public class CreateEventSystemTests {
 
     private static void createAndLoginMovieProvider(Context context) {
         RegisterEntertainmentProviderCommand registerEntertainmentProviderCommand =
@@ -43,5 +43,7 @@ public class CreateEventSystemTest {
         cmd.execute(context);
         Long eventNum = cmd.getResult();
         assertEquals(1, eventNum);
+
+        // TODO: add cases for consumer and govt rep
     }
 }

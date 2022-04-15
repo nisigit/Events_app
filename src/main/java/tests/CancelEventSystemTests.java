@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.testng.Assert.*;
 
-public class CancelEventSystemTest {
+public class CancelEventSystemTests {
     @BeforeEach
     void printTestName(TestInfo testInfo) {
         System.out.println(testInfo.getDisplayName());

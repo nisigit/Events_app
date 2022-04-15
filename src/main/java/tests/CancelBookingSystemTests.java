@@ -2,7 +2,6 @@ package tests;
 
 import command.*;
 import controller.Context;
-import controller.Controller;
 import logging.Logger;
 import model.*;
 import org.junit.jupiter.api.AfterEach;
@@ -17,7 +16,7 @@ import java.util.List;
 
 import static org.testng.Assert.assertEquals;
 
-public class CancelBookingSystemTest {
+public class CancelBookingSystemTests {
     private Context context;
     private CancelBookingCommand cancelBookingCommand1, cancelBookingCommand2, cancelBookingCommand3, cancelBookingCommand4;
 
