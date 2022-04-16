@@ -10,10 +10,8 @@ import model.EntertainmentProvider;
 import static model.EventType.*;
 import static org.testng.Assert.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import static org.testng.Assert.assertNotSame;
-import static org.testng.AssertJUnit.assertEquals;
+import java.util.*;
+
 
 
 public class TestEventState {
