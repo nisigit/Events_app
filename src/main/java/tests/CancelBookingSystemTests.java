@@ -194,25 +194,25 @@ public class CancelBookingSystemTests {
     @Test
     void successfullyCancelled(){
         cancelBookingCommand1.execute(context);
-        assertTrue(cancelBookingCommand1.getResult());
-        assertEquals(context.getBookingState().findBookingByNumber(Integer.toUnsignedLong(1)).getStatus(), BookingStatus.CancelledByConsumer);
+        assertTrue(cancelBookingCommand1.getResult(), "The cancel booking result is set correctly");
+        assertEquals(context.getBookingState().findBookingByNumber(Integer.toUnsignedLong(1)).getStatus(), BookingStatus.CancelledByConsumer, "The cancelling doesn't change the state");
     }
 
     @Test
     void wrongBookingNumber() {
         cancelBookingCommand4.execute(context);
-        assertNull(context.getBookingState().findBookingByNumber(Integer.toUnsignedLong(10)));
-        assertFalse(cancelBookingCommand4.getResult());
+        assertNull(context.getBookingState().findBookingByNumber(Integer.toUnsignedLong(10)), "The booking number is not found");
+        assertFalse(cancelBookingCommand4.getResult(), "The result of cancelling shouldn't be changed");
     }
 
     @Test
     void within24Hours() {
         cancelBookingCommand3.execute(context);
         cancelBookingCommand2.execute(context);
-        assertFalse(cancelBookingCommand3.getResult());
-        assertFalse(cancelBookingCommand2.getResult());
-        assertEquals(context.getBookingState().findBookingByNumber(Integer.toUnsignedLong(3)).getStatus(), BookingStatus.Active);
-        assertEquals(context.getBookingState().findBookingByNumber(Integer.toUnsignedLong(2)).getStatus(), BookingStatus.Active);
+        assertFalse(cancelBookingCommand3.getResult(), "The booking will start in 24 hours, cannot be cancelled");
+        assertFalse(cancelBookingCommand2.getResult(), "The booking will start in 24 hours, cannot be cancelled");
+        assertEquals(context.getBookingState().findBookingByNumber(Integer.toUnsignedLong(3)).getStatus(), BookingStatus.Active, "Failed to cancel, should be Active");
+        assertEquals(context.getBookingState().findBookingByNumber(Integer.toUnsignedLong(2)).getStatus(), BookingStatus.Active, "Failed to cancel, should be Active");
     }
 
 }
