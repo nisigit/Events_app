@@ -84,4 +84,41 @@ public class EventPerformance {
                 ", venueSize=" + venueSize +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EventPerformance that = (EventPerformance) o;
+
+        if (performanceNumber != that.performanceNumber) return false;
+        if (hasSocialDistancing != that.hasSocialDistancing) return false;
+        if (hasAirFiltration != that.hasAirFiltration) return false;
+        if (isOutdoors != that.isOutdoors) return false;
+        if (capacityLimit != that.capacityLimit) return false;
+        if (venueSize != that.venueSize) return false;
+        if (event != null ? !event.equals(that.event) : that.event != null) return false;
+        if (venueAddress != null ? !venueAddress.equals(that.venueAddress) : that.venueAddress != null) return false;
+        if (startDateTime != null ? !startDateTime.equals(that.startDateTime) : that.startDateTime != null)
+            return false;
+        if (endDateTime != null ? !endDateTime.equals(that.endDateTime) : that.endDateTime != null) return false;
+        return performerNames != null ? performerNames.equals(that.performerNames) : that.performerNames == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (performanceNumber ^ (performanceNumber >>> 32));
+        result = 31 * result + (event != null ? event.hashCode() : 0);
+        result = 31 * result + (venueAddress != null ? venueAddress.hashCode() : 0);
+        result = 31 * result + (startDateTime != null ? startDateTime.hashCode() : 0);
+        result = 31 * result + (endDateTime != null ? endDateTime.hashCode() : 0);
+        result = 31 * result + (performerNames != null ? performerNames.hashCode() : 0);
+        result = 31 * result + (hasSocialDistancing ? 1 : 0);
+        result = 31 * result + (hasAirFiltration ? 1 : 0);
+        result = 31 * result + (isOutdoors ? 1 : 0);
+        result = 31 * result + capacityLimit;
+        result = 31 * result + venueSize;
+        return result;
+    }
 }

@@ -65,4 +65,18 @@ public class EventState implements IEventState {
         return newPerformance;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EventState that = (EventState) o;
+
+        return events != null ? events.equals(that.events) : that.events == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return events != null ? events.hashCode() : 0;
+    }
 }

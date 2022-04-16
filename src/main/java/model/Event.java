@@ -64,4 +64,29 @@ public abstract class Event {
                 + "\nType: " + type + "\nStatus: " + eventStatus + "\nOrganiser: " + organiser.getOrgName()
                 + "\nPerformances: " + eventPerformances;
     }
+
+    // added for testing purposes
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Event event = (Event) o;
+
+        if (eventStatus != event.eventStatus) return false;
+        if (organiser != null ? !organiser.equals(event.organiser) : event.organiser != null) return false;
+        if (title != null ? !title.equals(event.title) : event.title != null) return false;
+        if (type != event.type) return false;
+        return eventPerformances != null ? eventPerformances.equals(event.eventPerformances) : event.eventPerformances == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = eventStatus != null ? eventStatus.hashCode() : 0;
+        result = 31 * result + (organiser != null ? organiser.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (eventPerformances != null ? eventPerformances.hashCode() : 0);
+        return result;
+    }
 }
