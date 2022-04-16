@@ -279,10 +279,10 @@ public class SearchForEventsSystemTests {
         List<Event> entEventList2 = searchEvents2(context);
         List<Event> entEventList3 = searchEvents3(context);
         List<Event> entEventList4 = searchEvents4(context);
-        assertEquals(entEventList1, List.of(context.getEventState().findEventByNumber(2)));
-        assertEquals(entEventList1, entEventList2);
-        assertEquals(entEventList2, entEventList3);
-        assertEquals(entEventList3, entEventList4);
+        assertEquals(entEventList1, List.of(context.getEventState().findEventByNumber(2)), "Search result should be the same as expected list");
+        assertEquals(entEventList1, entEventList2, "All three results should be equal");
+        assertEquals(entEventList2, entEventList3, "All three results should be equal");
+        assertEquals(entEventList3, entEventList4, "All three results should be equal");
     }
 
     @Test
@@ -292,8 +292,8 @@ public class SearchForEventsSystemTests {
 
         List<Event> entEventList12 = searchEvents1(context);
         List<Event> entEventList22 = searchEvents2(context);
-        assertEquals(entEventList12, List.of());
-        assertEquals(entEventList22, List.of(context.getEventState().findEventByNumber(2)));
+        assertEquals(entEventList12, List.of(), "After cancelling should be empty list");
+        assertEquals(entEventList22, List.of(context.getEventState().findEventByNumber(2)), "Search result should be the same as expected list");
     }
 
     // Consumers Search for events:
@@ -307,10 +307,10 @@ public class SearchForEventsSystemTests {
         List<Event> conEventList2 = searchEvents2(context);
         List<Event> conEventList3 = searchEvents3(context);
         List<Event> conEventList4 = searchEvents4(context);
-        assertEquals(conEventList1, List.of(context.getEventState().findEventByNumber(2)));
-        assertEquals(conEventList1, conEventList2);
-        assertEquals(conEventList2, conEventList3);
-        assertEquals(conEventList3, conEventList4);
+        assertEquals(conEventList1, List.of(context.getEventState().findEventByNumber(2)), "Search result should be the same as expected list");
+        assertEquals(conEventList1, conEventList2, "All three results should be equal");
+        assertEquals(conEventList2, conEventList3, "All three results should be equal");
+        assertEquals(conEventList3, conEventList4, "All three results should be equal");
     }
 
     @Test
@@ -321,7 +321,7 @@ public class SearchForEventsSystemTests {
         ((Consumer) consumer2).setPreferences(consumerPreference2);
 
         List<Event> con2EventList5 = searchEvents5(context);
-        assertEquals(con2EventList5, List.of(context.getEventState().findEventByNumber(1)));
+        assertEquals(con2EventList5, List.of(context.getEventState().findEventByNumber(1)), "Search result should be the same as expected list");
     }
 
     @Test
@@ -340,11 +340,11 @@ public class SearchForEventsSystemTests {
         List<Event> conEventList32 = searchEvents3(context);
         List<Event> conEventList42 = searchEvents4(context);
         List<Event> conEventList52 = searchEvents5(context);
-        assertEquals(conEventList12, List.of());
-        assertEquals(conEventList22, List.of(context.getEventState().findEventByNumber(2)));
-        assertEquals(conEventList22, conEventList32);
-        assertEquals(conEventList42, List.of());
-        assertEquals(conEventList52, List.of(context.getEventState().findEventByNumber(1)));
+        assertEquals(conEventList12, List.of(), "Should be empty after cancelling");
+        assertEquals(conEventList22, List.of(context.getEventState().findEventByNumber(2)), "Search result should be the same as expected list");
+        assertEquals(conEventList22, conEventList32, "The two commands should give same results");
+        assertEquals(conEventList42, List.of(), "Should be empty after cancelling");
+        assertEquals(conEventList52, List.of(context.getEventState().findEventByNumber(1)), "Search result should be the same as expected list");
     }
 
     @Test
@@ -363,11 +363,11 @@ public class SearchForEventsSystemTests {
         List<Event> con2EventList32 = searchEvents3(context);
         List<Event> con2EventList42 = searchEvents4(context);
         List<Event> con2EventList52 = searchEvents5(context);
-        assertEquals(con2EventList12, List.of());
-        assertEquals(con2EventList22, List.of(context.getEventState().findEventByNumber(2)));
-        assertEquals(con2EventList32, List.of());
-        assertEquals(con2EventList42, List.of());
-        assertEquals(con2EventList52, List.of(context.getEventState().findEventByNumber(1)));
+        assertEquals(con2EventList12, List.of(), "Should be empty after cancelling");
+        assertEquals(con2EventList22, List.of(context.getEventState().findEventByNumber(2)), "Search result should be the same as expected list");
+        assertEquals(con2EventList32, List.of(), "Should be empty after cancelling");
+        assertEquals(con2EventList42, List.of(), "Should be empty after cancelling");
+        assertEquals(con2EventList52, List.of(context.getEventState().findEventByNumber(1)), "Search result should be the same as expected list");
     }
 
     @Test
@@ -386,10 +386,10 @@ public class SearchForEventsSystemTests {
         List<Event> con3EventList32 = searchEvents3(context);
         List<Event> con3EventList42 = searchEvents4(context);
         List<Event> con3EventList52 = searchEvents5(context);
-        assertEquals(con3EventList12, List.of());
-        assertEquals(con3EventList22, List.of(context.getEventState().findEventByNumber(2)));
-        assertEquals(con3EventList32, List.of());
-        assertEquals(con3EventList42, List.of());
-        assertEquals(con3EventList52, List.of());
+        assertEquals(con3EventList12, List.of(), "Should be empty after cancelling");
+        assertEquals(con3EventList22, List.of(context.getEventState().findEventByNumber(2)), "Search result should be the same as expected list");
+        assertEquals(con3EventList32, List.of(), "Should be empty after cancelling");
+        assertEquals(con3EventList42, List.of(), "Should be empty after cancelling");
+        assertEquals(con3EventList52, List.of(), "Should be empty after cancelling");
     }
 }
