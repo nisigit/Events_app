@@ -41,13 +41,13 @@ public class TestSponsorshipState {
 
     @Test
     void testConstructors() {
-        assertEquals(sponsorshipState0.getAllSponsorshipRequests(), List.of());
-        assertEquals(sponsorshipState0.getPendingSponsorshipRequests(), List.of());
-        assertEquals(sponsorshipState0.getNextRequestNumber(), 1);
+        assertEquals(sponsorshipState0.getAllSponsorshipRequests(), List.of(), "Should be initialized as an empty list");
+        assertEquals(sponsorshipState0.getPendingSponsorshipRequests(), List.of(), "Should be initialized as an empty list");
+        assertEquals(sponsorshipState0.getNextRequestNumber(), 1, "Should be initialized as 1");
 
         SponsorshipState sponsorshipState1 = new SponsorshipState(sponsorshipState0);
-        assertEquals(sponsorshipState1, sponsorshipState0);
-        assertNotSame(sponsorshipState1, sponsorshipState0);
+        assertEquals(sponsorshipState1, sponsorshipState0, "Should be equal with same fields");
+        assertNotSame(sponsorshipState1, sponsorshipState0, "Should be a deep copy");
     }
 
     @Test
@@ -56,8 +56,8 @@ public class TestSponsorshipState {
         SponsorshipRequest sponsorshipRequest1 = sponsorshipState0.addSponsorshipRequest(ticketedEvent2);
         SponsorshipRequest sponsorshipRequest11 = new SponsorshipRequest(2, ticketedEvent2);
         SponsorshipRequest sponsorshipRequest01 = new SponsorshipRequest(1, ticketedEvent1);
-        assertEquals(sponsorshipRequest0, sponsorshipRequest01);
-        assertEquals(sponsorshipRequest1, sponsorshipRequest11);
+        assertEquals(sponsorshipRequest0, sponsorshipRequest01, "should be equal to the expected object");
+        assertEquals(sponsorshipRequest1, sponsorshipRequest11, "should be equal to the expected object");
     }
 
     @Test
@@ -65,7 +65,7 @@ public class TestSponsorshipState {
         SponsorshipRequest sponsorshipRequest0 = sponsorshipState0.addSponsorshipRequest(ticketedEvent1);
         SponsorshipRequest sponsorshipRequest1 = sponsorshipState0.addSponsorshipRequest(ticketedEvent2);
         List<SponsorshipRequest> expectedSponsorships = List.of(sponsorshipRequest0, sponsorshipRequest1);
-        assertEquals(sponsorshipState0.getAllSponsorshipRequests(), expectedSponsorships);
+        assertEquals(sponsorshipState0.getAllSponsorshipRequests(), expectedSponsorships, "should be equal to the expected list");
     }
 
     @Test
@@ -75,7 +75,7 @@ public class TestSponsorshipState {
         SponsorshipRequest sponsorshipRequest2 = sponsorshipState0.addSponsorshipRequest(ticketedEvent3);
         sponsorshipRequest0.accept(20, "ImGovernment@scot.com");
         sponsorshipRequest2.reject();
-        assertEquals(sponsorshipState0.getPendingSponsorshipRequests(), List.of(sponsorshipRequest1));
+        assertEquals(sponsorshipState0.getPendingSponsorshipRequests(), List.of(sponsorshipRequest1), "Should only contain the second request");
     }
 
     @Test
@@ -83,20 +83,20 @@ public class TestSponsorshipState {
         SponsorshipRequest sponsorshipRequest0 = sponsorshipState0.addSponsorshipRequest(ticketedEvent1);
         SponsorshipRequest sponsorshipRequest1 = sponsorshipState0.addSponsorshipRequest(ticketedEvent2);
         SponsorshipRequest sponsorshipRequest2 = sponsorshipState0.addSponsorshipRequest(ticketedEvent3);
-        assertEquals(sponsorshipState0.findRequestByNumber(Integer.toUnsignedLong(1)), sponsorshipRequest0);
-        assertEquals(sponsorshipState0.findRequestByNumber(Integer.toUnsignedLong(2)), sponsorshipRequest1);
-        assertEquals(sponsorshipState0.findRequestByNumber(Integer.toUnsignedLong(3)), sponsorshipRequest2);
-        assertNull(sponsorshipState0.findRequestByNumber(Integer.toUnsignedLong(5)));
+        assertSame(sponsorshipState0.findRequestByNumber(Integer.toUnsignedLong(1)), sponsorshipRequest0, "Should be the same object as expected");
+        assertSame(sponsorshipState0.findRequestByNumber(Integer.toUnsignedLong(2)), sponsorshipRequest1, "Should be the same object as expected");
+        assertSame(sponsorshipState0.findRequestByNumber(Integer.toUnsignedLong(3)), sponsorshipRequest2, "Should be the same object as expected");
+        assertNull(sponsorshipState0.findRequestByNumber(Integer.toUnsignedLong(5)), "Should be null with non-existed request number");
     }
 
     @Test
     void testGetNextRequestNumber() {
-        assertEquals(sponsorshipState0.getNextRequestNumber(), 1);
+        assertEquals(sponsorshipState0.getNextRequestNumber(), 1, "Should be initialized as 1");
         SponsorshipRequest sponsorshipRequest0 = sponsorshipState0.addSponsorshipRequest(ticketedEvent1);
-        assertEquals(sponsorshipState0.getNextRequestNumber(), 2);
+        assertEquals(sponsorshipState0.getNextRequestNumber(), 2, "Should be 2 as 1 request is created");
         SponsorshipRequest sponsorshipRequest1 = sponsorshipState0.addSponsorshipRequest(ticketedEvent2);
-        assertEquals(sponsorshipState0.getNextRequestNumber(), 3);
+        assertEquals(sponsorshipState0.getNextRequestNumber(), 3, "Should be 3 as 2 requests are created");
         SponsorshipRequest sponsorshipRequest2 = sponsorshipState0.addSponsorshipRequest(ticketedEvent3);
-        assertEquals(sponsorshipState0.getNextRequestNumber(), 4);
+        assertEquals(sponsorshipState0.getNextRequestNumber(), 4, "Should be 4 as 3 requests are created");
     }
 }
