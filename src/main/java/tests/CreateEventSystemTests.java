@@ -83,7 +83,7 @@ public class CreateEventSystemTests {
                 200, 12.00, true);
 
         createTicketedEventCommand.execute(context);
-        assertNull(createTicketedEventCommand.getResult());
+        assertNull(createTicketedEventCommand.getResult(), "government provider has managed to make event when they shouldn't be able to");
     }
 
     @Test
@@ -91,20 +91,22 @@ public class CreateEventSystemTests {
         Context context = new Context();
         registerUsers(context);
         LoginCommand loginCommand = new LoginCommand("n.provider@noevents.com", "eventsn't");
+        loginCommand.execute(context);
 
         CreateTicketedEventCommand createTicketedEventCommand = new CreateTicketedEventCommand(
                 "BOTW 2 release party", EventType.Dance,
                 200, 12.00, true);
         createTicketedEventCommand.execute(context);
-        assertNull(createTicketedEventCommand.getResult());
+        assertNull(createTicketedEventCommand.getResult(), "consumer has managed to create event when they shouldn't be able to");
     }
 
     @Test
-    void getCinemaEvent() {
+    void validEventCreation() {
         Context context = new Context();
         registerUsers(context);
         LoginCommand loginCommand = new LoginCommand("p.bateman@pierce@pierce.com", "Dorsia@9");
         loginCommand.execute(context);
+
         CreateTicketedEventCommand cmd = new CreateTicketedEventCommand(
                 "Spider-Man 4: Ultimate Depression",
                 EventType.Movie,
@@ -114,6 +116,6 @@ public class CreateEventSystemTests {
         );
         cmd.execute(context);
         Long eventNum = cmd.getResult();
-        assertEquals(1, eventNum);
+        assertEquals(1, eventNum, "event creation has failed even though all parameters were correct");
     }
 }

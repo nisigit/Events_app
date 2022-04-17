@@ -56,6 +56,10 @@ public class TestEventState {
 
         Event event0 = eventState.createNonTicketedEvent(entertainmentProvider, "Open Mic", Music);
         Event event1 = eventState.createTicketedEvent(entertainmentProvider, "Super Bowl", Sports, 100, 50000);
+
+        event0.getOrganiser().getProviderSystem().recordNewEvent(event0.getEventNumber(), "Open Mic", 0);
+        event1.getOrganiser().getProviderSystem().recordNewEvent(event1.getEventNumber(), "Super Bowl", 50000);
+
         List<Event> eventList = List.of(event0, event1);
         assertEquals(eventState.getAllEvents(), eventList, "this event list does not have the right events");
     }
@@ -66,6 +70,7 @@ public class TestEventState {
         Event event0 = eventState.createNonTicketedEvent(entertainmentProvider, "Open Mic", Music);
         Event event1 = eventState.createTicketedEvent(entertainmentProvider, "Super Bowl", Sports, 100, 50000);
         Event event2 = eventState.createTicketedEvent(entertainmentProvider, "HairSpray", Theatre, 30, 3000);
+
         assertEquals(eventState.findEventByNumber(Integer.toUnsignedLong(1)), event0, "event not returned correctly");
         assertEquals(eventState.findEventByNumber(Integer.toUnsignedLong(2)), event1, "event not returned correctly");
         assertEquals(eventState.findEventByNumber(Integer.toUnsignedLong(3)), event2, "event not returned correctly");
@@ -79,6 +84,8 @@ public class TestEventState {
 
         Event event0 = eventState.createNonTicketedEvent(entertainmentProvider, "Open Mic", Music);
         Event event3 = eventState.createNonTicketedEvent(entertainmentProvider, "Drive-In Movie", Movie);
+
+
         Event eventtest0 = new NonTicketedEvent(1, entertainmentProvider, "Open Mic", Music);
         Event eventtest3 = new NonTicketedEvent(2, entertainmentProvider, "Drive-In Movie", Movie);
         assertEquals(event0, eventtest0, "event not created correctly");

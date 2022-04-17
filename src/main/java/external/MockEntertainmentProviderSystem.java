@@ -30,7 +30,6 @@ public class MockEntertainmentProviderSystem implements EntertainmentProviderSys
     public void recordNewEvent(long eventNumber, String title, int numTickets) {
         eventTickets.put(eventNumber, numTickets);
         eventPerformances.put(eventNumber, new ArrayList<>());
-        // globalNrTickets.put(eventNumber, numTickets);
         System.out.println("A new event is created with the following details: ");
         System.out.println("Event Number: " + eventNumber);
         System.out.println("Event Title: " + title);

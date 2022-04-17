@@ -49,9 +49,15 @@ public class TicketedEvent extends Event {
 
     @Override
     public String toString() {
-        return super.toString() + "\nTicket price: " + ticketPrice +
-                "\nNumber of tickets left: " + getOrganiser().getProviderSystem().getNumTicketsLeft(eventNumber, -1)
-                +"\nSponsorship request" + sponsorshipRequest;
+        if (sponsorshipRequest != null) {
+            return super.toString() + "\nTicket price: " + ticketPrice +
+                    "\nNumber of tickets left: " + getOrganiser().getProviderSystem().getNumTicketsLeft(eventNumber, -1)
+                    +"\nSponsorship request" + sponsorshipRequest;
+        }
+        else {
+            return super.toString() + "\nTicket price: " + ticketPrice +
+                    "\nNumber of tickets left: " + getOrganiser().getProviderSystem().getNumTicketsLeft(eventNumber, -1);
+        }
 
 //        return "TicketedEvent{" +
 //                "ticketPrice=" + ticketPrice +

@@ -30,6 +30,10 @@ public class EntertainmentProvider extends User {
 
     public void addEvent(Event event) {
         this.events.add(event);
+        if (event instanceof TicketedEvent) {
+            this.system.recordNewEvent(event.getEventNumber(), event.getTitle(), ((TicketedEvent) event).getNumTickets());
+        }
+        else this.system.recordNewEvent(event.getEventNumber(), event.getTitle(), 0);
     }
 
     public String getOrgName() {

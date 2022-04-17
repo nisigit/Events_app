@@ -45,6 +45,7 @@ public class EventState implements IEventState {
         // Create a new NonTicketedEvent and add it to the list
         NonTicketedEvent nonTicketedEvent = new NonTicketedEvent(uniqueEventNumber++, organiser, title, type);
         events.add(nonTicketedEvent);
+        organiser.addEvent(nonTicketedEvent);
         return nonTicketedEvent;
     }
 

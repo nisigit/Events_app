@@ -37,8 +37,6 @@ public class CreateTicketedEventCommand extends CreateEventCommand {
         TicketedEvent ticketedEvent = eventState.createTicketedEvent((EntertainmentProvider) user, title, type, ticketPrice, numTickets);
 
         eventNumberResult = ticketedEvent.getEventNumber();
-        EntertainmentProviderSystem system = ticketedEvent.getOrganiser().getProviderSystem();
-        system.recordNewEvent(eventNumberResult, this.title, this.numTickets);
 
         Logger.getInstance().logAction("CreateTicketedEventCommand", LogStatus.CREATE_TICKETED_EVENT_SUCCESS);
 
