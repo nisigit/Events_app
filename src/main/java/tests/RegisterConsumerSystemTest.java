@@ -1,64 +1,31 @@
 package tests;
 
-import command.LogoutCommand;
 import command.RegisterConsumerCommand;
-import controller.Controller;
+import controller.Context;
+import model.Consumer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RegisterConsumerSystemTest {
     // TODO: convert to use context, split into smaller methods
-    private static void register5Consumers(Controller controller) {
-        controller.runCommand(new RegisterConsumerCommand(
-                "John Smith",
-                "john.smith@example.com",
-                "07834281011",
-                "Johnny@552",
-                "john.smith@example.com"
-        ));
-        controller.runCommand(new LogoutCommand());
+    @Test
+    void registerConsumerTest() {
+        Context context = new Context();
 
-        controller.runCommand(new RegisterConsumerCommand(
-                "Jane Giantsdottir",
-                "jane@inf.ed.ac.uk",
-                "04462187232",
-                "giantsRverycool",
-                "jane@aol.com"
-        ));
-        controller.runCommand(new LogoutCommand());
-
-        controller.runCommand(new RegisterConsumerCommand(
-                "Boris Thompson",
-                "cant-talk-discord-only@yahoo.co.uk",
-                "-",
-                "password",
-                "cant-talk-discord-only@yahoo.co.uk"
-        ));
-
-        controller.runCommand(new RegisterConsumerCommand(
-                "Wednesday Kebede",
-                "i-will-kick-your@gmail.com",
-                "-",
-                "it is wednesday my dudes",
-                "i-will-kick-your@gmail.com"
-        ));
-        controller.runCommand(new LogoutCommand());
-
-        controller.runCommand(new RegisterConsumerCommand(
+        RegisterConsumerCommand registerConsumerCommand = new RegisterConsumerCommand(
                 "Joe Root",
                 "joe.root@ecb.co.uk",
                 "-",
-                "win the ashes",
-                "joe.root@ecb.co.uk"
-        ));
-        controller.runCommand(new LogoutCommand());
+                "win_the_ashes",
+                "payments@specsavers.co.uk"
+        );
+
+        registerConsumerCommand.execute(context);
+        Consumer consumer = registerConsumerCommand.getResult();
+
+        assertTrue(context.getUserState().getAllUsers().containsValue(consumer));
+        assertSame(context.getUserState().getCurrentUser(), consumer);
     }
 
-    @Test
-    void getRegisteredConsumers() {
-        Controller controller = new Controller();
-        register5Consumers(controller);
-    }
 }
