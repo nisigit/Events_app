@@ -108,22 +108,25 @@ public class CancelEventCommand implements ICommand {
         // If the conditions are passed, then cancel all the bookings of this event, and refund the payment
 
         List<Booking> bookings = context.getBookingState().findBookingsByEventNumber(eventNumber);
-        for (Booking booking : bookings) {
-            // First set the booking state to be cancelled
-            booking.cancelByProvider();
+        if (bookings.size() == 0) {refundBookingResult = true;}
+        else {
+            for (Booking booking : bookings) {
+                // First set the booking state to be cancelled
+                booking.cancelByProvider();
 
-            // notify consumer of cancellation
-            Consumer buyer = booking.getBooker();
-            buyer.notify(organiserMessage);
+                // notify consumer of cancellation
+                Consumer buyer = booking.getBooker();
+                buyer.notify(organiserMessage);
 
-            // Refund the booking if ticketed
-            if (event instanceof TicketedEvent) {
-                refundBookingResult = paymentSystem.processRefund(buyer.getEmail(), event.getOrganiser().getPaymentAccountEmail(), booking.getAmountPaid());
-                if (refundBookingResult) {
-                    Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_REFUND_BOOKING_SUCCESS);
-                }
-                else {
-                    Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_REFUND_BOOKING_ERROR);
+                // Refund the booking if ticketed
+                if (event instanceof TicketedEvent) {
+                    refundBookingResult = paymentSystem.processRefund(buyer.getEmail(), event.getOrganiser().getPaymentAccountEmail(), booking.getAmountPaid());
+                    if (refundBookingResult) {
+                        Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_REFUND_BOOKING_SUCCESS);
+                    }
+                    else {
+                        Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_REFUND_BOOKING_ERROR);
+                    }
                 }
             }
         }

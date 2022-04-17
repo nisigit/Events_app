@@ -70,11 +70,11 @@ public class TestUserState {
         addUsersToState(state);
         HashMap<String, User> map = (HashMap<String, User>) state.getAllUsers();
 
-        assertTrue(map.containsKey("human@being.com"));
-        assertTrue(map.containsValue(consumer));
+        assertTrue(map.containsKey("human@being.com"), "this email should be stored in the hashmap but isn't");
+        assertTrue(map.containsValue(consumer), "this user should be stored in the hashmap but isn't");
 
-        assertTrue(map.containsKey("kebinfeeg@bing.com"));
-        assertTrue(map.containsValue(provider));
+        assertTrue(map.containsKey("kebinfeeg@bing.com"), "this email should be stored in the hashmap but isn't");
+        assertTrue(map.containsValue(provider), "this user should be stored in the hashmap but isn't");
     }
 
     @Test
@@ -83,8 +83,8 @@ public class TestUserState {
         addUsersToState(state);
         UserState copyState = new UserState(state);
 
-        assertEquals(state, copyState);
-        assertNotSame(state, copyState);
+        assertEquals(state, copyState, "should have the same values");
+        assertNotSame(state, copyState, "should be a DEEP copy, not a shallow one");
     }
 
     @Test
@@ -93,6 +93,6 @@ public class TestUserState {
         addUsersToState(state);
 
         state.setCurrentUser(provider);
-        assertEquals(state.getCurrentUser(), provider);
+        assertEquals(state.getCurrentUser(), provider, "current user has been set incorrectly");
     }
 }

@@ -109,7 +109,7 @@ public class EventPerformance {
     @Override
     public int hashCode() {
         int result = (int) (performanceNumber ^ (performanceNumber >>> 32));
-        result = 31 * result + (event != null ? event.hashCode() : 0);
+        result = 31 * result + (event != null ? ((Long) event.getEventNumber()).hashCode() : 0);
         result = 31 * result + (venueAddress != null ? venueAddress.hashCode() : 0);
         result = 31 * result + (startDateTime != null ? startDateTime.hashCode() : 0);
         result = 31 * result + (endDateTime != null ? endDateTime.hashCode() : 0);

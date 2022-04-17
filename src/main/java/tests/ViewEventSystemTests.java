@@ -98,7 +98,8 @@ public class ViewEventSystemTests {
         System.out.println(eventList);
 
         long event1 = eventList.get(0).getEventNumber();
-        assertEquals(context.getEventState().findEventByNumber(event1).toString(), this.event1.toString());
+        assertEquals(context.getEventState().findEventByNumber(event1).toString(), this.event1.toString(),
+                "these events should display as the same string but don't");
     }
 
     @Test
@@ -114,6 +115,7 @@ public class ViewEventSystemTests {
         ArrayList<Event> eventList = (ArrayList<Event>) search.getResult();
 
         long event2 = eventList.get(1).getEventNumber();
-        assertEquals(context.getEventState().findEventByNumber(event2).toString(), this.event2.toString());
+        assertEquals(context.getEventState().findEventByNumber(event2).toString(), this.event2.toString(),
+                "these events should display as the same string but don't");
     }
 }

@@ -74,7 +74,7 @@ public abstract class Event {
         Event event = (Event) o;
 
         if (eventStatus != event.eventStatus) return false;
-        if (organiser != null ? !organiser.equals(event.organiser) : event.organiser != null) return false;
+        if (organiser != null ? !organiser.getOrgName().equals(event.organiser.getOrgName()) : event.organiser != null) return false;
         if (title != null ? !title.equals(event.title) : event.title != null) return false;
         if (type != event.type) return false;
         return eventPerformances != null ? eventPerformances.equals(event.eventPerformances) : event.eventPerformances == null;
@@ -83,7 +83,7 @@ public abstract class Event {
     @Override
     public int hashCode() {
         int result = eventStatus != null ? eventStatus.hashCode() : 0;
-        result = 31 * result + (organiser != null ? organiser.hashCode() : 0);
+        result = 31 * result + (organiser != null ? organiser.getOrgName().hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (eventPerformances != null ? eventPerformances.hashCode() : 0);

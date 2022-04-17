@@ -43,7 +43,7 @@ public class TestBookingState {
 
     @Test
     void TestConstructors() {
-        assertEquals(bookingState0.getBookings(), new HashMap<>(), "Should initialized as empty hash map");
+        assertEquals(bookingState0.getBookings(), new HashMap<>(), "Should be initialized as empty hash map");
         assertEquals(bookingState0.getNextBookingNumber(), 1, "Should be initialized as 1");
 
         BookingState bookingState1 = new BookingState(bookingState0);
