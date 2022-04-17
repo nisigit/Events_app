@@ -70,7 +70,7 @@ public class RespondSponsorshipCommand implements ICommand {
                 TicketedEvent event = request.getEvent();
                 // Gather emails for payment
                 String sellerEmail = event.getOrganiser().getEmail();
-                String governmentEmail = event.getSponsorAccountEmail();
+                String governmentEmail = user.getEmail();
 
                 // Calculate the amount of sponsorship
                 double originalPrice = event.getOriginalTicketPrice();
