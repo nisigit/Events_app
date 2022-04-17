@@ -1,42 +1,49 @@
 package tests;
 
 import command.RegisterEntertainmentProviderCommand;
-import controller.Controller;
+import controller.Context;
+import logging.Logger;
 import model.EntertainmentProvider;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.*;
 
 public class RegisterEntertainmentProviderSystemTest {
-    // TODO: convert to use context, split into more methods
-    private static EntertainmentProvider add5Providers(Controller controller) {
-        RegisterEntertainmentProviderCommand cmd = new RegisterEntertainmentProviderCommand(
-                "Maguire Stans",
-                "Maguire Building, 15 Holyrood Park Rd.",
-                "willem.da-dripping@oscorp.org",
-                "Patrick Bateman",
-                "p.bateman@pierce&pierce.com",
-                "Dorsia@9",
-                List.of("Jonah Jamieson", "Norman Osborne"),
-                List.of("j.jamieson@dailybugle.com", "norman@oscorp.org")
-        );
-        controller.runCommand(cmd);
-        return cmd.getResult();
+
+    @BeforeEach
+    void printTestName(TestInfo testInfo) {
+        System.out.println(testInfo.getDisplayName());
+    }
+
+    @AfterEach
+    void clearLogs() {
+        Logger.getInstance().clearLog();
+        System.out.println("---");
     }
 
     @Test
-    void registerNewEntProviderTest() {
-        Controller controller = new Controller();
-        EntertainmentProvider provider = add5Providers(controller);
+    void registerEntProviderTest() {
+        Context context = new Context();
+        RegisterEntertainmentProviderCommand registerEntertainmentProviderCommand = new RegisterEntertainmentProviderCommand(
+            "Maguire Stans",
+            "Maguire Building, 15 Holyrood Park Rd",
+                "willem-da-dripping@oscorp.org",
+                "Patrick Bateman",
+                "p.bateman@pierce&pierce.com",
+                "Dorsia@9",
+                List.of("Jonah Jamieson", "Norman Osborn"),
+                List.of("j.jamieson@dailybugle.com", "norman@oscord.com")
+        );
 
-        assertNotNull(provider);
-        assertEquals("p.bateman@pierce&pierce.com", provider.getEmail());
-        assertEquals("Maguire Stans", provider.getOrgName());
-        assertEquals("willem.da-dripping@oscorp.org", provider.getPaymentAccountEmail());
+        registerEntertainmentProviderCommand.execute(context);
+        EntertainmentProvider entertainmentProvider = registerEntertainmentProviderCommand.getResult();
+
+        assertTrue(context.getUserState().getAllUsers().containsValue(entertainmentProvider));
+        assertSame(context.getUserState().getCurrentUser(), entertainmentProvider);
     }
-
-
 }

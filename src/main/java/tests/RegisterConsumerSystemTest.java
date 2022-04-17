@@ -2,17 +2,31 @@ package tests;
 
 import command.RegisterConsumerCommand;
 import controller.Context;
+import logging.Logger;
 import model.Consumer;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RegisterConsumerSystemTest {
-    // TODO: convert to use context, split into smaller methods
+
+    @BeforeEach
+    void printTestName(TestInfo testInfo) {
+        System.out.println(testInfo.getDisplayName());
+    }
+
+    @AfterEach
+    void clearLogs() {
+        Logger.getInstance().clearLog();
+        System.out.println("---");
+    }
+
     @Test
     void registerConsumerTest() {
         Context context = new Context();
-
         RegisterConsumerCommand registerConsumerCommand = new RegisterConsumerCommand(
                 "Joe Root",
                 "joe.root@ecb.co.uk",
