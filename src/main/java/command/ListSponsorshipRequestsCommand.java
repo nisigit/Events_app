@@ -27,6 +27,12 @@ public class ListSponsorshipRequestsCommand implements ICommand {
         User currentUser = context.getUserState().getCurrentUser();
         List<SponsorshipRequest> allSponsorshipRequests = context.getSponsorshipState().getAllSponsorshipRequests();
         // Condition checks
+
+        // Using assertions to check conditions
+
+//        assert (currentUser == null): "The user is not logged in";
+//        assert (!(currentUser instanceof GovernmentRepresentative)): "Current user is not a government rep";
+
         if (currentUser == null) {
             logger.logAction("ListSponsorshipRequestsCommand", LogStatus.LIST_SPONSORSHIP_REQUESTS_NOT_LOGGED_IN);
             return;

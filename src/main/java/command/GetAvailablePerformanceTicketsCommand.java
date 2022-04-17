@@ -30,6 +30,16 @@ public class GetAvailablePerformanceTicketsCommand implements ICommand {
         // Condition checks
         Event event = context.getEventState().findEventByNumber(this.eventNumber);
 
+        // Using assertions to check conditions
+
+//        assert (event == null): "The event can't be null";
+//        if (event instanceof TicketedEvent) {
+//            EventPerformance performance = event.getPerformanceByNumber(this.performanceNumber);
+//
+//            assert (performance == null) : "The performance is not found";
+//        }
+
+
         if (event == null) {
             logger.logAction("GetAvailablePerformanceTicketsCommand", LogStatus.GET_AVAILABLE_TICKETS_EVENT_NOT_FOUND);
             return;

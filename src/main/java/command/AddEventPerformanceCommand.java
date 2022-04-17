@@ -55,10 +55,19 @@ public class AddEventPerformanceCommand implements ICommand {
         eventPerformanceResult = null;
 
         // Using assertions to check conditions
+
 //        assert (user != null) : "No user logged in";
 //        assert (startDateTime.isAfter(endDateTime)): "Provided start date is after end date";
 //        assert (capacityLimit < 1): "Capacity limit cannot be less than 1";
 //        assert (venueSize < 1): "Venue size cannot be less than 1";
+//        assert (!(user instanceof EntertainmentProvider)): "The current user is not an entertainment provider";
+//        assert (event == null): "The event can't be null";
+//        assert (!user.equals(event.getOrganiser())): "The current user is not the organiser";
+//        for (EventPerformance ep : event.getPerformances()) {
+//            if (ep.getEvent().getTitle().equals(event.getTitle())) {
+//                assert (ep.getStartDateTime().equals(startDateTime) && ep.getEndDateTime().equals(endDateTime)): "The events with same titles clash";
+//            }
+//        }
 
         // conditional checks as specified in docs - abort execution if a condition is satisfied
         if (user == null) {

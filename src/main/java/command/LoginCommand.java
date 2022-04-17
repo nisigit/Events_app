@@ -26,6 +26,12 @@ public class LoginCommand implements ICommand {
         userResult = context.getUserState().getAllUsers().get(email);
 
         // Condition checks
+
+        // Using assertions to check conditions
+
+//        assert (userResult == null): "Current user email is not registered";
+//        assert (!userResult.checkPasswordMatch(password)): "Wrong password";
+
         if (userResult == null) {
             logger.logAction("LoginCommand", LogStatus.USER_LOGIN_EMAIL_NOT_REGISTERED);
             return;

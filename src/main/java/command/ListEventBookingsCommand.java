@@ -29,15 +29,23 @@ public class ListEventBookingsCommand implements ICommand {
         // Condition checks
         User user = context.getUserState().getCurrentUser();
         Event event = context.getEventState().findEventByNumber(this.eventNumber);
+
+        // Using assertions to check conditions
+
+//        assert (user == null): "User is not logger in";
+//        assert (event == null): "Event is not found";
+//        assert (!(event instanceof TicketedEvent)): "Event is not ticketed";
+//        assert (!(user instanceof GovernmentRepresentative || user.equals(event.getOrganiser()))): "Current user is neither a government rep or the organiser";
+
         if (user == null) {
             Logger.getInstance().logAction("ListEventsBookingCommand", LogStatus.LIST_EVENT_BOOKINGS_USER_NOT_LOGGED_IN);
             return;
         }
-        if (event == null){
+        if (event == null) {
             Logger.getInstance().logAction("ListEventsBookingCommand", LogStatus.LIST_EVENT_BOOKINGS_EVENT_NOT_FOUND);
             return;
         }
-        if (!(event instanceof TicketedEvent)){
+        if (!(event instanceof TicketedEvent)) {
             Logger.getInstance().logAction("ListEventsBookingCommand", LogStatus.LIST_EVENT_BOOKINGS_EVENT_NOT_TICKETED);
             return;
         }

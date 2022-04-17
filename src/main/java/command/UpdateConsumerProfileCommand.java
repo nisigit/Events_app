@@ -37,6 +37,12 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand {
         // Condition checks
         boolean isNull = oldPassword == null && newName == null && newEmail == null && newPhoneNumber == null &&
                 newPassword == null && newPaymentAccountEmail == null && newPreferences == null;
+
+        // Using assertions to check conditions
+
+//        assert (isNull): "The updated fields information cannot be null";
+//        assert (isProfileUpdateInvalid(context, oldPassword, newEmail)): "Invalid update request";
+
         if (isNull) {
             logger.logAction("UpdateConsumerProfileCommand", LogStatus.USER_UPDATE_PROFILE_FIELDS_CANNOT_BE_NULL);
             return;

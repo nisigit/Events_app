@@ -38,6 +38,14 @@ public class RespondSponsorshipCommand implements ICommand {
         Logger logger = Logger.getInstance();
 
         // Check Conditions
+
+        // Using assertions to check conditions
+
+//        assert (user == null): "Current user is not logged in";
+//        assert (request == null): "The request to be answered not found";
+//        assert (percentToSponsor < 0 || percentToSponsor > 100): "Invalid percent number";
+//        assert (!(request.getStatus().equals(SponsorshipStatus.PENDING))): "Already been responded";
+
         if (user == null) {
             logger.logAction("RespondSponsorshipCommand", LogStatus.RESPOND_SPONSORSHIP_USER_NOT_LOGGED_IN);
             return;

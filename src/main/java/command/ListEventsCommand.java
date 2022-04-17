@@ -60,7 +60,12 @@ public class ListEventsCommand implements ICommand {
         List<Event> allEvents = context.getEventState().getAllEvents();
 
         // Condition Checks for userEventsOnly
+
         if (this.userEventsOnly) {
+            //Using assertions to check conditions
+
+//            assert (user == null): "Current user is not logged in";
+
             if (user == null) {
                 logger.logAction("ListEventsCommand", LogStatus.LIST_USER_EVENTS_NOT_LOGGED_IN);
                 return;

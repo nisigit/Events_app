@@ -24,20 +24,29 @@ public class ListConsumerBookingsCommand implements ICommand {
         Logger logger = Logger.getInstance();
         // Condition checks
         User user = context.getUserState().getCurrentUser();
+
+        // Using assertions to check conditions
+
+//        assert (user == null): "User is not logged in";
+//        assert (!(user instanceof Consumer)): "Current user is not a consumer";
+
         if (user == null) {
             logger.logAction("ListConsumerBookingsCommand", LogStatus.LIST_CONSUMER_BOOKINGS_NOT_LOGGED_IN);
             return;
         }
-        if (user instanceof Consumer) {
-            this.bookingListResult = ((Consumer) user).getBookings();
-            logger.logAction("ListConsumerBookingsCommand", LogStatus.LIST_CONSUMER_BOOKINGS_SUCCESS);
+        if (!(user instanceof Consumer)) {
+            logger.logAction("ListConsumerBookingsCommand", LogStatus.LIST_CONSUMER_BOOKINGS_USER_NOT_CONSUMER);
+            return;
         }
-        else logger.logAction("ListConsumerBookingsCommand", LogStatus.LIST_CONSUMER_BOOKINGS_USER_NOT_CONSUMER);
+
+        this.bookingListResult = ((Consumer) user).getBookings();
+        logger.logAction("ListConsumerBookingsCommand", LogStatus.LIST_CONSUMER_BOOKINGS_SUCCESS);
+
     }
 
     @Override
     public List<Booking> getResult() {
         return bookingListResult;
-    };
+    }
 
 }

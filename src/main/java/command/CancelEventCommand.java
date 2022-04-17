@@ -61,6 +61,17 @@ public class CancelEventCommand implements ICommand {
         boolean refundSponsorshipResult = true;
         boolean refundBookingResult = false;
 
+        // Using assertions to check conditions
+
+//        assert (event == null): "The event is not found";
+//        assert ((organiserMessage == null) || (organiserMessage.equals(""))): "The organiser can't be null";
+//        assert (!(userIsAllowedToCancelEvent(context, event))): "Current Event is not allowed to be cancelled";
+//        for (EventPerformance ep : event.getPerformances()) {
+//            assert ((LocalDateTime.now().isAfter(ep.getStartDateTime())) ||
+//                    (LocalDateTime.now().isAfter(ep.getEndDateTime()))): "The Event has already started";
+//        }
+
+
         if (event == null) {
             Logger.getInstance().logAction("CancelEventCommand", LogStatus.CANCEL_EVENT_EVENT_NOT_FOUND);
             return;

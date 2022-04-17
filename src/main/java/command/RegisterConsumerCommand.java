@@ -33,6 +33,17 @@ public class RegisterConsumerCommand implements ICommand {
     public void execute(Context context) {
         Map<String, User> allUsers = context.getUserState().getAllUsers();
         // Checking all conditions
+
+        // Using assertions to check conditions
+
+//        assert ((email == null) ||
+//                (name == null) ||
+//                (phoneNumber == null) ||
+//                (password == null) ||
+//                (paymentAccountEmail == null)): "Register fields information cannot be null";
+//        assert (allUsers.containsKey(email)): "The provided email has already existed";
+
+
         if ((email == null) ||
                 (name == null) ||
                 (phoneNumber == null) ||

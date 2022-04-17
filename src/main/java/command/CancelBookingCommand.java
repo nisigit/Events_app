@@ -30,6 +30,10 @@ public class CancelBookingCommand implements ICommand {
         // Condition checks - abort execution if condition is satisfied
         Booking booking = context.getBookingState().findBookingByNumber(bookingNumber);
 
+        // Using assertions to check conditions
+
+//        assert (booking == null): "The booking doesn't exist";
+
         if (booking == null) {
             logger.logAction("CancelBookingCommand", LogStatus.CANCEL_BOOKING_BOOKING_NOT_FOUND);
             return;
@@ -40,6 +44,14 @@ public class CancelBookingCommand implements ICommand {
         EventPerformance eventPerformance = booking.getEventPerformance();
         LocalDateTime performanceStart = eventPerformance.getStartDateTime();
         PaymentSystem paymentSystem = context.getPaymentSystem();
+
+        // Using assertions to check conditions
+
+//        assert (!(user instanceof Consumer)): "Current user is not a consumer";
+//        assert (booking.getStatus() != BookingStatus.Active): "Booking status is not Active anymore";
+//        assert (!booking.getBooker().equals(user)): "Current user is not the booker";
+//        assert (performanceStart.minusHours(24).isBefore(LocalDateTime.now())): "The booking can't be cancelled within 24 hours of start time";
+
 
         if (!(user instanceof Consumer)) {
             logger.logAction("CancelBookingCommand", LogStatus.CANCEL_BOOKING_USER_NOT_CONSUMER);

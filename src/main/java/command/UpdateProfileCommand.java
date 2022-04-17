@@ -19,6 +19,15 @@ public abstract class UpdateProfileCommand implements ICommand {
     protected boolean isProfileUpdateInvalid(Context context, String oldPassword, String newEmail) {
         Logger logger = Logger.getInstance();
         User user = context.getUserState().getCurrentUser();
+
+        // Condition checks
+
+        // Using assertions to check conditions
+
+//        assert (user == null): "Current user is not logged in";
+//        assert (!(user.checkPasswordMatch(oldPassword))): "Wrong password";
+//        assert (context.getUserState().getAllUsers().containsKey(newEmail)): "Email already registered";
+
         if (user == null) {
             logger.logAction("UpdateProfileCommand", LogStatus.USER_UPDATE_PROFILE_NOT_LOGGED_IN);
             return false;

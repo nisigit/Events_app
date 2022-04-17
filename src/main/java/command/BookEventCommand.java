@@ -44,6 +44,20 @@ public class BookEventCommand implements ICommand {
         paymentSuccess = false;
         bookingNumberResult = null;
 
+        // Using assertions to check conditions
+
+//        assert (!(user instanceof Consumer)): "User is not a consumer";
+//        assert (event == null): "Event can't be null";
+//        assert (!(event instanceof TicketedEvent)): "The event is not tickted";
+//        assert (!(numTicketsRequested >= 1)): "Minimum booking 1 ticket";
+//        EventPerformance eventPerformance = event.getPerformanceByNumber(performanceNumber);
+//        assert (eventPerformance == null): "Performance can't be null";
+//        TicketedEvent ticketedEvent = (TicketedEvent) event;
+//        assert (ticketedEvent.getStatus() != EventStatus.ACTIVE): "Current event is not active";
+//        assert (eventPerformance.getEndDateTime().isBefore(LocalDateTime.now())): "Booked event is already over";
+//        EntertainmentProviderSystem system = ticketedEvent.getOrganiser().getProviderSystem();
+//        assert (system.getNumTicketsLeft(eventNumber, performanceNumber) < numTicketsRequested): "No enough tickets left";
+
         if (!(user instanceof Consumer)) {
             Logger.getInstance().logAction("BookEventCommand", LogStatus.BOOK_EVENT_USER_NOT_CONSUMER);
             return;

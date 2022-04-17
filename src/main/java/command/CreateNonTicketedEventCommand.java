@@ -21,6 +21,11 @@ public class CreateNonTicketedEventCommand extends CreateEventCommand {
 
     public void execute(Context context) {
         // Condition checks
+
+        // Using assertions to check conditions
+
+//        assert (!isUserAllowedToCreateEvent(context)): "The event is not allowed to be created";
+
         if (!isUserAllowedToCreateEvent(context)) {
             return;
         }

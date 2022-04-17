@@ -40,6 +40,24 @@ public class RegisterEntertainmentProviderCommand implements ICommand {
         Logger logger = Logger.getInstance();
         Map<String, User> allUsers = context.getUserState().getAllUsers();
         // Checking Conditions
+
+        // Using assertions to check conditions
+
+//        assert ((orgName == null) ||
+//                (orgAddress == null) ||
+//                (paymentAccountEmail == null) ||
+//                (mainRepName == null) ||
+//                (password == null) ||
+//                (otherRepNames == null) ||
+//                (otherRepEmails == null)): "Register field information cannot be null";
+//        assert (allUsers.containsKey(mainRepEmail)): "The provided email has already existed";
+//        for (User user: allUsers.values()) {
+//            if (user instanceof EntertainmentProvider) {
+//                assert (((EntertainmentProvider) user).getOrgName().equals(orgName) ||
+//                        ((EntertainmentProvider) user).getOrgAddress().equals(orgAddress)): "Registered organization already exist";
+//            }
+//        }
+
         if ((orgName == null) ||
                 (orgAddress == null) ||
                 (paymentAccountEmail == null) ||

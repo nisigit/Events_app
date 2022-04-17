@@ -32,6 +32,11 @@ public abstract class CreateEventCommand implements ICommand {
     protected boolean isUserAllowedToCreateEvent(Context context) {
         User currentUser = context.getUserState().getCurrentUser();
 
+        // Using assertions to check conditions
+
+//        assert (currentUser == null): "Current user is not logged in";
+//        assert (!(currentUser instanceof EntertainmentProvider)): "Current is not an entertainment provider";
+
         if (currentUser == null) {
             Logger.getInstance().logAction("CreateEventCommand", LogStatus.CREATE_EVENT_USER_NOT_LOGGED_IN);
             return false;

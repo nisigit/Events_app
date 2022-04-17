@@ -56,6 +56,13 @@ public class GovernmentReport1Command implements ICommand {
         User user = context.getUserState().getCurrentUser();
 
         // condition checks as described in docs - abort execution if condition is satisfied
+
+        //Using assertions to check conditions
+
+//        assert (user == null): "Current user is not logged in";
+//        assert ((!(user instanceof  GovernmentRepresentative))): "Current user is not a government rep";
+//        assert ((intervalStartInclusive.isAfter(intervalEndInclusive))): "Invalid interval given";
+
         if (user == null) {
             bookingListResult = null;
             Logger.getInstance().logAction("GovernmentReport1Command", LogStatus.GOVERNMENT_REPORT1_NOT_LOGGED_IN);

@@ -43,6 +43,18 @@ public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileComm
         boolean isNull = oldPassword == null && newOrgName == null && newOrgAddress == null
                 && newPaymentAccountEmail == null && newMainRepName == null && newMainRepEmail == null
                 && newPassword == null && newOtherRepNames == null && newOtherRepEmails == null;
+
+        // Using assertions to check conditions
+
+//        assert (isNull): "The update profile fields cannot be null";
+//        assert (isProfileUpdateInvalid(context, oldPassword, newMainRepEmail)): "Invalid request";
+//        for (User i: context.getUserState().getAllUsers().values()) {
+//            if (i instanceof EntertainmentProvider) {
+//                assert  (((EntertainmentProvider) i).getOrgName().equals(newOrgName) ||
+//                        ((EntertainmentProvider) i).getOrgAddress().equals(newOrgAddress)): "Updated profile already registered";
+//            }
+//        }
+
         if (isNull) {
             logger.logAction("UpdateEntertainmentProviderProfileCommand", LogStatus.USER_UPDATE_PROFILE_FIELDS_CANNOT_BE_NULL);
             return;

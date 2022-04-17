@@ -18,6 +18,11 @@ public class LogoutCommand implements ICommand {
         IUserState userState = context.getUserState();
         User user = userState.getCurrentUser();
         // Condition checks
+
+        // Using assertions to check conditions
+
+//        assert (user == null): "Current user is not logged in";
+
         if (user == null) {
             Logger.getInstance().logAction("LogoutCommand", LogStatus.USER_LOGOUT_NOT_LOGGED_IN);
             return;
