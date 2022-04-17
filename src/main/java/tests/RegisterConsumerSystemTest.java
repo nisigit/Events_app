@@ -38,8 +38,8 @@ public class RegisterConsumerSystemTest {
         registerConsumerCommand.execute(context);
         Consumer consumer = registerConsumerCommand.getResult();
 
-        assertTrue(context.getUserState().getAllUsers().containsValue(consumer));
-        assertSame(context.getUserState().getCurrentUser(), consumer);
+        assertTrue(context.getUserState().getAllUsers().containsValue(consumer), "consumer has not been added to UserState");
+        assertSame(context.getUserState().getCurrentUser(), consumer, "the current user has not been set correctly");
     }
 
 }

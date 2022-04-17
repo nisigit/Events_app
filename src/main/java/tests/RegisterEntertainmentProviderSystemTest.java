@@ -43,7 +43,9 @@ public class RegisterEntertainmentProviderSystemTest {
         registerEntertainmentProviderCommand.execute(context);
         EntertainmentProvider entertainmentProvider = registerEntertainmentProviderCommand.getResult();
 
-        assertTrue(context.getUserState().getAllUsers().containsValue(entertainmentProvider));
-        assertSame(context.getUserState().getCurrentUser(), entertainmentProvider);
+        assertTrue(context.getUserState().getAllUsers().containsValue(entertainmentProvider),
+                "entertainment provider has not been added to UserState");
+        assertSame(context.getUserState().getCurrentUser(), entertainmentProvider,
+                "the current user has not been set correctly");
     }
 }
