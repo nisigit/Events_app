@@ -50,6 +50,7 @@ public class ListEventsCommand implements ICommand {
         List<Event> allEvents = context.getEventState().getAllEvents();
 
         // Condition Checks for userEventsOnly
+        // TODO: Class diagram has an extra class which we might need to implement.
         if (this.userEventsOnly) {
             if (user == null) {
                 logger.logAction("ListEventsCommand", LogStatus.LIST_USER_EVENTS_NOT_LOGGED_IN);
