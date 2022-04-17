@@ -39,12 +39,14 @@ public class GovernmentReport1Command implements ICommand {
 
     /**
      * This method should not be called directly outside of testing.
-     * @param context object that provides access to global application state
-     * Verifies that:
-     *                Current user is logged in
-     *                Current user is a government representative
-     *                intervalStartInclusive provided is before intervalEndInclusive
-     *                The events returned are active and sponsored
+     * @param context object that provides access to global application state <br>
+     *                <br>
+     * Verifies that: <ul>
+     * <li>Current user is logged in</li>
+     * <li>Current user is a government representative </li>
+     * <li>intervalStartInclusive provided is before intervalEndInclusive</li>
+     * <li>The events returned are active and sponsored</li>   
+     * </ul>
      */
 
     @Override
