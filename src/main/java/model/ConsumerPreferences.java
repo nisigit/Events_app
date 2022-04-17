@@ -8,8 +8,8 @@ public class ConsumerPreferences {
     Additionally, we implement individual setters for each attribute
      */
 
-    private boolean socialDistancing, airFiltration, outdoorsOnly;
-    private int maxCapacity, maxVenueSize;
+    public boolean socialDistancing, airFiltration, outdoorsOnly;
+    public int maxCapacity, maxVenueSize;
 
     public ConsumerPreferences() {
         this.socialDistancing = false;
@@ -17,15 +17,6 @@ public class ConsumerPreferences {
         this.outdoorsOnly = false;
         this.maxCapacity = Integer.MAX_VALUE;
         this.maxVenueSize = Integer.MAX_VALUE;
-    }
-
-    public ConsumerPreferences(boolean socialDistancing, boolean airFiltration, boolean outdoorsOnly,
-                               int maxCapacity, int maxVenueSize) {
-        this.socialDistancing = socialDistancing;
-        this.airFiltration = airFiltration;
-        this.outdoorsOnly = outdoorsOnly;
-        this.maxCapacity = maxCapacity;
-        this.maxVenueSize = maxVenueSize;
     }
 
     public boolean preferSocialDistancing() {
@@ -46,26 +37,6 @@ public class ConsumerPreferences {
 
     public int preferredMaxVenueSize() {
         return maxVenueSize;
-    }
-
-    public void changePrefSocialDistancing(boolean socialDistancing) {
-        this.socialDistancing = socialDistancing;
-    }
-
-    public void changePrefAirFiltration(boolean airFiltration) {
-        this.airFiltration = airFiltration;
-    }
-
-    public void changePrefOutdoorsOnly(boolean outdoorsOnly) {
-        this.outdoorsOnly = outdoorsOnly;
-    }
-
-    public void changePrefMaxCapacity(int maxCapacity) {
-        this.maxCapacity = maxCapacity;
-    }
-
-    public void changePrefMaxVenueSize(int maxVenueSize) {
-        this.maxVenueSize = maxVenueSize;
     }
 
     @Override
