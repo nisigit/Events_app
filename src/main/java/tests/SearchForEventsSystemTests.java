@@ -92,15 +92,28 @@ public class SearchForEventsSystemTests {
     }
 
     private ConsumerPreferences createConsumerPreferences1() {
-        return new ConsumerPreferences(true, false, false, 10000, 200000);
+        ConsumerPreferences consumerPreferences = new ConsumerPreferences();
+        consumerPreferences.socialDistancing = true;
+        consumerPreferences.maxCapacity = 10000;
+        consumerPreferences.maxVenueSize = 200000;
+        return consumerPreferences;
     }
 
     private ConsumerPreferences createConsumerPreferences2() {
-        return new ConsumerPreferences(true, false, true, 100, 2000);
+        ConsumerPreferences consumerPreferences = new ConsumerPreferences();
+        consumerPreferences.socialDistancing = true;
+        consumerPreferences.outdoorsOnly = true;
+        consumerPreferences.maxCapacity = 100;
+        consumerPreferences.maxVenueSize = 2000;
+        return consumerPreferences;
+
     }
 
     private ConsumerPreferences createConsumerPreferences3() {
-        return new ConsumerPreferences(false, false, false, 100, 2000);
+        ConsumerPreferences consumerPreferences = new ConsumerPreferences();
+        consumerPreferences.maxCapacity = 100;
+        consumerPreferences.maxVenueSize = 2000;
+        return consumerPreferences;
     }
 
     private void loginConsumer1(Context context) {

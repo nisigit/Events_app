@@ -36,7 +36,12 @@ public class ViewEventSystemTests {
                 "3",
                 "Depression",
                 "l.vents@paypal.com");
-        ConsumerPreferences prefs = new ConsumerPreferences(true, true, false, 100, 100);
+        ConsumerPreferences prefs = new ConsumerPreferences();
+        prefs.socialDistancing = true;
+        prefs.airFiltration = true;
+        prefs.maxCapacity = 100;
+        prefs.maxVenueSize = 100;
+
         consumer.setPreferences(prefs);
 
         EntertainmentProvider provider = new EntertainmentProvider(
