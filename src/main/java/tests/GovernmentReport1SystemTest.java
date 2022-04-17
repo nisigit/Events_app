@@ -359,12 +359,12 @@ public class GovernmentReport1SystemTest {
         controller.runCommand(new LogoutCommand());
 
         loginConsumer1(controller);
+        consumerBookNthTicketedEvent(controller, 0);
         consumerBookNthTicketedEvent(controller, 1);
-        consumerBookNthTicketedEvent(controller, 2);
         controller.runCommand(new LogoutCommand());
 
         loginConsumer3(controller);
-        consumerBookNthTicketedEvent(controller, 4);
+        consumerBookNthTicketedEvent(controller, 3);
         controller.runCommand(new LogoutCommand());
 
         loginOlympicsProvider(controller);

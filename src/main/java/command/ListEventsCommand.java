@@ -4,6 +4,7 @@ import controller.Context;
 import logging.Logger;
 import model.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -38,7 +39,16 @@ public class ListEventsCommand implements ICommand {
     }
 
     private List<Event> filterEvents(List<Event> events, boolean activeEventsOnly) {
-        ArrayList<Event> filteredEvents = new ArrayList<>(events);
+//        ArrayList<Event> filteredEvents = new ArrayList<>(events);
+        ArrayList<Event> filteredEvents = new ArrayList<>();
+        for (Event event : events) {
+            for (EventPerformance ep : event.getPerformances()) {
+                if (ep.getStartDateTime().isAfter(LocalDateTime.now())) {
+                    filteredEvents.add(event);
+                    break;
+                }
+            }
+        }
         if (activeEventsOnly) filteredEvents.removeIf(event -> event.getStatus() != EventStatus.ACTIVE);
         return filteredEvents;
     }
