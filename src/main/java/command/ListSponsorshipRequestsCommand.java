@@ -8,10 +8,10 @@ import model.*;
 import java.util.*;
 
 public class ListSponsorshipRequestsCommand implements ICommand {
-    // TODO: possibly add success value in enum?????
     enum LogStatus {
         LIST_SPONSORSHIP_REQUESTS_NOT_LOGGED_IN,
-        LIST_SPONSORSHIP_REQUESTS_NOT_GOVERNMENT_REPRESENTATIVE
+        LIST_SPONSORSHIP_REQUESTS_NOT_GOVERNMENT_REPRESENTATIVE,
+        LIST_SPONSORSHIP_REQUESTS_SUCCESS
     }
     private boolean pendingRequestsOnly;
     private List<SponsorshipRequest> requestListResult;
@@ -44,6 +44,10 @@ public class ListSponsorshipRequestsCommand implements ICommand {
                 }
             }
         }
+        else {
+            requestListResult = new ArrayList<>(allSponsorshipRequests);
+        }
+        logger.logAction("ListSponsorshipRequestsCommand", LogStatus.LIST_SPONSORSHIP_REQUESTS_SUCCESS);
     }
 
     @Override

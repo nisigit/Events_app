@@ -11,10 +11,9 @@ public class MockPaymentSystem implements PaymentSystem {
         transactions = new ArrayList<>();
     }
 
-    // TODO: Discuss when to decline a payment.
     @Override
     public boolean processPayment(String buyerAccountEmail, String sellerAccountEmail, double transactionAmount) {
-        // Creat a new payment transaction object of current payment and add it to the list
+        // Create a new payment transaction object of current payment and add it to the list
         Transaction newTransaction = new Transaction(buyerAccountEmail, sellerAccountEmail, transactionAmount, TransactionType.PAYMENT);
         transactions.add(newTransaction);
         return true;

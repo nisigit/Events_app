@@ -28,8 +28,6 @@ public class GovernmentReport1SystemTest {
         System.out.println("---");
     }
 
-    // TODO: should we change the name of this test file?
-
     private static void loginGovernmentRepresentative(Controller controller) {
         controller.runCommand(new LoginCommand("margaret.thatcher@gov.uk", "The Good times  "));
     }
